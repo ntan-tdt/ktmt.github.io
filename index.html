@@ -9,9 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" xintegrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" xintegrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" xintegrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -58,15 +58,13 @@
                     <i class="fas fa-play mr-2"></i>
                     Nghe tổng quan
                 </button>
-                <div id="loading-spinner" class="hidden mt-2 flex items-center text-blue-600">
-                    <i class="fas fa-spinner fa-spin mr-2"></i>
-                    Đang tạo âm thanh...
-                </div>
-                 <div id="audio-player-container" class="mt-4"></div>
+                <div id="audio-player-container" class="mt-4"></div>
             </div>
         </div>
         
         <main>
+            <!-- ... giữ nguyên phần nội dung hiện tại ... -->
+		
             <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-12 border-b-2 border-blue-500 pb-2">I. Phần Lý Thuyết</h2>
             
             <!-- Các phần lý thuyết -->
@@ -275,8 +273,8 @@
                 </div>
             </div>
 
-        </main>
-        
+        </main>	
+				        
         <footer class="text-center mt-16 py-8 border-t">
             <p class="text-gray-500">Tài liệu học phần Kiến trúc máy tính.</p>
         </footer>
@@ -311,115 +309,19 @@
                 });
             });
 
-            // --- Helper functions for Audio ---
-            function base64ToArrayBuffer(base64) {
-                const binaryString = window.atob(base64);
-                const len = binaryString.length;
-                const bytes = new Uint8Array(len);
-                for (let i = 0; i < len; i++) {
-                    bytes[i] = binaryString.charCodeAt(i);
-                }
-                return bytes.buffer;
-            }
-
-            function pcmToWav(pcmData, sampleRate) {
-                const numChannels = 1;
-                const bitsPerSample = 16;
-                const blockAlign = (numChannels * bitsPerSample) / 8;
-                const byteRate = sampleRate * blockAlign;
-                const dataSize = pcmData.length * 2;
-                const buffer = new ArrayBuffer(44 + dataSize);
-                const view = new DataView(buffer);
-                function writeString(view, offset, string) {
-                    for (let i = 0; i < string.length; i++) {
-                        view.setUint8(offset + i, string.charCodeAt(i));
-                    }
-                }
-                writeString(view, 0, 'RIFF');
-                view.setUint32(4, 36 + dataSize, true);
-                writeString(view, 8, 'WAVE');
-                writeString(view, 12, 'fmt ');
-                view.setUint32(16, 16, true);
-                view.setUint16(20, 1, true);
-                view.setUint16(22, numChannels, true);
-                view.setUint32(24, sampleRate, true);
-                view.setUint32(28, byteRate, true);
-                view.setUint16(32, blockAlign, true);
-                view.setUint16(34, bitsPerSample, true);
-                writeString(view, 36, 'data');
-                view.setUint32(40, dataSize, true);
-                let offset = 44;
-                for (let i = 0; i < pcmData.length; i++, offset += 2) {
-                    view.setInt16(offset, pcmData[i], true);
-                }
-                return new Blob([view], { type: 'audio/wav' });
-            }
-
-            // Generic function to call TTS API
-            async function generateAndPlayAudio(textToSpeak, button, spinner, container, voiceName = "Kore") {
-                button.disabled = true;
-                spinner.classList.remove('hidden');
-                container.innerHTML = '';
-
-                const apiKey = "";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
-
-                try {
-                    const payload = {
-                        contents: [{ parts: [{ text: textToSpeak }] }],
-                        generationConfig: {
-                            responseModalities: ["AUDIO"],
-                            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceName } } }
-                        },
-                        model: "gemini-2.5-flash-preview-tts"
-                    };
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    
-                    const result = await response.json();
-                    const part = result?.candidates?.[0]?.content?.parts?.[0];
-                    const audioData = part?.inlineData?.data;
-                    const mimeType = part?.inlineData?.mimeType;
-
-                    if (audioData && mimeType && mimeType.startsWith("audio/")) {
-                        const sampleRate = parseInt(mimeType.match(/rate=(\d+)/)[1], 10);
-                        const pcmData = base64ToArrayBuffer(audioData);
-                        const pcm16 = new Int16Array(pcmData);
-                        const wavBlob = pcmToWav(pcm16, sampleRate);
-                        const audioUrl = URL.createObjectURL(wavBlob);
-                        const audio = new Audio(audioUrl);
-                        audio.controls = true;
-                        container.appendChild(audio);
-                        audio.play();
-                    } else {
-                        throw new Error("Không nhận được dữ liệu âm thanh hợp lệ.");
-                    }
-                } catch (error) {
-                    console.error('Lỗi khi tạo âm thanh:', error);
-                    container.innerHTML = `<p class="text-red-500">Đã xảy ra lỗi. Vui lòng thử lại.</p>`;
-                } finally {
-                    button.disabled = false;
-                    spinner.classList.add('hidden');
-                }
-            }
-
-            // --- Event Listeners for Audio Buttons ---
+            // Phát âm thanh tổng quan từ file mp3
             const playButton = document.getElementById('play-overview-btn');
-            const loadingSpinner = document.getElementById('loading-spinner');
             const audioContainer = document.getElementById('audio-player-container');
-            const introTextElement = document.getElementById('intro-text');
             
             playButton.addEventListener('click', () => {
-                const text = `Nói với giọng đọc truyền cảm, rõ ràng: ${introTextElement.innerText}`;
-                generateAndPlayAudio(text, playButton, loadingSpinner, audioContainer);
-            });
-
-            const playSampleButton = document.getElementById('play-sample-audio-btn');
-            const sampleLoadingSpinner = document.getElementById('sample-loading-spinner');
-            const sampleAudioContainer = document.getElementById('sample-audio-container');
-
-            playSampleButton.addEventListener('click', () => {
-                generateAndPlayAudio("Hello", playSampleButton, sampleLoadingSpinner, sampleAudioContainer, "Puck");
+                // Xóa audio cũ nếu có
+                audioContainer.innerHTML = '';
+                // Tạo phần tử audio mới
+                const audio = document.createElement('audio');
+                audio.src = 'tongquan.mp3'; // Đường dẫn file mp3
+                audio.controls = true;
+                audio.autoplay = true;
+                audioContainer.appendChild(audio);
             });
         });
     </script>
