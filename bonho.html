@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<!-- Mình muốn làm tiếp Chương 3. Bộ nhớ như Chương 2 (file index.html) -->
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chương 2: Biểu diễn thông tin trong máy tính</title>
+    <title>Chương 3: Bộ nhớ trong máy tính</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,15 +43,15 @@
 
     <div class="container mx-auto p-4 md:p-8 max-w-5xl">
         <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Chương 2: Biểu diễn thông tin</h1>
-            <p class="text-lg text-gray-600">Khám phá cách máy tính "nhìn" thế giới qua lăng kính nhị phân</p>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Chương 3: Bộ nhớ trong máy tính</h1>
+            <p class="text-lg text-gray-600">Hiểu về cách máy tính lưu trữ và quản lý thông tin</p>
         </header>
 
-        <!-- Lời mở đầu và Tổng quan âm thanh -->
+        <!-- Giới thiệu -->
         <div id="intro-section" class="card">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Lời mở đầu</h2>
-            <p id="intro-text" class="text-gray-700 leading-relaxed">
-                Trong thế giới của con người, chúng ta giao tiếp và thể hiện thông tin qua ngôn ngữ, hình ảnh, âm thanh và các con số trong hệ thập phân. Tuy nhiên, máy tính, về bản chất, là một cỗ máy điện tử chỉ có thể hiểu được hai trạng thái: "có điện" và "không có điện", tương ứng với hai ký hiệu <code>1</code> và <code>0</code>. Tất cả mọi dữ liệu, từ một văn bản bạn đang soạn, một bức ảnh bạn chụp, một bài hát bạn nghe, cho đến những dòng lệnh phức tạp điều khiển chương trình, đều phải được "dịch" sang ngôn ngữ nhị phân này. Chương này sẽ giúp chúng ta khám phá cách máy tính biểu diễn các loại thông tin đa dạng của thế giới thực bằng một ngôn ngữ đơn giản nhất: ngôn ngữ của những con số 0 và 1.
+            <p class="text-gray-700 leading-relaxed">
+                Bộ nhớ là nơi lưu trữ dữ liệu, lệnh và kết quả xử lý của CPU, đóng vai trò sống còn trong hoạt động của máy tính. Không chỉ lưu trữ thông tin, bộ nhớ còn quyết định tốc độ, hiệu suất và khả năng xử lý của hệ thống. Chương này sẽ giúp bạn hiểu rõ về các loại bộ nhớ, nguyên lý hoạt động và cách tổ chức phân cấp bộ nhớ trong máy tính hiện đại.
             </p>
             <div class="mt-6">
                 <button id="play-overview-btn" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center">
@@ -64,216 +63,193 @@
         </div>
         
         <main>
-            <!-- ... giữ nguyên phần nội dung hiện tại ... -->
-		
             <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-12 border-b-2 border-blue-500 pb-2">I. Phần Lý Thuyết</h2>
             
-            <!-- Các phần lý thuyết -->
             <div class="card">
-                <h3 class="text-xl font-bold mb-4">1. Đơn vị thông tin cơ bản</h3>
+                <h3 class="text-xl font-bold mb-4">1. Khái niệm về Bộ nhớ trong máy tính</h3>
                 <ul class="list-disc list-inside space-y-3">
-                    <li><strong>Bit (Binary Digit):</strong> Đơn vị thông tin nhỏ nhất, nhận giá trị <code>0</code> hoặc <code>1</code>.</li>
-                    <li><strong>Byte:</strong> Một nhóm gồm 8 bit. Là đơn vị cơ sở để đo lường dung lượng. Ví dụ: Ký tự 'A' trong mã ASCII là <code>01000001</code>.</li>
-                    <li><strong>Word:</strong> Một nhóm bit mà CPU có thể xử lý trong một lần (ví dụ: 16-bit, 32-bit, 64-bit).</li>
+                    <li><strong>Bộ nhớ</strong> là thành phần lưu trữ dữ liệu, lệnh và kết quả xử lý của CPU.</li>
+                    <li>Bộ nhớ gồm các ô nhớ, mỗi ô chứa một số bit cố định, thông tin được mã hóa dưới dạng nhị phân.</li>
+                    <li>Có nhiều loại bộ nhớ: Bộ nhớ trong (<strong>RAM</strong>, <strong>ROM</strong>), bộ nhớ đệm (<strong>Cache</strong>), bộ nhớ ngoài (<strong>ổ cứng</strong>, <strong>SSD</strong>).</li>
                 </ul>
             </div>
 
             <div class="card">
-                <h3 class="text-xl font-bold mb-4">2. Các hệ đếm thông dụng</h3>
-                 <p class="mb-4">Máy tính sử dụng các hệ đếm khác nhau để biểu diễn thông tin, phổ biến nhất là nhị phân, thập phân và thập lục phân.</p>
-                <div class="grid md:grid-cols-3 gap-4 text-center">
+                <h3 class="text-xl font-bold mb-4">2. Phân cấp Bộ nhớ</h3>
+                <p class="mb-4">Bộ nhớ trong máy tính được tổ chức thành các cấp độ với tốc độ và dung lượng khác nhau:</p>
+                <div class="grid md:grid-cols-4 gap-4 text-center">
                     <div class="p-4 bg-gray-100 rounded-lg">
-                        <h4 class="font-bold">Thập phân (Cơ số 10)</h4>
-                        <p class="text-sm">0, 1, 2, 3, 4, 5, 6, 7, 8, 9</p>
-                        <p class="mt-2"><code>157</code></p>
+                        <h4 class="font-bold">Thanh ghi CPU<br>(Registers)</h4>
+                        <p class="text-sm">Dung lượng rất nhỏ<br>Tốc độ cực nhanh</p>
+                        <p class="mt-2"><i class="fas fa-microchip text-indigo-500"></i></p>
                     </div>
                     <div class="p-4 bg-gray-100 rounded-lg">
-                        <h4 class="font-bold">Nhị phân (Cơ số 2)</h4>
-                        <p class="text-sm">0, 1</p>
-                        <p class="mt-2"><code>1011</code></p>
+                        <h4 class="font-bold">Bộ nhớ Cache</h4>
+                        <p class="text-sm">Dung lượng nhỏ/trung bình<br>Tốc độ rất nhanh</p>
+                        <p class="mt-2"><i class="fas fa-bolt text-yellow-500"></i></p>
                     </div>
                     <div class="p-4 bg-gray-100 rounded-lg">
-                        <h4 class="font-bold">Thập lục phân (Cơ số 16)</h4>
-                        <p class="text-sm">0-9, A, B, C, D, E, F</p>
-                        <p class="mt-2"><code>F5</code></p>
+                        <h4 class="font-bold">Bộ nhớ RAM</h4>
+                        <p class="text-sm">Dung lượng lớn<br>Tốc độ trung bình</p>
+                        <p class="mt-2"><i class="fas fa-memory text-green-600"></i></p>
+                    </div>
+                    <div class="p-4 bg-gray-100 rounded-lg">
+                        <h4 class="font-bold">Bộ nhớ ngoài<br>(HDD, SSD)</h4>
+                        <p class="text-sm">Dung lượng rất lớn<br>Tốc độ chậm</p>
+                        <p class="mt-2"><i class="fas fa-hdd text-gray-700"></i></p>
                     </div>
                 </div>
-                 <h4 class="font-semibold mt-6 mb-2">Chuyển đổi giữa các hệ đếm</h4>
-                <p><strong>Thập phân sang Nhị phân:</strong> Chia liên tiếp cho 2 và lấy phần dư. Ví dụ: $21_{10} = 10101_2$.</p>
-                <p><strong>Nhị phân sang Thập lục phân:</strong> Nhóm thành các bộ 4 bit. Ví dụ: $110110111_2 = 1B7_{16}$.</p>
+                <p class="mt-6"><strong>Bộ nhớ phân cấp</strong> giúp cân bằng giữa tốc độ, dung lượng và chi phí, tối ưu hiệu suất tổng thể.</p>
             </div>
 
             <div class="card">
-                 <h3 class="text-xl font-bold mb-4">3. Biểu diễn số nguyên</h3>
-                 <h4 class="font-semibold mt-4 mb-2">a. Số nguyên không dấu (Unsigned Integers)</h4>
-                 <p>Với n bit, biểu diễn được các số từ $0$ đến $2^n - 1$. Ví dụ với 8 bit: từ 0 (<code>00000000</code>) đến 255 (<code>11111111</code>).</p>
-                 <h4 class="font-semibold mt-4 mb-2">b. Số nguyên có dấu (Signed Integers)</h4>
-                 <p>Sử dụng bit ngoài cùng bên trái làm bit dấu (0: dương, 1: âm).</p>
-                 <ul class="list-decimal list-inside space-y-2 mt-2">
-                     <li><strong>Dấu và Lượng (Sign and Magnitude):</strong> Bit đầu là dấu, còn lại là độ lớn. Ví dụ: -18 là <code>10010010</code>.</li>
-                     <li><strong>Số Bù 1 (1's Complement):</strong> Số âm là đảo bit của số dương. Ví dụ: -18 là <code>11101101</code>.</li>
-                     <li><strong>Số Bù 2 (2's Complement):</strong> Phổ biến nhất. Số âm = (Bù 1) + 1. Ví dụ: -18 là <code>11101110</code>. Với 8 bit, dải biểu diễn là [-128, 127].</li>
-                 </ul>
-            </div>
-            
-            <div class="card">
-                <h3 class="text-xl font-bold mb-4">4. Biểu diễn số thực (Số chấm động - Floating-Point)</h3>
-                 <p>Sử dụng chuẩn IEEE 754, biểu diễn số dưới dạng khoa học: $\text{Số} = (-1)^S \times M \times 2^E$.</p>
-                 <div class="text-center my-4 bg-gray-100 p-4 rounded-lg">
-                     <img src="https://placehold.co/600x150/e2e8f0/475569?text=C%E1%BA%A5u+tr%C3%BAc+bit+c%E1%BB%A7a+s%E1%BB%91+th%E1%BB%B1c+IEEE+754+(32-bit)" alt="Cấu trúc bit của số thực IEEE 754" class="mx-auto rounded-md w-full max-w-lg">
-                     <p class="text-sm mt-2 text-gray-600">Minh họa cấu trúc 1 bit Dấu, 8 bit Mũ, và 23 bit Định trị.</p>
-                 </div>
-                 <ul class="list-disc list-inside space-y-2">
-                    <li><strong>S (Sign):</strong> Bit dấu.</li>
-                    <li><strong>E (Exponent):</strong> Phần mũ.</li>
-                    <li><strong>M (Mantissa):</strong> Phần định trị.</li>
-                 </ul>
-                 <p class="mt-2">Có 2 định dạng phổ biến: <strong>Single Precision</strong> (32 bit) và <strong>Double Precision</strong> (64 bit).</p>
-            </div>
-
-            <div class="card">
-                <h3 class="text-xl font-bold mb-4">5. Biểu diễn dữ liệu phi số</h3>
-                <h4 class="font-semibold mt-4 mb-2">a. Ký tự (Characters)</h4>
-                <p>Sử dụng bảng mã để gán một số cho mỗi ký tự.</p>
+                <h3 class="text-xl font-bold mb-4">3. Nguyên lý Cục bộ của Bộ nhớ</h3>
                 <ul class="list-disc list-inside space-y-2">
-                    <li><strong>ASCII:</strong> Bảng mã 8-bit cho tiếng Anh. Ví dụ: 'A' = 65 (<code>01000001</code>).</li>
-                    <li><strong>Unicode (UTF-8):</strong> Chuẩn quốc tế, có khả năng biểu diễn hầu hết các chữ viết.</li>
+                    <li>Truy cập bộ nhớ thường diễn ra trên một khối nhớ cục bộ trong thời gian ngắn.</li>
+                    <li>Giúp tối ưu hóa hiệu suất bộ nhớ cache, giảm thời gian truy cập dữ liệu.</li>
                 </ul>
                 <div class="text-center my-4 bg-gray-100 p-4 rounded-lg">
-                     <img src="https://placehold.co/500x300/e2e8f0/475569?text=B%E1%BA%A3ng+m%C3%A3+ASCII+(m%E1%BB%99t+ph%E1%BA%A7n)" alt="Bảng mã ASCII" class="mx-auto rounded-md w-full max-w-md">
-                     <p class="text-sm mt-2 text-gray-600">Một phần của bảng mã ASCII, cho thấy mỗi ký tự tương ứng với một giá trị số.</p>
-                </div>
-                
-                <h4 class="font-semibold mt-4 mb-2">b. Hình ảnh (Images) <i class="fas fa-image text-blue-500"></i></h4>
-                <p>Ảnh Bitmap (Raster) là một lưới các pixel. Màu của mỗi pixel được biểu diễn bằng bit, ví dụ màu RGB 24-bit dùng 3 byte cho hơn 16 triệu màu.</p>
-                <!-- Ví dụ minh họa hình ảnh -->
-                <div class="mt-4 border-t pt-4">
-                    <h5 class="font-medium">Ví dụ: Ảnh đen trắng 1-bit</h5>
-                    <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 mt-2">
-                        <div>
-                            <p class="text-sm mb-2 text-center">Hình ảnh 2x2 pixel:</p>
-                            <div class="grid grid-cols-2 w-12 h-12 border-2 border-gray-400 mx-auto">
-                                <div class="w-6 h-6 bg-white border border-gray-300"></div>
-                                <div class="w-6 h-6 bg-black border border-gray-300"></div>
-                                <div class="w-6 h-6 bg-black border border-gray-300"></div>
-                                <div class="w-6 h-6 bg-white border border-gray-300"></div>
-                            </div>
-                        </div>
-                        <div class="text-center sm:text-left">
-                            <p class="text-sm mb-2">Biểu diễn nhị phân (0=trắng, 1=đen):</p>
-                            <code>0 1</code><br>
-                            <code>1 0</code>
-                            <p class="text-sm mt-2">Dữ liệu lưu trữ trong máy tính:</p>
-                            <code>0110</code>
-                        </div>
-                    </div>
-                </div>
-
-                <h4 class="font-semibold mt-6 mb-2">c. Âm thanh (Sound) <i class="fas fa-volume-up text-blue-500"></i></h4>
-                <p>Âm thanh analog được số hóa qua 2 bước:</p>
-                <ol class="list-decimal list-inside space-y-2">
-                    <li><strong>Lấy mẫu (Sampling):</strong> Đo biên độ sóng âm tại các thời điểm đều đặn.</li>
-                    <li><strong>Lượng tử hóa (Quantization):</strong> Gán một giá trị nhị phân cho mỗi mẫu.</li>
-                </ol>
-                <div class="text-center my-4 bg-gray-100 p-4 rounded-lg">
-                     <img src="https://placehold.co/600x250/e2e8f0/475569?text=Qu%C3%A1+tr%C3%ACnh+s%E1%BB%91+h%C3%B3a+%C3%A2m+thanh" alt="Số hóa âm thanh" class="mx-auto rounded-md w-full max-w-lg">
-                     <p class="text-sm mt-2 text-gray-600">Sóng âm analog (liên tục) được lấy mẫu tại các điểm rời rạc để chuyển thành tín hiệu số.</p>
-                </div>
-                 <!-- Ví dụ minh họa âm thanh -->
-                <div class="mt-4 border-t pt-4">
-                    <h5 class="font-medium">Ví dụ: Âm thanh được số hóa</h5>
-                    <p class="text-sm text-gray-600 mb-2">Nhấn nút bên dưới để nghe từ "Hello". Âm thanh bạn nghe được thực chất là một chuỗi dài các số 0 và 1 được máy tính đọc và chuyển thành sóng âm.</p>
-                    <button id="play-sample-audio-btn" class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center text-sm">
-                        <i class="fas fa-volume-up mr-2"></i>
-                        Nghe từ "Hello"
-                    </button>
-                    <div id="sample-loading-spinner" class="hidden mt-2 flex items-center text-green-600">
-                        <i class="fas fa-spinner fa-spin mr-2"></i>
-                        Đang tạo âm thanh...
-                    </div>
-                    <div id="sample-audio-container" class="mt-4"></div>
+                    <img src="https://placehold.co/600x180/e2e8f0/475569?text=Minh+h%E1%BB%8Da+nguy%C3%AAn+l%C3%BD+c%E1%BB%A5c+b%E1%BB%99+b%E1%BB%99+nh%E1%BB%9B" alt="Nguyên lý cục bộ" class="mx-auto rounded-md w-full max-w-lg">
+                    <p class="text-sm mt-2 text-gray-600">Dữ liệu được truy cập liên tục trong một vùng bộ nhớ nhỏ.</p>
                 </div>
             </div>
 
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">4. Địa chỉ Bộ nhớ</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>Mỗi ô nhớ có một địa chỉ duy nhất.</li>
+                    <li><strong>Địa chỉ logic</strong>: Địa chỉ do chương trình tạo ra.</li>
+                    <li><strong>Địa chỉ vật lý</strong>: Địa chỉ thực trong bộ nhớ máy tính.</li>
+                    <li>Địa chỉ logic được chuyển thành địa chỉ vật lý qua <strong>MMU (Memory Mapping Unit)</strong>.</li>
+                </ul>
+                <div class="text-center my-4 bg-gray-100 p-4 rounded-lg">
+                    <img src="https://placehold.co/600x150/e2e8f0/475569?text=Chuy%E1%BB%83n+%C4%91%E1%BB%8Ba+ch%E1%BB%89+logic+%E2%86%92+v%E1%BA%ADt+l%C3%BD" alt="Chuyển đổi địa chỉ" class="mx-auto rounded-md w-full max-w-lg">
+                    <p class="text-sm mt-2 text-gray-600">MMU chuyển đổi địa chỉ logic sang địa chỉ vật lý.</p>
+                </div>
+            </div>
 
-            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-16 border-b-2 border-green-500 pb-2">II. Phần Bài Tập Thực Hành</h2>
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">5. Các thành phần Bộ nhớ chính</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><strong>ROM</strong>: Bộ nhớ chỉ đọc, lưu trữ chương trình khởi động, phần mềm cố định.</li>
+                    <li><strong>RAM</strong>: Bộ nhớ đọc/ghi, lưu trữ dữ liệu và chương trình đang thực thi.</li>
+                    <li><strong>Cache</strong>: Bộ nhớ nhỏ, tốc độ cao, lưu dữ liệu thường xuyên truy cập để giảm độ trễ truy cập RAM.</li>
+                </ul>
+                <div class="grid md:grid-cols-3 gap-4 mt-6">
+                    <div class="p-4 bg-gray-100 rounded-lg text-center">
+                        <h4 class="font-bold">ROM</h4>
+                        <p class="text-sm">Chỉ đọc, không thay đổi được, lưu chương trình khởi động.</p>
+                        <i class="fas fa-cube text-red-500 text-2xl mt-2"></i>
+                    </div>
+                    <div class="p-4 bg-gray-100 rounded-lg text-center">
+                        <h4 class="font-bold">RAM</h4>
+                        <p class="text-sm">Đọc/ghi, lưu dữ liệu tạm thời, mất dữ liệu khi tắt máy.</p>
+                        <i class="fas fa-memory text-green-600 text-2xl mt-2"></i>
+                    </div>
+                    <div class="p-4 bg-gray-100 rounded-lg text-center">
+                        <h4 class="font-bold">Cache</h4>
+                        <p class="text-sm">Tốc độ truy cập cực nhanh, dung lượng nhỏ.</p>
+                        <i class="fas fa-bolt text-yellow-500 text-2xl mt-2"></i>
+                    </div>
+                </div>
+            </div>
 
-            <!-- Bài tập -->
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-16 border-b-2 border-green-500 pb-2">II. Câu hỏi Lý thuyết</h2>
             <div class="space-y-6">
-                <!-- Bài 1 -->
                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                    <p class="font-semibold mb-2">Bài 1: Chuyển đổi hệ đếm</p>
-                    <ul class="list-alpha list-inside text-gray-700">
-                        <li>Chuyển số $145_{10}$ sang hệ nhị phân và hệ thập lục phân.</li>
-                        <li>Chuyển số $111010.11_2$ sang hệ thập phân.</li>
-                        <li>Chuyển số $A3D_{16}$ sang hệ nhị phân và hệ thập phân.</li>
-                    </ul>
-                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <p class="font-semibold mb-2">1. Bộ nhớ máy tính có những loại nào? Nêu đặc điểm cơ bản của từng loại?</p>
                     <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
-                        <p>a. $145_{10} = 10010001_2 = 91_{16}$</p>
-                        <p>b. $111010.11_2 = 58.75_{10}$</p>
-                        <p>c. $A3D_{16} = 101000111101_2 = 2621_{10}$</p>
-                    </div>
-                </div>
-
-                <!-- Bài 2 -->
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                    <p class="font-semibold mb-2">Bài 2: Biểu diễn số nguyên có dấu (8 bit)</p>
-                    <p class="text-gray-700">Biểu diễn số $-45_{10}$ bằng các phương pháp: Dấu và Lượng, Bù 1, Bù 2.</p>
-                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
-                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
-                        <p>Số dương 45 là <code>00101101</code>.</p>
-                        <p>a. Dấu và Lượng: <code>10101101</code></p>
-                        <p>b. Bù 1: <code>11010010</code></p>
-                        <p>c. Bù 2: <code>11010011</code></p>
-                    </div>
-                </div>
-
-                <!-- Bài 3 -->
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                    <p class="font-semibold mb-2">Bài 3: Số học nhị phân (8 bit, bù 2)</p>
-                    <p class="text-gray-700">Thực hiện phép tính và cho biết có tràn số không?</p>
-                    <ul class="list-alpha list-inside text-gray-700">
-                        <li>$56 + 42$</li>
-                        <li>$(-10) + (-25)$</li>
-                        <li>$90 + 80$</li>
-                    </ul>
-                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
-                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
-                        <p>a. $56 + 42 = 98$ (<code>01100010</code>). <strong>Không tràn số.</strong></p>
-                        <p>b. $(-10) + (-25) = -35$ (<code>11011101</code>). <strong>Không tràn số.</strong></p>
-                        <p>c. $90 + 80 = 170$. Kết quả nhị phân <code>10101010</code> có bit dấu âm. <strong>Có tràn số</strong> vì vượt quá giới hạn 127.</p>
-                    </div>
-                </div>
-
-                <!-- Bài 4 -->
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                    <p class="font-semibold mb-2">Bài 4: Biểu diễn số thực</p>
-                    <p class="text-gray-700">Biểu diễn số $-13.75_{10}$ bằng chuẩn IEEE 754 Single Precision (32 bit).</p>
-                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
-                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
-                        <p>Kết quả:</p>
-                        <code>1 10000010 10111000000000000000000</code>
-                        <ul class="list-disc list-inside mt-2">
-                           <li>Dấu S=1.</li>
-                           <li>Mũ E = 3 + 127 = 130 (<code>10000010</code>).</li>
-                           <li>Định trị M = <code>10111</code> (phần sau dấu chấm của $1.10111_2$).</li>
+                        <ul class="list-disc list-inside">
+                            <li><strong>RAM</strong>: Đọc/ghi, lưu dữ liệu tạm thời, mất dữ liệu khi tắt máy.</li>
+                            <li><strong>ROM</strong>: Chỉ đọc, lưu phần mềm cố định.</li>
+                            <li><strong>Cache</strong>: Tốc độ cao, dung lượng nhỏ, giảm độ trễ truy cập RAM.</li>
+                            <li><strong>Bộ nhớ ngoài (HDD, SSD)</strong>: Lưu trữ lâu dài, dung lượng lớn, tốc độ chậm.</li>
                         </ul>
                     </div>
-                </div>
-                 <!-- Bài 5 -->
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                    <p class="font-semibold mb-2">Bài 5: Dữ liệu ký tự</p>
-                    <p class="text-gray-700">Viết ra chuỗi bit biểu diễn cho từ "CPU" theo mã ASCII (8 bit/ký tự).</p>
                     <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">2. Phân cấp bộ nhớ trong máy tính được tổ chức như thế nào? Tại sao nên tổ chức theo phân cấp?</p>
                     <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
-                         <p>'C' = 67 = <code>01000011</code></p>
-                         <p>'P' = 80 = <code>01010000</code></p>
-                         <p>'U' = 85 = <code>01010101</code></p>
+                        <p>Bộ nhớ được tổ chức từ tốc độ cao đến thấp: Thanh ghi → Cache → RAM → Bộ nhớ ngoài. Phân cấp giúp tối ưu giữa tốc độ, dung lượng và chi phí, nâng cao hiệu suất hệ thống.</p>
                     </div>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">3. Nguyên lý cục bộ bộ nhớ là gì? Ý nghĩa của nó trong thiết kế bộ nhớ cache?</p>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>Nguyên lý cục bộ: Dữ liệu được truy cập liên tục trong một vùng bộ nhớ nhỏ. Ý nghĩa: Giúp cache lưu trữ dữ liệu thường truy cập, giảm thời gian truy xuất, tăng hiệu suất.</p>
+                    </div>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">4. Địa chỉ logic và địa chỉ vật lý khác nhau như thế nào? Vai trò của MMU?</p>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>Địa chỉ logic do chương trình tạo ra, địa chỉ vật lý là địa chỉ thực trong bộ nhớ. MMU chuyển đổi địa chỉ logic sang vật lý, giúp bảo vệ và quản lý bộ nhớ hiệu quả.</p>
+                    </div>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">5. Chức năng của bộ nhớ RAM, ROM và Cache trong hệ thống máy tính?</p>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <ul class="list-disc list-inside">
+                            <li><strong>RAM</strong>: Lưu dữ liệu và chương trình đang xử lý.</li>
+                            <li><strong>ROM</strong>: Lưu chương trình khởi động, phần mềm cố định.</li>
+                            <li><strong>Cache</strong>: Lưu dữ liệu truy cập thường xuyên, giảm độ trễ.</li>
+                        </ul>
+                    </div>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
                 </div>
             </div>
 
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-16 border-b-2 border-green-500 pb-2">III. Bài tập Thực hành</h2>
+            <div class="space-y-6">
+                <!-- Bài tập 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Bài tập 1: Lệnh LOAD và thanh ghi ACC</p>
+                    <ul class="list-disc list-inside text-gray-700">
+                        <li>Bộ lệnh 8-bit, địa chỉ 5-bit. Ban đầu ACC = <code>01101</code>, ô nhớ địa chỉ <code>10110</code> chứa giá trị <code>10101</code>.</li>
+                        <li>Thực hiện lệnh <strong>LOAD 10110</strong>. Kết quả trong ACC là gì?</li>
+                    </ul>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>Lệnh LOAD sẽ nạp nội dung ô nhớ có địa chỉ <code>10110</code> vào ACC.<br>Giá trị ô nhớ là <code>10101</code>, do đó kết quả ACC = <code>10101</code>.</p>
+                    </div>
+                </div>
+
+                <!-- Bài tập 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Bài tập 2: Lệnh ADD và tính toán trong thanh ghi ACC</p>
+                    <ul class="list-disc list-inside text-gray-700">
+                        <li>ACC đang có giá trị <code>10010</code>.</li>
+                        <li>Lệnh <strong>ADD 10001</strong> cộng giá trị ô nhớ địa chỉ <code>10001</code> (giả sử chứa <code>01001</code>) với ACC.</li>
+                        <li>Giá trị mới của ACC là bao nhiêu?</li>
+                    </ul>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>ACC = <code>10010</code> + <code>01001</code> = <code>11011</code>.<br>Do đó, ACC = <code>11011</code> sau khi thực hiện lệnh ADD.</p>
+                    </div>
+                </div>
+
+                <!-- Bài tập 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Bài tập 3: Hệ thống bộ nhớ, phân cấp và quản lý địa chỉ</p>
+                    <ul class="list-disc list-inside text-gray-700">
+                        <li>Hệ thống gồm: thanh ghi CPU, cache (64KB), RAM (4GB), bộ nhớ ngoài (1TB).</li>
+                        <li>Giải thích vai trò từng loại bộ nhớ và lý do sử dụng bộ nhớ phân cấp.</li>
+                    </ul>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <ul class="list-disc list-inside">
+                            <li><strong>Thanh ghi CPU</strong>: Lưu trữ tạm thời biến và phép tính, tốc độ nhanh, dung lượng nhỏ.</li>
+                            <li><strong>Cache</strong>: Lưu dữ liệu hoặc lệnh truy cập thường xuyên, giảm độ trễ.</li>
+                            <li><strong>RAM</strong>: Lưu chương trình và dữ liệu đang thực hiện, dung lượng lớn, tốc độ trung bình.</li>
+                            <li><strong>Bộ nhớ ngoài</strong>: Lưu trữ lâu dài, dung lượng rất lớn, tốc độ chậm nhất.</li>
+                        </ul>
+                        <p>Bộ nhớ phân cấp giúp cân bằng giữa tốc độ, dung lượng và chi phí, tối ưu hiệu suất tổng thể.</p>
+                    </div>
+                </div>
+            </div>
         </main>	
 				        
         <footer class="text-center mt-16 py-8 border-t">
@@ -315,11 +291,9 @@
             const audioContainer = document.getElementById('audio-player-container');
             
             playButton.addEventListener('click', () => {
-                // Xóa audio cũ nếu có
                 audioContainer.innerHTML = '';
-                // Tạo phần tử audio mới
                 const audio = document.createElement('audio');
-                audio.src = 'tongquan.mp3'; // Đường dẫn file mp3
+                audio.src = 'bonho_tongquan.mp3'; // Đường dẫn file mp3 tổng quan bộ nhớ
                 audio.controls = true;
                 audio.autoplay = true;
                 audioContainer.appendChild(audio);
