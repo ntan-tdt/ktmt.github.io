@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chương 3: Bộ nhớ trong máy tính</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .katex {
+            font-size: 1.1em;
+        }
+        code {
+            background-color: #f1f5f9;
+            color: #475569;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            padding: 2rem;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+            <div class="mb-6 flex justify-start">
+                <a href="index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold shadow-lg hover:from-blue-600 hover:to-cyan-500 transition-all">
+                    <i class="fa-solid fa-arrow-left"></i> Quay về trang chủ
+                </a>
+            </div>
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Chương 3: Bộ nhớ trong máy tính</h1>
+            <p class="text-lg text-gray-600">Hiểu về cách máy tính lưu trữ và quản lý thông tin</p>
+        </header>
+
+        <!-- Giới thiệu -->
+        <div id="intro-section" class="card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Lời mở đầu</h2>
+            <p class="text-gray-700 leading-relaxed">
+                Bộ nhớ là nơi lưu trữ dữ liệu, lệnh và kết quả xử lý của CPU, đóng vai trò sống còn trong hoạt động của máy tính. Không chỉ lưu trữ thông tin, bộ nhớ còn quyết định tốc độ, hiệu suất và khả năng xử lý của hệ thống. Chương này sẽ giúp bạn hiểu rõ về các loại bộ nhớ, nguyên lý hoạt động và cách tổ chức phân cấp bộ nhớ trong máy tính hiện đại.
+            </p>
+            <div class="mt-6">
+                <button id="play-overview-btn" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center">
+                    <i class="fas fa-play mr-2"></i>
+                    Nghe tổng quan
+                </button>
+                <div id="audio-player-container" class="mt-4"></div>
+            </div>
+        </div>
+        
+        <main>
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-12 border-b-2 border-blue-500 pb-2">I. Phần Lý Thuyết</h2>
+            
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">1. Khái niệm về Bộ nhớ trong máy tính</h3>
+                <ul class="list-disc list-inside space-y-3">
+                    <li><strong>Bộ nhớ</strong> là thành phần lưu trữ dữ liệu, lệnh và kết quả xử lý của CPU.</li>
+                    <li>Bộ nhớ gồm các ô nhớ, mỗi ô chứa một số bit cố định, thông tin được mã hóa dưới dạng nhị phân.</li>
+                    <li>Có nhiều loại bộ nhớ: Bộ nhớ trong (<strong>RAM</strong>, <strong>ROM</strong>), bộ nhớ đệm (<strong>Cache</strong>), bộ nhớ ngoài (<strong>ổ cứng</strong>, <strong>SSD</strong>).</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">2. Phân cấp Bộ nhớ</h3>
+                <p class="mb-4">Bộ nhớ trong máy tính được tổ chức thành các cấp độ với tốc độ và dung lượng khác nhau:</p>
+                <div class="grid md:grid-cols-4 gap-4 text-center">
+                    <div class="p-4 bg-gray-100 rounded-lg">
+                        <h4 class="font-bold">Thanh ghi CPU<br>(Registers)</h4>
+                        <p class="text-sm">Dung lượng rất nhỏ<br>Tốc độ cực nhanh</p>
+                        <p class="mt-2"><i class="fas fa-microchip text-indigo-500"></i></p>
+                    </div>
+                    <div class="p-4 bg-gray-100 rounded-lg">
+                        <h4 class="font-bold">Bộ nhớ Cache</h4>
+                        <p class="text-sm">Dung lượng nhỏ/trung bình<br>Tốc độ rất nhanh</p>
+                        <p class="mt-2"><i class="fas fa-bolt text-yellow-500"></i></p>
+                    </div>
+                    <div class="p-4 bg-gray-100 rounded-lg">
+                        <h4 class="font-bold">Bộ nhớ RAM</h4>
+                        <p class="text-sm">Dung lượng lớn<br>Tốc độ trung bình</p>
+                        <p class="mt-2"><i class="fas fa-memory text-green-600"></i></p>
+                    </div>
+                    <div class="p-4 bg-gray-100 rounded-lg">
+                        <h4 class="font-bold">Bộ nhớ ngoài<br>(HDD, SSD)</h4>
+                        <p class="text-sm">Dung lượng rất lớn<br>Tốc độ chậm</p>
+                        <p class="mt-2"><i class="fas fa-hdd text-gray-700"></i></p>
+                    </div>
+                </div>
+                <p class="mt-6"><strong>Bộ nhớ phân cấp</strong> giúp cân bằng giữa tốc độ, dung lượng và chi phí, tối ưu hiệu suất tổng thể.</p>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">3. Nguyên lý Cục bộ của Bộ nhớ</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>Truy cập bộ nhớ thường diễn ra trên một khối nhớ cục bộ trong thời gian ngắn.</li>
+                    <li>Giúp tối ưu hóa hiệu suất bộ nhớ cache, giảm thời gian truy cập dữ liệu.</li>
+                </ul>
+                <div class="text-center my-4 bg-gray-100 p-4 rounded-lg">
+                    <img src="https://placehold.co/600x180/e2e8f0/475569?text=Minh+h%E1%BB%8Da+nguy%C3%AAn+l%C3%BD+c%E1%BB%A5c+b%E1%BB%99+b%E1%BB%99+nh%E1%BB%9B" alt="Nguyên lý cục bộ" class="mx-auto rounded-md w-full max-w-lg">
+                    <p class="text-sm mt-2 text-gray-600">Dữ liệu được truy cập liên tục trong một vùng bộ nhớ nhỏ.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">4. Địa chỉ Bộ nhớ</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>Mỗi ô nhớ có một địa chỉ duy nhất.</li>
+                    <li><strong>Địa chỉ logic</strong>: Địa chỉ do chương trình tạo ra.</li>
+                    <li><strong>Địa chỉ vật lý</strong>: Địa chỉ thực trong bộ nhớ máy tính.</li>
+                    <li>Địa chỉ logic được chuyển thành địa chỉ vật lý qua <strong>MMU (Memory Mapping Unit)</strong>.</li>
+                </ul>
+                <div class="text-center my-4 bg-gray-100 p-4 rounded-lg">
+                    <img src="https://placehold.co/600x150/e2e8f0/475569?text=Chuy%E1%BB%83n+%C4%91%E1%BB%8Ba+ch%E1%BB%89+logic+%E2%86%92+v%E1%BA%ADt+l%C3%BD" alt="Chuyển đổi địa chỉ" class="mx-auto rounded-md w-full max-w-lg">
+                    <p class="text-sm mt-2 text-gray-600">MMU chuyển đổi địa chỉ logic sang địa chỉ vật lý.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">5. Các thành phần Bộ nhớ chính</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><strong>ROM</strong>: Bộ nhớ chỉ đọc, lưu trữ chương trình khởi động, phần mềm cố định.</li>
+                    <li><strong>RAM</strong>: Bộ nhớ đọc/ghi, lưu trữ dữ liệu và chương trình đang thực thi.</li>
+                    <li><strong>Cache</strong>: Bộ nhớ nhỏ, tốc độ cao, lưu dữ liệu thường xuyên truy cập để giảm độ trễ truy cập RAM.</li>
+                </ul>
+                <div class="grid md:grid-cols-3 gap-4 mt-6">
+                    <div class="p-4 bg-gray-100 rounded-lg text-center">
+                        <h4 class="font-bold">ROM</h4>
+                        <p class="text-sm">Chỉ đọc, không thay đổi được, lưu chương trình khởi động.</p>
+                        <i class="fas fa-cube text-red-500 text-2xl mt-2"></i>
+                    </div>
+                    <div class="p-4 bg-gray-100 rounded-lg text-center">
+                        <h4 class="font-bold">RAM</h4>
+                        <p class="text-sm">Đọc/ghi, lưu dữ liệu tạm thời, mất dữ liệu khi tắt máy.</p>
+                        <i class="fas fa-memory text-green-600 text-2xl mt-2"></i>
+                    </div>
+                    <div class="p-4 bg-gray-100 rounded-lg text-center">
+                        <h4 class="font-bold">Cache</h4>
+                        <p class="text-sm">Tốc độ truy cập cực nhanh, dung lượng nhỏ.</p>
+                        <i class="fas fa-bolt text-yellow-500 text-2xl mt-2"></i>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-16 border-b-2 border-green-500 pb-2">II. Câu hỏi Lý thuyết</h2>
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">1. Bộ nhớ máy tính có những loại nào? Nêu đặc điểm cơ bản của từng loại?</p>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <ul class="list-disc list-inside">
+                            <li><strong>RAM</strong>: Đọc/ghi, lưu dữ liệu tạm thời, mất dữ liệu khi tắt máy.</li>
+                            <li><strong>ROM</strong>: Chỉ đọc, lưu phần mềm cố định.</li>
+                            <li><strong>Cache</strong>: Tốc độ cao, dung lượng nhỏ, giảm độ trễ truy cập RAM.</li>
+                            <li><strong>Bộ nhớ ngoài (HDD, SSD)</strong>: Lưu trữ lâu dài, dung lượng lớn, tốc độ chậm.</li>
+                        </ul>
+                    </div>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">2. Phân cấp bộ nhớ trong máy tính được tổ chức như thế nào? Tại sao nên tổ chức theo phân cấp?</p>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>Bộ nhớ được tổ chức từ tốc độ cao đến thấp: Thanh ghi → Cache → RAM → Bộ nhớ ngoài. Phân cấp giúp tối ưu giữa tốc độ, dung lượng và chi phí, nâng cao hiệu suất hệ thống.</p>
+                    </div>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">3. Nguyên lý cục bộ bộ nhớ là gì? Ý nghĩa của nó trong thiết kế bộ nhớ cache?</p>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>Nguyên lý cục bộ: Dữ liệu được truy cập liên tục trong một vùng bộ nhớ nhỏ. Ý nghĩa: Giúp cache lưu trữ dữ liệu thường truy cập, giảm thời gian truy xuất, tăng hiệu suất.</p>
+                    </div>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">4. Địa chỉ logic và địa chỉ vật lý khác nhau như thế nào? Vai trò của MMU?</p>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>Địa chỉ logic do chương trình tạo ra, địa chỉ vật lý là địa chỉ thực trong bộ nhớ. MMU chuyển đổi địa chỉ logic sang vật lý, giúp bảo vệ và quản lý bộ nhớ hiệu quả.</p>
+                    </div>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">5. Chức năng của bộ nhớ RAM, ROM và Cache trong hệ thống máy tính?</p>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <ul class="list-disc list-inside">
+                            <li><strong>RAM</strong>: Lưu dữ liệu và chương trình đang xử lý.</li>
+                            <li><strong>ROM</strong>: Lưu chương trình khởi động, phần mềm cố định.</li>
+                            <li><strong>Cache</strong>: Lưu dữ liệu truy cập thường xuyên, giảm độ trễ.</li>
+                        </ul>
+                    </div>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                </div>
+            </div>
+
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-16 border-b-2 border-green-500 pb-2">III. Bài tập Thực hành</h2>
+            <div class="space-y-6">
+                <!-- Bài tập 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Bài tập 1: Lệnh LOAD và thanh ghi ACC</p>
+                    <ul class="list-disc list-inside text-gray-700">
+                        <li>Bộ lệnh 8-bit, địa chỉ 5-bit. Ban đầu ACC = <code>01101</code>, ô nhớ địa chỉ <code>10110</code> chứa giá trị <code>10101</code>.</li>
+                        <li>Thực hiện lệnh <strong>LOAD 10110</strong>. Kết quả trong ACC là gì?</li>
+                    </ul>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>Lệnh LOAD sẽ nạp nội dung ô nhớ có địa chỉ <code>10110</code> vào ACC.<br>Giá trị ô nhớ là <code>10101</code>, do đó kết quả ACC = <code>10101</code>.</p>
+                    </div>
+                </div>
+
+                <!-- Bài tập 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Bài tập 2: Lệnh ADD và tính toán trong thanh ghi ACC</p>
+                    <ul class="list-disc list-inside text-gray-700">
+                        <li>ACC đang có giá trị <code>10010</code>.</li>
+                        <li>Lệnh <strong>ADD 10001</strong> cộng giá trị ô nhớ địa chỉ <code>10001</code> (giả sử chứa <code>01001</code>) với ACC.</li>
+                        <li>Giá trị mới của ACC là bao nhiêu?</li>
+                    </ul>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>ACC = <code>10010</code> + <code>01001</code> = <code>11011</code>.<br>Do đó, ACC = <code>11011</code> sau khi thực hiện lệnh ADD.</p>
+                    </div>
+                </div>
+
+                <!-- Bài tập 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Bài tập 3: Hệ thống bộ nhớ, phân cấp và quản lý địa chỉ</p>
+                    <ul class="list-disc list-inside text-gray-700">
+                        <li>Hệ thống gồm: thanh ghi CPU, cache (64KB), RAM (4GB), bộ nhớ ngoài (1TB).</li>
+                        <li>Giải thích vai trò từng loại bộ nhớ và lý do sử dụng bộ nhớ phân cấp.</li>
+                    </ul>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <ul class="list-disc list-inside">
+                            <li><strong>Thanh ghi CPU</strong>: Lưu trữ tạm thời biến và phép tính, tốc độ nhanh, dung lượng nhỏ.</li>
+                            <li><strong>Cache</strong>: Lưu dữ liệu hoặc lệnh truy cập thường xuyên, giảm độ trễ.</li>
+                            <li><strong>RAM</strong>: Lưu chương trình và dữ liệu đang thực hiện, dung lượng lớn, tốc độ trung bình.</li>
+                            <li><strong>Bộ nhớ ngoài</strong>: Lưu trữ lâu dài, dung lượng rất lớn, tốc độ chậm nhất.</li>
+                        </ul>
+                        <p>Bộ nhớ phân cấp giúp cân bằng giữa tốc độ, dung lượng và chi phí, tối ưu hiệu suất tổng thể.</p>
+                    </div>
+                </div>
+            </div>
+        </main>	
+				        
+        <footer class="text-center mt-16 py-8 border-t">
+            <p class="text-gray-500">Tài liệu học phần Kiến trúc máy tính.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render công thức toán học
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ]
+                });
+            }
+
+            // Chức năng ẩn/hiện lời giải
+            const solutionButtons = document.querySelectorAll('.toggle-solution-btn');
+            solutionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const solution = button.nextElementSibling;
+                    const isHidden = solution.classList.contains('hidden');
+                    if (isHidden) {
+                        solution.classList.remove('hidden');
+                        button.textContent = 'Ẩn lời giải';
+                    } else {
+                        solution.classList.add('hidden');
+                        button.textContent = 'Hiển thị lời giải';
+                    }
+                });
+            });
+
+            // Phát âm thanh tổng quan từ file mp3
+            const playButton = document.getElementById('play-overview-btn');
+            const audioContainer = document.getElementById('audio-player-container');
+            
+            playButton.addEventListener('click', () => {
+                audioContainer.innerHTML = '';
+                const audio = document.createElement('audio');
+                audio.src = 'bonho_tongquan.mp3'; // Đường dẫn file mp3 tổng quan bộ nhớ
+                audio.controls = true;
+                audio.autoplay = true;
+                audioContainer.appendChild(audio);
+            });
+        });
+    </script>
+</body>
+</html>

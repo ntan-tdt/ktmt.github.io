@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chương 4: CPU - Bộ xử lý trung tâm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .katex {
+            font-size: 1.1em;
+        }
+        code {
+            background-color: #f1f5f9;
+            color: #475569;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            padding: 2rem;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .section-link {
+            color: #2563eb;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+            <div class="mb-6 flex justify-start">
+                <a href="index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold shadow-lg hover:from-blue-600 hover:to-cyan-500 transition-all">
+                    <i class="fa-solid fa-arrow-left"></i> Quay về trang chủ
+                </a>
+            </div>
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Chương 4: CPU - Bộ xử lý trung tâm</h1>
+            <p class="text-lg text-gray-600">Khám phá cấu trúc, nguyên tắc hoạt động và hiệu năng của CPU</p>
+        </header>
+
+        <div class="card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Lời mở đầu</h2>
+            <p class="text-gray-700 leading-relaxed">
+                Chương này cung cấp một cái nhìn toàn diện về đơn vị xử lý trung tâm (CPU), bộ não của mọi hệ thống máy tính. Chúng ta sẽ khám phá cấu trúc, nguyên tắc hoạt động và các yếu tố ảnh hưởng đến hiệu năng của CPU.
+            </p>
+        </div>
+
+        <main>
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-12 border-b-2 border-blue-500 pb-2">I. Lý thuyết</h2>
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">1. Giới thiệu tổng quan về CPU</h3>
+                <p>CPU (Central Processing Unit) hay Bộ xử lý trung tâm, là một mạch điện tử phức tạp thực hiện các lệnh của một chương trình máy tính bằng cách thực hiện các phép toán số học, logic, điều khiển và vào/ra (I/O) cơ bản. CPU là thành phần cốt lõi, quyết định tốc độ và khả năng xử lý của toàn bộ hệ thống.</p>
+                <ul class="list-disc list-inside mt-3">
+                    <li><strong>Chức năng chính:</strong></li>
+                    <ul class="list-disc list-inside ml-6">
+                        <li><strong>Tìm và nạp lệnh (Fetch):</strong> Lấy lệnh từ bộ nhớ chính (RAM).</li>
+                        <li><strong>Giải mã lệnh (Decode):</strong> Diễn giải lệnh để biết cần thực hiện thao tác gì.</li>
+                        <li><strong>Thực thi lệnh (Execute):</strong> Thực hiện thao tác đã được giải mã.</li>
+                        <li><strong>Lưu kết quả (Store):</strong> Ghi kết quả của việc thực thi lệnh trở lại bộ nhớ hoặc thanh ghi.</li>
+                    </ul>
+                </ul>
+                <p class="mt-2">Chu trình này được gọi là <strong>chu trình lệnh (Instruction Cycle)</strong>.</p>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">2. Các thành phần chính của CPU</h3>
+                <p>Một CPU hiện đại bao gồm ba thành phần chính:</p>
+                <ul class="list-disc list-inside mt-3">
+                    <li><strong>Khối điều khiển (Control Unit - CU):</strong>
+                        <ul class="list-disc list-inside ml-6">
+                            <li>"Nhạc trưởng" của CPU, chỉ đạo các bộ phận khác thực hiện lệnh.</li>
+                            <li>Đọc và giải mã lệnh từ bộ nhớ, tạo tín hiệu điều khiển.</li>
+                            <li>Ví dụ: Khi nhấn lưu tài liệu, CU gửi tín hiệu đến ổ cứng để ghi dữ liệu.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Khối tính toán số học và logic (Arithmetic Logic Unit - ALU):</strong>
+                        <ul class="list-disc list-inside ml-6">
+                            <li>"Bộ não tính toán" của CPU, thực hiện các phép toán số học và logic.</li>
+                            <li>Tốc độ ALU quyết định hiệu năng xử lý.</li>
+                            <li>Ví dụ: Tính 2 + 2, CU gửi lệnh và dữ liệu đến ALU, ALU trả về kết quả.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Các thanh ghi (Registers):</strong>
+                        <ul class="list-disc list-inside ml-6">
+                            <li>Lưu trữ nhỏ, tốc độ cực cao, nằm trong CPU.</li>
+                            <li>Lưu tạm dữ liệu và lệnh đang xử lý.</li>
+                            <li>Truy cập nhanh hơn nhiều so với RAM.</li>
+                            <li>Các loại thanh ghi quan trọng:
+                                <ul class="list-disc list-inside ml-6">
+                                    <li>Program Counter (PC): Địa chỉ lệnh kế tiếp.</li>
+                                    <li>Instruction Register (IR): Lệnh đang thực thi.</li>
+                                    <li>Accumulator (AC): Kết quả trung gian.</li>
+                                    <li>Memory Address Register (MAR): Địa chỉ ô nhớ cần truy cập.</li>
+                                    <li>Memory Buffer Register (MBR): Dữ liệu đọc/ghi từ bộ nhớ.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">3. Chu trình lệnh (Instruction Cycle)</h3>
+                <p>Toàn bộ hoạt động của CPU xoay quanh việc thực hiện các lệnh. Một chu trình lệnh cơ bản gồm các bước:</p>
+                <ol class="list-decimal list-inside mt-3">
+                    <li><strong>Tìm nạp (Fetch):</strong>
+                        <ul class="list-disc list-inside ml-6">
+                            <li>CPU đọc địa chỉ trong PC để xác định vị trí lệnh tiếp theo.</li>
+                            <li>Địa chỉ gửi đến bộ nhớ qua MAR.</li>
+                            <li>Lệnh nạp vào MBR rồi chuyển sang IR.</li>
+                            <li>PC tăng lên để trỏ đến lệnh kế tiếp.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Giải mã (Decode):</strong>
+                        <ul class="list-disc list-inside ml-6">
+                            <li>CU phân tích lệnh trong IR để xác định thao tác và dữ liệu liên quan.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Thực thi (Execute):</strong>
+                        <ul class="list-disc list-inside ml-6">
+                            <li>ALU thực hiện phép toán trên các toán hạng.</li>
+                            <li>Kết quả lưu tạm trong các thanh ghi như Accumulator.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Lưu trữ (Store/Write-back):</strong>
+                        <ul class="list-disc list-inside ml-6">
+                            <li>Kết quả cuối cùng ghi lại vào bộ nhớ chính hoặc thanh ghi.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <div class="mt-4">
+                    <p><strong>Ví dụ minh họa:</strong> Thực hiện lệnh <code>ADD R1, 100</code> (Cộng giá trị tại địa chỉ bộ nhớ 100 vào thanh ghi R1).</p>
+                    <ol class="list-decimal list-inside ml-6 mt-2">
+                        <li>Fetch: PC chứa địa chỉ lệnh ADD. Lệnh nạp vào IR. PC tăng lên.</li>
+                        <li>Decode: CU giải mã lệnh ADD, nhận biết cần cộng giá trị từ ô nhớ 100 vào R1.</li>
+                        <li>Execute:
+                            <ul class="list-disc list-inside ml-6">
+                                <li>CU gửi địa chỉ 100 đến MAR.</li>
+                                <li>Giá trị tại ô nhớ 100 nạp vào MBR.</li>
+                                <li>ALU nhận giá trị từ MBR và R1, thực hiện phép cộng.</li>
+                            </ul>
+                        </li>
+                        <li>Store: Kết quả phép cộng ghi lại vào R1.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">4. Pipelining - Xử lý đường ống</h3>
+                <p>Pipelining là kỹ thuật cho phép CPU thực hiện đồng thời nhiều lệnh bằng cách chia chu trình lệnh thành nhiều giai đoạn (stages). Mỗi giai đoạn xử lý một phần của một lệnh khác nhau.</p>
+                <ul class="list-disc list-inside mt-3">
+                    <li>Tương tự dây chuyền lắp ráp: mỗi công đoạn xử lý một phần trên nhiều sản phẩm cùng lúc.</li>
+                    <li>Các giai đoạn pipeline cơ bản:
+                        <ul class="list-disc list-inside ml-6">
+                            <li>IF (Instruction Fetch): Nạp lệnh.</li>
+                            <li>ID (Instruction Decode): Giải mã lệnh.</li>
+                            <li>EX (Execute): Thực thi lệnh.</li>
+                            <li>MEM (Memory Access): Truy cập bộ nhớ.</li>
+                            <li>WB (Write Back): Ghi kết quả.</li>
+                        </ul>
+                    </li>
+                    <li>Lợi ích: Tăng thông lượng (throughput) của CPU, cải thiện hiệu năng.</li>
+                </ul>
+                <div class="mt-4">
+                    <p><strong>Ví dụ:</strong> Với pipeline 5 giai đoạn, tại một thời điểm, CPU có thể đang:</p>
+                    <ul class="list-disc list-inside ml-6">
+                        <li>Nạp lệnh thứ 5.</li>
+                        <li>Giải mã lệnh thứ 4.</li>
+                        <li>Thực thi lệnh thứ 3.</li>
+                        <li>Truy cập bộ nhớ cho lệnh thứ 2.</li>
+                        <li>Ghi kết quả của lệnh thứ 1.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">5. Kiến trúc tập lệnh: CISC vs. RISC</h3>
+                <p>Kiến trúc tập lệnh (Instruction Set Architecture - ISA) định nghĩa các lệnh mà một CPU có thể thực thi. Có hai triết lý thiết kế chính:</p>
+                <ul class="list-disc list-inside mt-3">
+                    <li><strong>CISC (Complex Instruction Set Computer):</strong>
+                        <ul class="list-disc list-inside ml-6">
+                            <li>Tập lệnh phức tạp, một lệnh thực hiện nhiều thao tác cấp thấp.</li>
+                            <li>Mục tiêu: Giảm số lượng lệnh cho một chương trình.</li>
+                            <li>Ví dụ: Bộ xử lý x86 của Intel, AMD.</li>
+                            <li>Ưu: Lập trình hợp ngữ dễ, code ngắn.</li>
+                            <li>Nhược: Thiết kế phức tạp, khó tối ưu pipeline, tiêu thụ nhiều năng lượng.</li>
+                        </ul>
+                    </li>
+                    <li><strong>RISC (Reduced Instruction Set Computer):</strong>
+                        <ul class="list-disc list-inside ml-6">
+                            <li>Tập lệnh đơn giản, mỗi lệnh thực hiện một thao tác đơn giản, mất một chu kỳ xung nhịp.</li>
+                            <li>Mục tiêu: Tối ưu tốc độ và hiệu quả năng lượng.</li>
+                            <li>Ví dụ: ARM, MIPS, PowerPC.</li>
+                            <li>Ưu: Thiết kế đơn giản, dễ pipelining, hiệu quả năng lượng cao.</li>
+                            <li>Nhược: Cần nhiều lệnh hơn, đòi hỏi trình biên dịch thông minh.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex flex-wrap gap-4 mt-8 mb-12">
+                <a href="#cau-hoi" class="section-link text-blue-600 font-semibold">&rarr; Đến phần Câu hỏi lý thuyết</a>
+                <a href="#bai-tap" class="section-link text-green-600 font-semibold">&rarr; Đến phần Bài tập thực hành</a>
+            </div>
+
+            <h2 id="cau-hoi" class="text-3xl font-bold text-gray-900 mb-6 mt-16 border-b-2 border-yellow-500 pb-2">II. Câu hỏi lý thuyết</h2>
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Câu 1:</p>
+                    <p>Trình bày vai trò và chức năng của ba thành phần chính trong CPU: Khối điều khiển (CU), Khối tính toán (ALU) và các Thanh ghi (Registers). Cho ví dụ về sự phối hợp giữa chúng để thực hiện một lệnh đơn giản.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Câu 2:</p>
+                    <p>Chu trình lệnh là gì? Mô tả chi tiết các bước trong một chu trình lệnh cơ bản. Tại sao thanh ghi Program Counter (PC) lại quan trọng trong chu trình này?</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Câu 3:</p>
+                    <p>Pipelining là gì và nó cải thiện hiệu năng CPU như thế nào? Giải thích khái niệm "xung đột pipeline" (pipeline hazard) và nêu một ví dụ.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Câu 4:</p>
+                    <p>So sánh hai kiến trúc tập lệnh CISC và RISC về các mặt: độ phức tạp của lệnh, số lượng lệnh cho một chương trình, thiết kế phần cứng CPU và vai trò của trình biên dịch.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Câu 5:</p>
+                    <p>Tại sao thanh ghi lại có tốc độ truy cập nhanh hơn nhiều so với bộ nhớ chính (RAM)? Mối quan hệ giữa tốc độ và dung lượng trong hệ thống phân cấp bộ nhớ (cache, RAM, ổ cứng) là gì?</p>
+                </div>
+            </div>
+
+            <h2 id="bai-tap" class="text-3xl font-bold text-gray-900 mb-6 mt-16 border-b-2 border-green-500 pb-2">III. Bài tập thực hành và lời giải</h2>
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Bài tập 1: Tính toán thời gian thực thi chương trình</p>
+                    <ul class="list-alpha list-inside text-gray-700">
+                        <li>Một máy tính có tốc độ xung nhịp là 2.5 GHz. Một chương trình cần thực thi 1.5 tỷ lệnh. Giả sử CPI (Cycles Per Instruction - số chu kỳ xung nhịp trung bình cho một lệnh) của chương trình này là 1.8.</li>
+                        <li>a. Tốc độ xung nhịp 2.5 GHz tương ứng với chu kỳ xung nhịp là bao nhiêu nano giây?</li>
+                        <li>b. Tính thời gian thực thi chương trình này (CPU time).</li>
+                    </ul>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p><strong>Lời giải:</strong></p>
+                        <p>a. Tính chu kỳ xung nhịp:</p>
+                        <p>Tốc độ xung nhịp (Clock Rate) = 2.5 GHz = 2.5×10<sup>9</sup> Hz (chu kỳ/giây).</p>
+                        <p>Chu kỳ xung nhịp (Clock Cycle Time) = 1 / Tốc độ xung nhịp = 1/(2.5×10<sup>9</sup>) giây = 0.4×10<sup>−9</sup> giây = 0.4 ns.</p>
+                        <p>b. Tính thời gian thực thi chương trình:</p>
+                        <p>Công thức: <code>CPU Time = Số lệnh × CPI × Chu kỳ xung nhịp</code></p>
+                        <p>Hoặc: <code>CPU Time = Số lệnh × CPI / Tốc độ xung nhịp</code></p>
+                        <p>Áp dụng: <br>
+                        CPU Time = (1.5×10<sup>9</sup>) × 1.8 × 0.4×10<sup>−9</sup> = 1.08 giây</p>
+                        <p>Vậy, chương trình mất <strong>1.08 giây</strong> để thực thi trên CPU này.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Bài tập 2: Phân tích hiệu quả của Pipelining</p>
+                    <ul class="list-alpha list-inside text-gray-700">
+                        <li>Xét một CPU không sử dụng pipeline. Thời gian để thực thi mỗi lệnh là 10ns.</li>
+                        <li>Bây giờ, giả sử CPU này được thiết kế lại với một pipeline 5 giai đoạn, mỗi giai đoạn mất 2ns để hoàn thành (tổng vẫn là 10ns).</li>
+                        <li>a. Cần bao nhiêu thời gian để thực thi 1 lệnh và 10 lệnh trên CPU không có pipeline?</li>
+                        <li>b. Cần bao nhiêu thời gian để thực thi 1 lệnh và 10 lệnh trên CPU có pipeline?</li>
+                        <li>c. Tính toán sự tăng tốc (Speedup) mà pipeline mang lại khi thực thi 10 lệnh.</li>
+                    </ul>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p><strong>Lời giải:</strong></p>
+                        <p>a. CPU không có pipeline:</p>
+                        <ul class="list-disc list-inside ml-6">
+                            <li>Thời gian thực thi 1 lệnh = 10ns.</li>
+                            <li>Thời gian thực thi 10 lệnh = 10×10ns = 100ns.</li>
+                        </ul>
+                        <p>b. CPU có pipeline 5 giai đoạn:</p>
+                        <ul class="list-disc list-inside ml-6">
+                            <li>Công thức: <code>Tpipeline = (k + n − 1) × thời gian một giai đoạn</code></li>
+                            <li>k = 5, n = số lệnh, thời gian một giai đoạn = 2ns</li>
+                            <li>Thời gian thực thi 1 lệnh (n=1): T1 = (5+1−1)×2ns = 10ns.</li>
+                            <li>Thời gian thực thi 10 lệnh (n=10): T10 = (5+10−1)×2ns = 28ns.</li>
+                        </ul>
+                        <p>c. Tính toán sự tăng tốc (Speedup):</p>
+                        <p><code>Speedup = Thời gian không pipeline / Thời gian có pipeline = 100ns / 28ns ≈ 3.57 lần</code></p>
+                        <p>Như vậy, với 10 lệnh, pipeline giúp CPU thực thi nhanh hơn khoảng 3.57 lần. Khi số lệnh lớn, tăng tốc tiệm cận số giai đoạn pipeline (ở đây là 5 lần).</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center mt-16 py-8 border-t">
+            <p class="text-gray-500">Tài liệu học phần Kiến trúc máy tính.</p>
+        </footer>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ]
+                });
+            }
+            // Ẩn/hiện lời giải
+            const solutionButtons = document.querySelectorAll('.toggle-solution-btn');
+            solutionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const solution = button.nextElementSibling;
+                    const isHidden = solution.classList.contains('hidden');
+                    if (isHidden) {
+                        solution.classList.remove('hidden');
+                        button.textContent = 'Ẩn lời giải';
+                    } else {
+                        solution.classList.add('hidden');
+                        button.textContent = 'Hiển thị lời giải';
+                    }
+                });
+            });
+            // Cuộn đến phần khi click link
+            document.querySelectorAll('.section-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        window.scrollTo({ top: target.offsetTop - 40, behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
