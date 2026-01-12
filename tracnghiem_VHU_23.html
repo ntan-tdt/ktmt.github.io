@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiểm tra Kiến trúc Máy tính - Phần 2 & 3</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --bg-color: #ecf0f1;
+        }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg-color); padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: var(--primary-color); text-transform: uppercase; margin-bottom: 5px; }
+        .sub-title { text-align: center; color: #7f8c8d; margin-bottom: 30px; }
+        .question-block { margin-bottom: 30px; border-bottom: 1px dashed #ccc; padding-bottom: 20px; }
+        .q-text { font-weight: 600; font-size: 1.1em; margin-bottom: 15px; display: block; color: #2c3e50; }
+        .options-list { list-style: none; padding-left: 0; }
+        .options-list li { margin-bottom: 10px; padding: 10px; border: 1px solid #ebedef; border-radius: 6px; transition: 0.2s; }
+        .options-list li:hover { background: #fdf2e9; }
+        input[type="radio"] { margin-right: 12px; transform: scale(1.2); cursor: pointer; }
+        #submit-area { position: sticky; bottom: 20px; background: white; padding: 15px; border-top: 2px solid var(--accent-color); text-align: center; }
+        #btn-submit { background: var(--accent-color); color: white; border: none; padding: 12px 40px; font-size: 18px; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        #btn-submit:hover { background: #d35400; }
+        #result-box { margin-top: 20px; padding: 20px; border-radius: 8px; display: none; text-align: center; }
+        .score-text { font-size: 24px; font-weight: bold; color: var(--success-color); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>KẾT QUẢ HỌC TẬP KIẾN TRÚC MÁY TÍNH</h1>
+    <p class="sub-title">Ngân hàng đề thi: Phần 2 (Mức độ 2) & Phần 3 (Mức độ 3)</p>
+    
+    <div id="quiz-content"></div>
+
+    <div id="submit-area">
+        <button id="btn-submit" onclick="checkAnswers()">Nộp bài ngay</button>
+        <div id="result-box"></div>
+    </div>
+</div>
+
+<script>
+    const data = [
+        // PHẦN 2 (Câu 1-36 trong file)
+        { q: "Chức năng của máy tính là:", a: "Xử lý dữ liệu, lưu trữ dữ liệu, di chuyển dữ liệu, điều khiển", options: ["Lưu trữ dữ liệu, xử lý dữ liệu, điều khiển", "Xử lý dữ liệu, lưu trữ dữ liệu, di chuyển dữ liệu, điều khiển", "Trao đổi dữ liệu, xử lý dữ liệu, di chuyển dữ liệu, điều khiển", "Xử lý dữ liệu, lưu trữ dữ liệu, di chuyển dữ liệu"], ans: "b" },
+        { q: "Thành phần của CPU gồm có:", a: "ALU, CU, bộ các thanh ghi (Register Set)", options: ["ALU, CU, RAM", "ALU, CU, bộ các thanh ghi (Register Set)", "ALU, RAM, bộ các thanh ghi (Register Set)", "CU, RAM, bộ các thanh ghi (Register Set)"], ans: "b" },
+        { q: "Nguyên lý Von Neumann đề cập đến vấn đề:", a: "Chương trình được lưu trữ và truy cập theo địa chỉ", options: ["Xử lý song song", "Chương trình được lưu trữ và truy cập theo địa chỉ", "Bộ nhớ được chia thành nhiều ngăn", "Sử dụng số thập phân"], ans: "b" },
+        { q: "Mỗi lệnh của máy tính là một chuỗi các bit ... mà CPU hiểu được để thực hiện một thao tác cụ thể.", a: "Số nhị phân", options: ["Số thập phân", "Số nhị phân", "Số BCD", "Số Hexa"], ans: "b" },
+        { q: "Để tăng tốc độ trao đổi dữ liệu giữa CPU và bộ nhớ chính, người ta sử dụng:", a: "Bộ nhớ Cache", options: ["Bộ nhớ ngoài", "Bộ nhớ Cache", "Bộ nhớ ROM", "Thanh ghi"], ans: "b" },
+        { q: "Thanh ghi IR (Instruction Register) dùng để:", a: "Chứa lệnh đang thực thi", options: ["Chứa địa chỉ lệnh tiếp theo", "Chứa lệnh đang thực thi", "Chứa kết quả phép tính", "Chứa trạng thái CPU"], ans: "b" },
+        { q: "Đơn vị tính dung lượng bộ nhớ nào sau đây là lớn nhất?", a: "Terabyte", options: ["Megabyte", "Gigabyte", "Terabyte", "Kilobyte"], ans: "c" },
+        { q: "Mã BCD sử dụng bao nhiêu bit để biểu diễn một chữ số thập phân?", a: "4 bit", options: ["2 bit", "4 bit", "8 bit", "16 bit"], ans: "b" },
+        { q: "Trong các bộ nhớ sau, bộ nhớ nào có tốc độ truy cập nhanh nhất?", a: "Thanh ghi (Registers)", options: ["RAM", "Cache", "Thanh ghi (Registers)", "Ổ cứng"], ans: "c" },
+        { q: "Chu kỳ lệnh (Instruction Cycle) bao gồm các giai đoạn chính là:", a: "Nhận lệnh và Thực thi lệnh", options: ["Nhận lệnh và Giải mã", "Nhận lệnh và Thực thi lệnh", "Giải mã và Lưu trữ", "Đọc dữ liệu và Ghi dữ liệu"], ans: "b" },
+        { q: "Chức năng của khối điều khiển (CU) là:", a: "Điều khiển các hoạt động của máy tính theo lệnh đã chương trình hóa", options: ["Thực hiện các phép toán số học", "Thực hiện các phép toán logic", "Lưu trữ tạm thời dữ liệu", "Điều khiển các hoạt động của máy tính theo lệnh đã chương trình hóa"], ans: "d" },
+        { q: "Xe bus địa chỉ 20 bit có thể quản lý được bao nhiêu ô nhớ?", a: "1 MB", options: ["640 KB", "1 MB", "2 MB", "4 MB"], ans: "b" },
+        { q: "Cổng logic nào có đầu ra là 1 khi tất cả các đầu vào là 1?", a: "AND", options: ["OR", "AND", "NOT", "XOR"], ans: "b" },
+        { q: "Trong hệ thống máy tính, ROM là bộ nhớ:", a: "Chỉ đọc, không mất dữ liệu khi mất điện", options: ["Chỉ đọc, mất dữ liệu khi mất điện", "Chỉ đọc, không mất dữ liệu khi mất điện", "Có thể đọc/ghi, không mất dữ liệu", "Có thể đọc/ghi, mất dữ liệu"], ans: "b" },
+        { q: "Đặc điểm của kiến trúc RISC là:", a: "Số lượng lệnh ít và đơn giản", options: ["Số lượng lệnh nhiều và phức tạp", "Số lượng lệnh ít và đơn giản", "Chỉ sử dụng cho siêu máy tính", "Không có bộ nhớ Cache"], ans: "b" },
+        { q: "Thanh ghi trạng thái (Flags Register) dùng để lưu trữ:", a: "Các trạng thái sau khi thực hiện lệnh của ALU", options: ["Địa chỉ lệnh", "Mã lệnh", "Các trạng thái sau khi thực hiện lệnh của ALU", "Dữ liệu tạm thời"], ans: "c" },
+        { q: "Bus dữ liệu (Data Bus) là bus:", a: "Hai chiều", options: ["Một chiều từ CPU ra", "Một chiều từ bộ nhớ vào CPU", "Hai chiều", "Không có chiều cố định"], ans: "c" },
+        { q: "Mục đích của việc phân tầng bộ nhớ là:", a: "Cân bằng giữa tốc độ, dung lượng và giá thành", options: ["Để dễ sửa chữa", "Để tiết kiệm điện", "Cân bằng giữa tốc độ, dung lượng và giá thành", "Để tăng dung lượng RAM"], ans: "c" },
+        { q: "Ổ cứng (HDD) là loại bộ nhớ:", a: "Bộ nhớ ngoài (Secondary Memory)", options: ["Bộ nhớ trong", "Bộ nhớ Cache", "Bộ nhớ ngoài (Secondary Memory)", "Thanh ghi"], ans: "c" },
+        { q: "Phép toán NOT 101100 là:", a: "010011", options: ["110011", "010011", "010111", "111111"], ans: "b" },
+        { q: "Thiết bị nào sau đây là thiết bị vào (Input)?", a: "Bàn phím", options: ["Màn hình", "Máy in", "Loa", "Bàn phím"], ans: "d" },
+        { q: "Đơn vị xử lý số học và logic (ALU) thực hiện:", a: "Các phép toán số học và các phép toán logic", options: ["Các phép toán số học", "Các phép toán logic", "Các phép toán số học và các phép toán logic", "Việc điều khiển CPU"], ans: "c" },
+        { q: "Bộ nhớ RAM là viết tắt của:", a: "Random Access Memory", options: ["Read Access Memory", "Random Access Memory", "Ready Access Memory", "Rapid Access Memory"], ans: "b" },
+        { q: "Một byte bằng bao nhiêu bit?", a: "8 bit", options: ["4 bit", "8 bit", "16 bit", "32 bit"], ans: "b" },
+        { q: "Để biểu diễn số nguyên có dấu trong máy tính, người ta thường dùng:", a: "Số bù 2", options: ["Số bù 2", "Số nhị phân thuần túy", "Số BCD", "Số Hexa"], ans: "a" },
+        { q: "Chức năng của Bus điều khiển là:", a: "Truyền các tín hiệu điều khiển giữa CPU và các thành phần khác", options: ["Truyền địa chỉ", "Truyền dữ liệu", "Truyền các tín hiệu điều khiển giữa CPU và các thành phần khác", "Cấp nguồn điện"], ans: "c" },
+        { q: "Bộ nhớ Cache L1 nằm ở đâu?", a: "Bên trong chip CPU", options: ["Trên bo mạch chủ", "Bên trong chip CPU", "Trong thanh RAM", "Trong ổ cứng"], ans: "b" },
+        { q: "Thành phần nào điều phối việc lấy lệnh và thực hiện lệnh?", a: "Khối điều khiển (CU)", options: ["ALU", "Khối điều khiển (CU)", "Bộ nhớ", "Bus"], ans: "b" },
+        { q: "Tốc độ của CPU được đo bằng đơn vị:", a: "Hertz (Hz)", options: ["Byte", "Hertz (Hz)", "Bit", "Watt"], ans: "b" },
+        { q: "Hệ thống số Hexadecimal sử dụng bao nhiêu ký tự?", a: "16", options: ["2", "8", "10", "16"], ans: "d" },
+        { q: "Máy tính sẽ làm gì khi gặp lệnh ngắt (Interrupt)?", a: "Tạm dừng chương trình hiện tại để thực hiện chương trình phục vụ ngắt", options: ["Tạm dừng chương trình hiện tại để thực hiện chương trình phục vụ ngắt", "Tắt máy ngay lập tức", "Bỏ qua lệnh đó", "Xóa toàn bộ RAM"], ans: "a" },
+        { q: "Cấu trúc máy tính Von Neumann gồm những khối chức năng nào?", a: "Bộ xử lý trung tâm, bộ nhớ, hệ thống vào ra", options: ["CPU, RAM, HDD", "Màn hình, Bàn phím, Chuột", "Bộ xử lý trung tâm, bộ nhớ, hệ thống vào ra", "CU, ALU, Registers"], ans: "c" },
+        { q: "Tín hiệu đồng hồ (Clock) trong CPU dùng để:", a: "Đồng bộ hóa các hoạt động bên trong máy tính", options: ["Xem giờ hệ thống", "Đồng bộ hóa các hoạt động bên trong máy tính", "Đo nhiệt độ CPU", "Tiết kiệm điện năng"], ans: "b" },
+        { q: "Vi xử lý Intel Core i7 là kiến trúc bao nhiêu bit?", a: "64 bit", options: ["16 bit", "32 bit", "64 bit", "128 bit"], ans: "c" },
+        { q: "Chuẩn giao tiếp nào dùng cho ổ cứng SSD hiện nay phổ biến nhất?", a: "NVMe (M.2)", options: ["IDE", "LPT", "NVMe (M.2)", "PS/2"], ans: "c" },
+        { q: "Đâu là hệ điều hành máy tính?", a: "Windows 11", options: ["Microsoft Office", "Windows 11", "Google Chrome", "Adobe Photoshop"], ans: "b" },
+
+        // PHẦN 3 (Câu 1-24 trong file)
+        { q: "Giá trị của số nhị phân 11011 sang thập phân là:", a: "27", options: ["25", "26", "27", "28"], ans: "c" },
+        { q: "Số thập phân 50 sang nhị phân là:", a: "110010", options: ["110010", "110001", "101010", "111000"], ans: "a" },
+        { q: "Kết quả phép cộng nhị phân 1011 + 1101 là:", a: "11000", options: ["10100", "11000", "11111", "11011"], ans: "b" },
+        { q: "Chuyển số Hexa A5 sang thập phân:", a: "165", options: ["160", "165", "170", "175"], ans: "b" },
+        { q: "Trong số thực dấu chấm động, phần số mũ xác định:", a: "Phạm vi biểu diễn của số", options: ["Độ chính xác của số", "Phạm vi biểu diễn của số", "Dấu của số", "Giá trị tuyệt đối"], ans: "b" },
+        { q: "Biểu diễn số -5 dưới dạng bù 2 (8 bit):", a: "11111011", options: ["11111011", "11111010", "10000101", "11111111"], ans: "a" },
+        { q: "Phép nhân nhị phân 110 x 11 là:", a: "10010", options: ["10010", "1111", "10110", "11011"], ans: "a" },
+        { q: "Cổng XOR có đầu ra bằng 1 khi:", a: "Hai đầu vào khác nhau", options: ["Hai đầu vào đều bằng 0", "Hai đầu vào đều bằng 1", "Hai đầu vào khác nhau", "Ít nhất một đầu vào bằng 1"], ans: "c" },
+        { q: "Địa chỉ vật lý của bộ nhớ được tính bằng công thức (trong chế độ thực 8086):", a: "Segment * 16 + Offset", options: ["Segment + Offset", "Segment * 16 + Offset", "Segment * 8 + Offset", "Segment + Offset * 16"], ans: "b" },
+        { q: "Nếu thanh ghi CS=1000h và IP=2000h, địa chỉ vật lý là:", a: "12000h", options: ["12000h", "3000h", "21000h", "10002h"], ans: "a" },
+        { q: "Dung lượng tối đa của một đoạn (segment) trong kiến trúc x86 16-bit là:", a: "64 KB", options: ["16 KB", "32 KB", "64 KB", "1 MB"], ans: "c" },
+        { q: "Thanh ghi nào thường được dùng làm biến đếm trong các vòng lặp?", a: "CX", options: ["AX", "BX", "CX", "DX"], ans: "c" },
+        { q: "Lệnh nào dùng để đẩy dữ liệu vào ngăn xếp (Stack)?", a: "PUSH", options: ["PUSH", "POP", "MOV", "ADD"], ans: "a" },
+        { q: "Định chỉ số trực tiếp (Direct Addressing) là:", a: "Địa chỉ toán hạng nằm ngay trong lệnh", options: ["Toán hạng nằm trong thanh ghi", "Địa chỉ toán hạng nằm ngay trong lệnh", "Toán hạng nằm ngay trong lệnh", "Địa chỉ toán hạng nằm trong thanh ghi"], ans: "b" },
+        { q: "Mạch bán cộng (Half Adder) thực hiện cộng 2 bit nhị phân cho ra:", a: "Tổng (Sum) và Số nhớ (Carry)", options: ["Tổng (Sum)", "Số nhớ (Carry)", "Tổng (Sum) và Số nhớ (Carry)", "Hiệu"], ans: "c" },
+        { q: "Một chip RAM 4K x 8 bit có bao nhiêu đường địa chỉ?", a: "12", options: ["10", "11", "12", "13"], ans: "c" },
+        { q: "Phương pháp truy cập dữ liệu của bộ nhớ RAM là:", a: "Truy cập ngẫu nhiên", options: ["Truy cập tuần tự", "Truy cập ngẫu nhiên", "Truy cập trực tiếp", "Truy cập liên kết"], ans: "b" },
+        { q: "Đĩa cứng quay với tốc độ 7200 RPM, RPM nghĩa là:", a: "Vòng mỗi phút", options: ["Vòng mỗi giây", "Vòng mỗi phút", "Đoạn mỗi giây", "Dữ liệu mỗi phút"], ans: "b" },
+        { q: "Sự khác biệt chính giữa RISC và CISC là:", a: "Số lượng và độ phức tạp của tập lệnh", options: ["Giá thành sản xuất", "Số lượng và độ phức tạp của tập lệnh", "Kích thước vật lý", "Năm sản xuất"], ans: "b" },
+        { q: "Bộ nhớ ảo (Virtual Memory) thực chất nằm ở:", a: "Ổ đĩa cứng", options: ["RAM", "ROM", "Ổ đĩa cứng", "Cache"], ans: "c" },
+        { q: "Thời gian để đầu đọc di chuyển đến đúng rãnh (track) trên đĩa cứng gọi là:", a: "Seek time", options: ["Latency", "Seek time", "Access time", "Transfer time"], ans: "b" },
+        { q: "GPU khác CPU ở điểm nào chính yếu?", a: "GPU có hàng ngàn lõi nhỏ để xử lý song song", options: ["GPU nhanh hơn CPU ở mọi tác vụ", "GPU có ít lõi hơn CPU", "GPU không cần bộ nhớ", "GPU có hàng ngàn lõi nhỏ để xử lý song song"], ans: "d" },
+        { q: "Khi CPU thực hiện lệnh CALL, nó sẽ lưu địa chỉ trở về vào:", a: "Stack", options: ["RAM", "Register AX", "Stack", "Cache"], ans: "c" },
+        { q: "Phép toán logic NOT(A AND B) tương đương với:", a: "(NOT A) OR (NOT B)", options: ["(NOT A) AND (NOT B)", "(NOT A) OR (NOT B)", "A OR B", "A XOR B"], ans: "b" }
+    ];
+
+    function render() {
+        const container = document.getElementById('quiz-content');
+        data.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'question-block';
+            div.innerHTML = `
+                <span class="q-text">Câu ${index + 1}: ${item.q}</span>
+                <ul class="options-list">
+                    ${item.options.map((opt, i) => `
+                        <li>
+                            <input type="radio" name="q${index}" value="${String.fromCharCode(97 + i)}" id="q${index}${i}">
+                            <label for="q${index}${i}">${String.fromCharCode(97 + i).toUpperCase()}. ${opt}</label>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function checkAnswers() {
+        let score = 0;
+        data.forEach((item, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            if (selected && selected.value === item.ans) {
+                score++;
+            }
+        });
+
+        const resultBox = document.getElementById('result-box');
+        const finalScore = ((score / data.length) * 10).toFixed(2);
+        
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `
+            <hr>
+            <p class="score-text">Đúng ${score}/${data.length} câu - Điểm: ${finalScore}</p>
+            <p>${finalScore >= 5 ? 'Chúc mừng bạn đã đạt!' : 'Bạn cần cố gắng hơn nhé!'}</p>
+        `;
+        resultBox.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    render();
+</script>
+
+</body>
+</html>
