@@ -161,12 +161,49 @@
                     <li><strong>DMA</strong>: Chuyển dữ liệu trực tiếp giữa I/O và bộ nhớ, bypass CPU.</li>
                 </ul>
                 <div class="text-center my-6">
-                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEheBDHlRkyQ3CrO75tkHjGboW3vgKybKHvqkM4ge3aOUJVDtQEImLLte9HfPOSB9qJUW-rzOj9CP5xJsXH7Xd9zAxkskAj21X_WfS89FtjK3j5EPZFq4mvhnEbKikWrPKM6b3FyMWn4CdkV/s1600/Screenshot_27.jpg" alt="Polling vs Interrupt">
-                    <p class="text-sm mt-2 text-gray-600">Hình 3: So sánh Programmed I/O (Polling) và Interrupt-driven I/O</p>
+                    <p class="font-semibold text-lg mb-2">Bảng 3: So sánh Programmed I/O (Polling) và Interrupt-driven I/O</p>
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tiêu chí</th>
+                                    <th>Programmed I/O (Polling)</th>
+                                    <th>Interrupt-driven I/O</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Cách hoạt động</td>
+                                    <td>CPU liên tục kiểm tra (poll) trạng thái thiết bị qua vòng lặp</td>
+                                    <td>Thiết bị gửi tín hiệu ngắt (interrupt) đến CPU khi sẵn sàng</td>
+                                </tr>
+                                <tr>
+                                    <td>Sử dụng CPU</td>
+                                    <td>CPU bị chiếm dụng liên tục, lãng phí nếu thiết bị chậm</td>
+                                    <td>CPU chỉ xử lý khi có ngắt, hiệu quả hơn</td>
+                                </tr>
+                                <tr>
+                                    <td>Độ trễ phản hồi</td>
+                                    <td>Phụ thuộc vào tần suất poll, có thể chậm nếu vòng lặp dài</td>
+                                    <td>Phản hồi nhanh khi có ngắt (thường trong vài chu kỳ clock)</td>
+                                </tr>
+                                <tr>
+                                    <td>Overhead</td>
+                                    <td>Thấp về phần cứng, nhưng cao về chu kỳ CPU</td>
+                                    <td>Có overhead xử lý ngắt (context switch), nhưng tổng thể tốt hơn</td>
+                                </tr>
+                                <tr>
+                                    <td>Ứng dụng phù hợp</td>
+                                    <td>Thiết bị rất nhanh hoặc hệ thống đơn giản</td>
+                                    <td>Hầu hết các hệ thống hiện đại, đặc biệt khi có nhiều thiết bị</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="text-center my-6">
                     <img src="https://miro.medium.com/0*dQXSZiRE1g31I7zE.jpg" alt="DMA block diagram">
-                    <p class="text-sm mt-2 text-gray-600">Hình 4: Cấu trúc DMA Controller</p>
+                    <p class="text-sm mt-2 text-gray-600">Hình 3: Cấu trúc DMA Controller</p>
                 </div>
                 <div class="video-container">
                     <iframe src="https://www.youtube.com/embed/Hr7tbmIr0G8" 
@@ -185,7 +222,7 @@
                 </ul>
                 <div class="text-center my-6">
                     <img src="https://www.baeldung.com/wp-content/uploads/sites/4/2022/04/MemoryMappedVsPortMapped.png" alt="Memory-mapped vs Isolated I/O">
-                    <p class="text-sm mt-2 text-gray-600">Hình 5: So sánh Memory-mapped và Isolated/Port-mapped I/O</p>
+                    <p class="text-sm mt-2 text-gray-600">Hình 4: So sánh Memory-mapped và Isolated/Port-mapped I/O</p>
                 </div>
             </div>
 
@@ -194,7 +231,7 @@
                 <p>USB, PCIe, SATA/NVMe, HDMI...</p>
                 <div class="text-center my-6">
                     <img src="https://ctf.re/assets/PCIe_Images_Part1/image-20230213124016347.png" alt="PCIe topology">
-                    <p class="text-sm mt-2 text-gray-600">Hình 6: Cấu trúc PCIe bus hierarchy</p>
+                    <p class="text-sm mt-2 text-gray-600">Hình 5: Cấu trúc PCIe bus hierarchy</p>
                 </div>
                 <div class="video-container">
                     <iframe src="https://www.youtube.com/embed/dRyUP3f_VVo" 
@@ -246,7 +283,7 @@
         </main>
 
         <footer class="text-center mt-16 py-8 border-t">
-            <p class="text-gray-500">TanNQ - VHU - Tài liệu học phần Kiến trúc máy tính.</p>
+            <p class="text-gray-500">Tài liệu học phần Kiến trúc máy tính.</p>
         </footer>
 
     </div>
