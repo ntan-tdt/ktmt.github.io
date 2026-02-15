@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fix lỗi YouTube embed nếu có -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Chương 6: Hệ thống Input/Output | Kiến trúc Máy tính</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            padding: 2rem;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        img {
+            border-radius: 0.5rem;
+            max-width: 100%;
+            height: auto;
+            margin: 1rem auto;
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+
+        <!-- Nút Quay về trang chủ -->
+        <div class="mb-6 flex justify-start">
+            <a href="index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold shadow-lg hover:from-blue-600 hover:to-cyan-500 transition-all">
+                <i class="fa-solid fa-arrow-left"></i> Quay về trang chủ
+            </a>
+        </div>
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Chương 6: Hệ thống Input/Output</h1>
+            <p class="text-lg text-gray-600">Giao tiếp giữa máy tính và thế giới bên ngoài</p>
+        </header>
+
+        <!-- Lời mở đầu -->
+        <div id="intro-section" class="card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Lời mở đầu</h2>
+            <p class="text-gray-700 leading-relaxed">
+                Hệ thống Input/Output (I/O) cho phép máy tính nhận dữ liệu từ người dùng/thiết bị và xuất kết quả xử lý ra bên ngoài. Chương này trình bày các kỹ thuật xử lý I/O, cơ chế giao tiếp, và các chuẩn kết nối phổ biến trong kiến trúc máy tính hiện đại.
+            </p>
+        </div>
+
+        <main>
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-12 border-b-2 border-blue-500 pb-2">I. Phần Lý Thuyết</h2>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">1. Giới thiệu về Hệ thống Input/Output</h3>
+                <p class="text-gray-700 leading-relaxed">
+                    Hệ thống I/O bao gồm các thiết bị nhập (input), xuất (output) và lưu trữ, giúp trao đổi dữ liệu giữa CPU, bộ nhớ và thế giới bên ngoài. Thiết bị I/O thường chậm hơn CPU, nên cần kỹ thuật tối ưu để tránh lãng phí tài nguyên.
+                </p>
+                <ul class="list-disc list-inside space-y-2 mt-4">
+                    <li><strong>Chức năng</strong>: Nhập dữ liệu, xuất kết quả, lưu trữ lâu dài.</li>
+                    <li><strong>Thách thức</strong>: Tốc độ chậm → cần Interrupt hoặc DMA.</li>
+                </ul>
+                <div class="text-center my-6">
+                    <img src="https://res.cloudinary.com/witspry/image/upload/witscad/public/content/courses/computer-architecture/system-bus.png" alt="Cấu trúc hệ thống I/O">
+                    <p class="text-sm mt-2 text-gray-600">Hình 1: Cấu trúc hệ thống I/O với CPU, Memory và peripherals qua System Bus</p>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/MM5tm5nFCH4" 
+                            title="Introduction to Input and Output Requirements" 
+                            frameborder="0" 
+                            allowfullscreen 
+                            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">2. Các loại Thiết bị I/O</h3>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Loại</th>
+                                <th>Mô tả</th>
+                                <th>Ví dụ</th>
+                                <th>Đặc điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Input</td>
+                                <td>Nhập dữ liệu vào hệ thống</td>
+                                <td>Bàn phím, chuột, microphone</td>
+                                <td>Chậm, cần xử lý ngắt</td>
+                            </tr>
+                            <tr>
+                                <td>Output</td>
+                                <td>Xuất dữ liệu ra bên ngoài</td>
+                                <td>Màn hình, máy in, loa</td>
+                                <td>Cần buffering</td>
+                            </tr>
+                            <tr>
+                                <td>Storage</td>
+                                <td>Lưu trữ lâu dài (input/output)</td>
+                                <td>HDD/SSD, USB</td>
+                                <td>Dung lượng lớn, dùng DMA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center my-6">
+                    <img src="http://www.rozyph.com/wp-content/uploads/2017/12/Block-diagram-of-Computer.png" alt="Mô hình máy tính với I/O">
+                    <p class="text-sm mt-2 text-gray-600">Hình 2: Mô hình cơ bản máy tính với Input và Output Units</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">3. Kỹ thuật Xử lý I/O</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><strong>Programmed I/O (Polling)</strong>: CPU kiểm tra liên tục trạng thái thiết bị.</li>
+                    <li><strong>Interrupt-driven I/O</strong>: Thiết bị gửi ngắt khi sẵn sàng.</li>
+                    <li><strong>DMA</strong>: Chuyển dữ liệu trực tiếp giữa I/O và bộ nhớ, bypass CPU.</li>
+                </ul>
+                <div class="text-center my-6">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEheBDHlRkyQ3CrO75tkHjGboW3vgKybKHvqkM4ge3aOUJVDtQEImLLte9HfPOSB9qJUW-rzOj9CP5xJsXH7Xd9zAxkskAj21X_WfS89FtjK3j5EPZFq4mvhnEbKikWrPKM6b3FyMWn4CdkV/s1600/Screenshot_27.jpg" alt="Polling vs Interrupt">
+                    <p class="text-sm mt-2 text-gray-600">Hình 3: So sánh Programmed I/O (Polling) và Interrupt-driven I/O</p>
+                </div>
+                <div class="text-center my-6">
+                    <img src="https://miro.medium.com/0*dQXSZiRE1g31I7zE.jpg" alt="DMA block diagram">
+                    <p class="text-sm mt-2 text-gray-600">Hình 4: Cấu trúc DMA Controller</p>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/Hr7tbmIr0G8" 
+                            title="I/O Transfer Modes" 
+                            frameborder="0" 
+                            allowfullscreen 
+                            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">4. Cấu trúc Giao tiếp I/O</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><strong>Memory-mapped I/O</strong>: I/O dùng chung không gian địa chỉ với bộ nhớ.</li>
+                    <li><strong>Port-mapped I/O (Isolated)</strong>: Không gian địa chỉ riêng cho I/O.</li>
+                </ul>
+                <div class="text-center my-6">
+                    <img src="https://www.baeldung.com/wp-content/uploads/sites/4/2022/04/MemoryMappedVsPortMapped.png" alt="Memory-mapped vs Isolated I/O">
+                    <p class="text-sm mt-2 text-gray-600">Hình 5: So sánh Memory-mapped và Isolated/Port-mapped I/O</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">5. Các Chuẩn I/O Phổ biến</h3>
+                <p>USB, PCIe, SATA/NVMe, HDMI...</p>
+                <div class="text-center my-6">
+                    <img src="https://ctf.re/assets/PCIe_Images_Part1/image-20230213124016347.png" alt="PCIe topology">
+                    <p class="text-sm mt-2 text-gray-600">Hình 6: Cấu trúc PCIe bus hierarchy</p>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/dRyUP3f_VVo" 
+                            title="Basic Input Output Operations" 
+                            frameborder="0" 
+                            allowfullscreen 
+                            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+            </div>
+
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-16 border-b-2 border-green-500 pb-2">II. Phần Bài tập Thực hành</h2>
+
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">1. Trắc nghiệm: Kỹ thuật I/O nào CPU liên tục kiểm tra trạng thái?</p>
+                    <p class="mt-2">a) DMA  b) Interrupt-driven  c) Programmed I/O</p>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p><strong>Đáp án: c) Programmed I/O (Polling)</strong></p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">2. Tự luận: Giải thích sự khác biệt giữa Memory-mapped và Port-mapped I/O.</p>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>Memory-mapped: I/O dùng chung địa chỉ bộ nhớ (load/store). Port-mapped: Không gian riêng (IN/OUT instructions).</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">3. Tính toán: Thời gian DMA chuyển 1 MB dữ liệu ở 100 MB/s?</p>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>Thời gian = 1 MB / 100 MB/s = 0.01 giây.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Bài tập thực hành: Mô phỏng trong Logisim</p>
+                    <ul class="list-disc list-inside mt-2">
+                        <li>Thiết kế Programmed I/O với polling.</li>
+                        <li>Thêm interrupt signal.</li>
+                        <li>Mô phỏng DMA đơn giản.</li>
+                    </ul>
+                    <p class="mt-4">Tải Logisim: <a href="https://sourceforge.net/projects/circuit/" class="text-blue-600 hover:underline">https://sourceforge.net/projects/circuit/</a></p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center mt-16 py-8 border-t">
+            <p class="text-gray-500">TanNQ - VHU - Tài liệu học phần Kiến trúc máy tính.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const solutionButtons = document.querySelectorAll('.toggle-solution-btn');
+            solutionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const solution = button.nextElementSibling;
+                    if (solution.classList.contains('hidden')) {
+                        solution.classList.remove('hidden');
+                        button.textContent = 'Ẩn lời giải';
+                    } else {
+                        solution.classList.add('hidden');
+                        button.textContent = 'Hiển thị lời giải';
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
