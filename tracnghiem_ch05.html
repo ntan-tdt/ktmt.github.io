@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm Chương 5 - Hệ thống BUS | Kiến trúc Máy tính</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .question-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .correct { background-color: #d1fae5; border-left: 4px solid #10b981; }
+        .incorrect { background-color: #fee2e2; border-left: 4px solid #ef4444; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+
+        <!-- Nút Quay về trang chủ -->
+        <div class="mb-6 flex justify-start">
+            <a href="index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold shadow-lg hover:from-blue-600 hover:to-cyan-500 transition-all">
+                <i class="fa-solid fa-arrow-left"></i> Quay về trang chủ
+            </a>
+        </div>
+
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Trắc nghiệm Chương 5: Hệ thống BUS</h1>
+            <p class="text-lg text-gray-600">40 câu hỏi trắc nghiệm – Kiểm tra kiến thức về Bus trong kiến trúc máy tính</p>
+            <p class="mt-2 text-sm text-gray-500">Thời gian đề nghị: 40 phút | Tổng điểm: 40</p>
+        </header>
+
+        <div id="quiz-form" class="mb-10">
+            <!-- Câu hỏi sẽ được render bằng JavaScript -->
+        </div>
+
+        <div class="text-center">
+            <button id="submit-btn" class="bg-green-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-green-700 transition-colors text-lg shadow-md">
+                Nộp bài & Xem kết quả
+            </button>
+        </div>
+
+        <div id="result-section" class="mt-12 hidden">
+            <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                <h2 class="text-3xl font-bold mb-4">Kết quả của bạn</h2>
+                <p class="text-5xl font-bold text-blue-600 mb-6" id="score">0/40</p>
+                <p class="text-lg mb-6" id="message"></p>
+                <button id="review-btn" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700">
+                    Xem đáp án chi tiết
+                </button>
+                <button id="restart-btn" class="ml-4 bg-gray-600 text-white py-2 px-6 rounded-lg hover:bg-gray-700">
+                    Làm lại bài
+                </button>
+            </div>
+        </div>
+
+        <div id="answer-key" class="mt-10 hidden">
+            <h3 class="text-2xl font-bold mb-6 text-center">Đáp án chi tiết</h3>
+            <!-- Đáp án sẽ được render ở đây -->
+        </div>
+
+    </div>
+
+    <script>
+        // Dữ liệu 40 câu hỏi - đã tách riêng chữ cái và nội dung lựa chọn
+        const questions = [
+            { q: "Bus trong kiến trúc máy tính dùng để làm gì?", options: ["Lưu trữ dữ liệu", "Truyền thông tin giữa các thành phần", "Thực hiện phép tính", "Điều khiển tốc độ CPU"], correct: 1 }, // index 1 → B
+            { q: "Bus nào truyền địa chỉ từ CPU đến bộ nhớ?", options: ["Data Bus", "Address Bus", "Control Bus", "System Bus"], correct: 1 },
+            { q: "Data Bus có đặc điểm gì?", options: ["Chỉ truyền theo một chiều", "Truyền hai chiều", "Chỉ truyền tín hiệu điều khiển", "Không truyền dữ liệu"], correct: 1 },
+            { q: "Control Bus chủ yếu truyền loại tín hiệu nào?", options: ["Dữ liệu người dùng", "Địa chỉ bộ nhớ", "Tín hiệu điều khiển (read/write, interrupt...)", "Dữ liệu đồ họa"], correct: 2 },
+            { q: "Độ rộng Address Bus 32 bit cho phép địa chỉ hóa tối đa bao nhiêu byte?", options: ["64 KB", "4 GB", "16 GB", "256 MB"], correct: 1 },
+            { q: "Bus có hướng truyền từ CPU ra ngoài là?", options: ["Data Bus", "Address Bus", "Control Bus", "Cả ba loại"], correct: 1 },
+            { q: "Trong hệ thống bus đơn (single bus), nhược điểm chính là gì?", options: ["Tốc độ quá cao", "Dễ bị tắc nghẽn (bus contention)", "Không thể mở rộng", "Chi phí thấp"], correct: 1 },
+            { q: "Chuẩn bus nào hiện đại, tốc độ cao, dùng cho card đồ họa và SSD?", options: ["ISA", "PCI", "PCIe", "USB 2.0"], correct: 2 },
+            { q: "Phương pháp phân xử bus Centralized có đặc điểm gì?", options: ["Mỗi thiết bị tự quyết định", "Có một bộ điều khiển trung tâm (arbiter)", "Không cần ưu tiên", "Chỉ dùng cho bus song song"], correct: 1 },
+            { q: "Phương pháp Daisy Chain thuộc loại phân xử bus nào?", options: ["Distributed", "Centralized", "Token passing", "Priority independent"], correct: 1 },
+            { q: "Bus Hierarchy thường bao gồm các cấp nào gần CPU nhất?", options: ["Peripheral Bus", "Local Bus", "Expansion Bus", "Storage Bus"], correct: 1 },
+            { q: "Chuẩn USB hiện đại nhất (2025) có tốc độ tối đa khoảng bao nhiêu?", options: ["480 Mbps", "10 Gbps", "20 Gbps (USB4)", "5 Gbps"], correct: 2 },
+            { q: "Trong chu kỳ đọc (read cycle), tín hiệu nào được gửi trước?", options: ["Dữ liệu trên Data Bus", "Địa chỉ trên Address Bus", "Tín hiệu Write trên Control Bus", "Interrupt"], correct: 1 },
+            { q: "Bus song song (parallel) so với bus nối tiếp (serial) có ưu điểm gì?", options: ["Tốc độ cao hơn ở khoảng cách xa", "Ít nhiễu hơn", "Chi phí thấp hơn", "Dễ triển khai hơn ở khoảng cách ngắn"], correct: 3 },
+            { q: "PCIe sử dụng bao nhiêu làn (lanes) phổ biến cho card đồ họa cao cấp?", options: ["x1", "x4", "x8 hoặc x16", "x32"], correct: 2 },
+            { q: "Khi nhiều thiết bị cùng muốn sử dụng bus, cơ chế nào được dùng?", options: ["Buffering", "Bus Arbitration", "Paging", "Caching"], correct: 1 },
+            { q: "Phương pháp phân xử bus Distributed thường dùng kỹ thuật gì?", options: ["Daisy Chain", "Polling", "Token passing", "Centralized Arbiter"], correct: 2 },
+            { q: "Bus nào thường có độ rộng 64 bit trong máy tính hiện đại?", options: ["Address Bus", "Control Bus", "Data Bus", "Expansion Bus"], correct: 2 },
+            { q: "Northbridge trong chipset cũ chủ yếu quản lý bus nào?", options: ["USB", "PCIe và RAM (high-speed)", "SATA", "Audio"], correct: 1 },
+            { q: "Southbridge trong chipset cũ quản lý các thiết bị nào?", options: ["CPU và RAM", "USB, SATA, audio, LAN", "GPU", "Cache"], correct: 1 },
+            { q: "Bus contention xảy ra khi nào?", options: ["Khi bus rảnh", "Khi nhiều thiết bị cùng truy cập bus", "Khi CPU nghỉ", "Khi bộ nhớ đầy"], correct: 1 },
+            { q: "Chuẩn bus nào thay thế dần PCI trong máy tính hiện đại?", options: ["ISA", "EISA", "PCIe", "AGP"], correct: 2 },
+            { q: "Tín hiệu nào trên Control Bus báo hiệu CPU muốn đọc dữ liệu?", options: ["Write", "Read", "Interrupt", "Clock"], correct: 1 },
+            { q: "Bus Clock dùng để làm gì?", options: ["Truyền dữ liệu", "Đồng bộ thời gian giữa các thành phần", "Lưu địa chỉ", "Xử lý ngắt"], correct: 1 },
+            { q: "Trong bus hệ thống, thành phần nào quyết định ai được dùng bus khi có xung đột?", options: ["CPU", "Bus Arbiter", "RAM", "Cache"], correct: 1 },
+            { q: "Phương pháp Polling trong bus arbitration có nhược điểm gì?", options: ["Tốn ít tài nguyên", "CPU phải liên tục kiểm tra", "Không cần phần cứng", "Luôn nhanh nhất"], correct: 1 },
+            { q: "Bus nào thường dùng cho thiết bị ngoại vi tốc độ thấp như bàn phím?", options: ["PCIe", "USB", "SATA", "NVMe"], correct: 1 },
+            { q: "Số bit tối thiểu của Data Bus để truyền một ký tự ASCII (8 bit) trong một chu kỳ?", options: ["4 bit", "8 bit", "16 bit", "32 bit"], correct: 1 },
+            { q: "Trong hệ thống bus đa cấp, cấp nào nhanh nhất và gần CPU nhất?", options: ["Peripheral Bus", "Front Side Bus / Local Bus", "Expansion Bus", "Storage Bus"], correct: 1 },
+            { q: "Ưu điểm chính của bus nối tiếp (serial) so với song song?", options: ["Tốc độ chậm hơn", "Ít dây dẫn, ít nhiễu, khoảng cách xa hơn", "Chi phí cao hơn", "Không hỗ trợ plug-and-play"], correct: 1 },
+            { q: "Chuẩn bus nào dùng cho ổ cứng tốc độ cao hiện nay?", options: ["IDE", "SATA", "SCSI", "PATA"], correct: 1 },
+            { q: "Trong bus arbitration, phương pháp Independent Request yêu cầu gì?", options: ["Mỗi thiết bị có đường yêu cầu riêng", "Dùng token", "Xếp hàng theo Daisy Chain", "Không cần arbiter"], correct: 0 },
+            { q: "Bus width (độ rộng) ảnh hưởng trực tiếp đến?", options: ["Tốc độ truyền dữ liệu mỗi chu kỳ", "Dung lượng RAM", "Tốc độ CPU", "Dung lượng ổ cứng"], correct: 0 },
+            { q: "Tín hiệu Interrupt thường được truyền qua bus nào?", options: ["Address Bus", "Data Bus", "Control Bus", "Expansion Bus"], correct: 2 },
+            { q: "Bus topology dạng vòng (ring) thường dùng trong loại phân xử nào?", options: ["Daisy Chain", "Token Ring", "Centralized", "Polling"], correct: 1 },
+            { q: "Trong máy tính hiện đại, bus chính kết nối CPU với RAM thường là?", options: ["Front Side Bus (FSB)", "QPI / UPI / Infinity Fabric / Direct Memory Interface", "PCI", "ISA"], correct: 1 },
+            { q: "Bus nào hỗ trợ hot-plug (cắm nóng) tốt nhất?", options: ["PCI", "PCIe", "USB", "SATA"], correct: 2 },
+            { q: "Khi xảy ra bus mastership transfer, ai chuyển giao quyền điều khiển bus?", options: ["CPU", "Bus Arbiter", "Thiết bị I/O", "RAM"], correct: 1 },
+            { q: "Một trong những ưu điểm của bus PCIe so với PCI là?", options: ["Tốc độ chậm hơn", "Hỗ trợ nhiều làn (lanes), băng thông cao hơn", "Không hỗ trợ card đồ họa", "Chỉ dùng cho thiết bị chậm"], correct: 1 },
+            { q: "Bus nào thường có số lượng đường truyền ít hơn nhưng tốc độ mỗi đường rất cao?", options: ["Parallel Bus", "Serial Bus", "ISA Bus", "EISA Bus"], correct: 1 },
+            { q: "Trong chu kỳ ghi (write cycle), thứ tự tín hiệu thường là?", options: ["Địa chỉ → Dữ liệu → Write signal", "Write signal → Địa chỉ → Dữ liệu", "Dữ liệu → Địa chỉ → Write signal", "Không cần địa chỉ"], correct: 0 }
+        ];
+
+        // Render câu hỏi
+        const quizContainer = document.getElementById('quiz-form');
+        questions.forEach((q, index) => {
+            const div = document.createElement('div');
+            div.className = 'question-card';
+            div.innerHTML = `
+                <p class="font-semibold mb-3">Câu ${index + 1}: ${q.q}</p>
+                ${q.options.map((opt, i) => `
+                    <label class="block mb-1 cursor-pointer">
+                        <input type="radio" name="q${index}" value="${i}" class="mr-2">
+                        ${String.fromCharCode(65 + i)}. ${opt}
+                    </label>
+                `).join('')}
+            `;
+            quizContainer.appendChild(div);
+        });
+
+        // Xử lý nộp bài
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            let score = 0;
+            const answerKey = document.getElementById('answer-key');
+            answerKey.innerHTML = '<h3 class="text-2xl font-bold mb-6 text-center">Đáp án chi tiết</h3>';
+            answerKey.classList.remove('hidden');
+
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                const userAnswer = selected ? parseInt(selected.value) : -1;
+                const isCorrect = userAnswer === q.correct;
+
+                if (isCorrect) score++;
+
+                const card = document.querySelectorAll('.question-card')[index];
+                card.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+                const answerDiv = document.createElement('div');
+                answerDiv.className = 'question-card mt-4';
+                answerDiv.innerHTML = `
+                    <p class="font-semibold">Câu ${index + 1}: ${q.q}</p>
+                    <p><strong>Đáp án đúng: ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}</strong></p>
+                    <p class="${isCorrect ? 'text-green-600' : 'text-red-600'}">
+                        Bạn chọn: ${userAnswer >= 0 ? String.fromCharCode(65 + userAnswer) + '. ' + q.options[userAnswer] : 'Chưa chọn'} 
+                        ${isCorrect ? '(Đúng)' : '(Sai)'}
+                    </p>
+                `;
+                answerKey.appendChild(answerDiv);
+            });
+
+            document.getElementById('score').textContent = `${score}/40`;
+            document.getElementById('message').textContent = score >= 32 ? 'Xuất sắc! Bạn nắm rất tốt chương 5.' : 
+                score >= 24 ? 'Khá tốt! Cần ôn lại một số phần.' : 
+                'Cần ôn tập thêm về hệ thống BUS nhé!';
+            
+            document.getElementById('result-section').classList.remove('hidden');
+            document.getElementById('submit-btn').disabled = true;
+        });
+
+        // Làm lại bài
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            location.reload();
+        });
+
+        // Xem đáp án chi tiết
+        document.getElementById('review-btn').addEventListener('click', () => {
+            document.getElementById('answer-key').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+
+</body>
+</html>
