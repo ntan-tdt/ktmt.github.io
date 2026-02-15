@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm Chương 7 - Hệ điều hành | Kiến trúc Máy tính</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .question-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .correct { background-color: #d1fae5; border-left: 4px solid #10b981; }
+        .incorrect { background-color: #fee2e2; border-left: 4px solid #ef4444; }
+        .hidden { display: none; }
+        #timer { font-size: 1.5rem; font-weight: bold; color: #dc2626; }
+        #password-modal { background: rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+
+        <!-- Nút Quay về trang chủ -->
+        <div class="mb-6 flex justify-start">
+            <a href="index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold shadow-lg hover:from-blue-600 hover:to-cyan-500 transition-all">
+                <i class="fa-solid fa-arrow-left"></i> Quay về trang chủ
+            </a>
+        </div>
+
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Trắc nghiệm Chương 7: Hệ điều hành</h1>
+            <p class="text-lg text-gray-600">40 câu hỏi trắc nghiệm – Kiểm tra kiến thức về Operating System</p>
+            <p class="mt-2 text-sm text-gray-500">Thời gian: <span id="timer">40:00</span> | Tổng điểm: 40</p>
+            <p id="best-score" class="text-sm text-green-600 font-semibold mt-1">Điểm cao nhất: --</p>
+        </header>
+
+        <div id="quiz-form" class="mb-10">
+            <!-- Câu hỏi sẽ được render bằng JavaScript -->
+        </div>
+
+        <div class="text-center">
+            <button id="submit-btn" class="bg-green-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-green-700 transition-colors text-lg shadow-md">
+                Nộp bài & Xem kết quả
+            </button>
+        </div>
+
+        <div id="result-section" class="mt-12 hidden">
+            <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                <h2 class="text-3xl font-bold mb-4">Kết quả của bạn</h2>
+                <p class="text-5xl font-bold text-blue-600 mb-6" id="score">0/40</p>
+                <p class="text-lg mb-6" id="message"></p>
+                <button id="review-btn" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700">
+                    Xem đáp án chi tiết (yêu cầu mật khẩu)
+                </button>
+                <button id="restart-btn" class="ml-4 bg-gray-600 text-white py-2 px-6 rounded-lg hover:bg-gray-700">
+                    Làm lại bài
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal nhập mật khẩu -->
+        <div id="password-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full">
+                <h3 class="text-xl font-bold mb-4 text-center">Nhập mật khẩu để xem đáp án chi tiết</h3>
+                <input type="password" id="password-input" class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Mật khẩu...">
+                <div class="flex justify-center gap-4">
+                    <button id="submit-password" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700">Xác nhận</button>
+                    <button id="cancel-password" class="bg-gray-400 text-white py-2 px-6 rounded-lg hover:bg-gray-500">Hủy</button>
+                </div>
+                <p id="password-error" class="text-red-600 text-center mt-3 hidden">Mật khẩu sai!</p>
+            </div>
+        </div>
+
+        <!-- Phần đáp án chi tiết (ẩn hoàn toàn ban đầu) -->
+        <div id="answer-key" class="mt-10 hidden">
+            <h3 class="text-2xl font-bold mb-6 text-center">Đáp án chi tiết</h3>
+            <!-- Đáp án sẽ được render ở đây khi nhập đúng mật khẩu -->
+        </div>
+
+    </div>
+
+    <script>
+        // Dữ liệu 40 câu hỏi trắc nghiệm Chương 7 - Hệ điều hành
+        const questions = [
+            { q: "Hệ điều hành (OS) có vai trò chính là gì?", options: ["Thực hiện phép tính toán học", "Quản lý tài nguyên phần cứng và cung cấp dịch vụ cho ứng dụng", "Lưu trữ dữ liệu vĩnh viễn", "Thiết kế phần cứng"], correct: 1 },
+            { q: "Kernel trong hệ điều hành là gì?", options: ["Giao diện người dùng", "Phần lõi giao tiếp trực tiếp với phần cứng", "Phần mềm ứng dụng", "Trình duyệt web"], correct: 1 },
+            { q: "Chế độ kernel mode khác user mode ở điểm nào?", options: ["Có quyền truy cập trực tiếp phần cứng", "Chạy chậm hơn", "Không có quyền truy cập bộ nhớ", "Chỉ dùng cho ứng dụng"], correct: 0 },
+            { q: "Hệ điều hành nào sau đây là ví dụ về OS đa nhiệm?", options: ["MS-DOS", "Windows 10", "CP/M", "Palm OS"], correct: 1 },
+            { q: "Trạng thái tiến trình nào là trạng thái sẵn sàng chờ CPU?", options: ["Running", "Waiting", "Ready", "Terminated"], correct: 2 },
+            { q: "Thuật toán lập lịch FCFS là gì?", options: ["Shortest Job First", "First Come First Served", "Round Robin", "Priority Scheduling"], correct: 1 },
+            { q: "Round Robin scheduling sử dụng gì để tránh starvation?", options: ["Quantum time slice", "Ưu tiên cao", "Không có cơ chế", "SJF"], correct: 0 },
+            { q: "Tiến trình (process) khác tiểu trình (thread) ở điểm nào chính?", options: ["Tiến trình có không gian bộ nhớ riêng, thread chia sẻ"], correct: 0 },
+            { q: "Bộ nhớ ảo (virtual memory) giúp gì cho hệ thống?", options: ["Tăng tốc độ CPU", "Cho phép chạy chương trình lớn hơn RAM vật lý", "Giảm dung lượng ổ cứng", "Tăng bảo mật phần cứng"], correct: 1 },
+            { q: "Cơ chế paging trong quản lý bộ nhớ dùng đơn vị nào?", options: ["Segment", "Page (trang cố định)", "Block", "Cluster"], correct: 1 },
+            { q: "Phân mảnh ngoài (external fragmentation) thường xảy ra trong kỹ thuật nào?", options: ["Paging", "Segmentation", "Swapping", "Demand paging"], correct: 1 },
+            { q: "Page fault là gì?", options: ["Trang đã có trong RAM", "Trang cần truy cập không có trong RAM", "Lỗi phần cứng", "Lỗi phần mềm ứng dụng"], correct: 1 },
+            { q: "Thrashing xảy ra khi nào?", options: ["Khi CPU idle", "Khi hệ thống dành quá nhiều thời gian swapping page", "Khi RAM đầy 100%", "Khi không có tiến trình"], correct: 1 },
+            { q: "Hệ thống tệp (file system) nào thường dùng trong Windows?", options: ["ext4", "NTFS", "FAT32", "APFS"], correct: 1 },
+            { q: "Hệ thống tệp nào thường dùng trong Linux hiện đại?", options: ["NTFS", "FAT32", "ext4", "HFS+"], correct: 2 },
+            { q: "RAID 1 dùng để làm gì?", options: ["Tăng tốc độ đọc/ghi", "Mirroring (sao lưu dữ liệu)", "Phân tán dữ liệu", "Tăng dung lượng"], correct: 1 },
+            { q: "Spooling trong hệ thống I/O dùng để làm gì?", options: ["Tăng tốc độ truyền", "Quản lý hàng đợi cho thiết bị chậm như máy in", "Mã hóa dữ liệu", "Nén file"], correct: 1 },
+            { q: "System call là gì?", options: ["Lệnh gọi hệ thống từ ứng dụng đến kernel", "Lệnh gọi phần cứng", "Lệnh gọi thư viện", "Lệnh gọi driver"], correct: 0 },
+            { q: "Monolithic kernel khác microkernel ở điểm nào?", options: ["Monolithic chạy tất cả dịch vụ trong kernel mode", "Microkernel chạy tất cả trong user mode", "Monolithic chậm hơn", "Microkernel không có driver"], correct: 0 },
+            { q: "Hypervisor loại 1 (bare-metal) chạy trực tiếp trên phần cứng, ví dụ nào?", options: ["VirtualBox", "VMware Workstation", "VMware ESXi", "Virtual PC"], correct: 2 },
+            { q: "Deadlock trong quản lý tài nguyên xảy ra khi nào?", options: ["Khi có 4 điều kiện đồng thời: mutual exclusion, hold & wait, no preemption, circular wait"], correct: 0 },
+            { q: "Banker's algorithm dùng để làm gì?", options: ["Phát hiện deadlock", "Tránh deadlock", "Khôi phục sau deadlock", "Tăng tốc độ CPU"], correct: 1 },
+            { q: "Process synchronization dùng cơ chế nào phổ biến?", options: ["Semaphore", "Paging", "Swapping", "Thrashing"], correct: 0 },
+            { q: "Mutex khác semaphore ở điểm nào?", options: ["Mutex chỉ cho phép 1 tiến trình truy cập, semaphore có thể nhiều hơn"], correct: 0 },
+            { q: "Critical section là gì?", options: ["Phần code truy cập tài nguyên chung", "Phần code không truy cập tài nguyên", "Toàn bộ tiến trình", "Kernel code"], correct: 0 },
+            { q: "Hệ điều hành thời gian thực (RTOS) ưu tiên điều gì?", options: ["Throughput cao", "Đáp ứng thời gian xác định (deadline)", "Dung lượng lớn", "Giao diện đẹp"], correct: 1 },
+            { q: "Multilevel Queue Scheduling chia hàng đợi dựa trên gì?", options: ["Ưu tiên hoặc loại tiến trình", "Thời gian đến", "Kích thước tiến trình", "Tên tiến trình"], correct: 0 },
+            { q: "Aging trong lập lịch dùng để làm gì?", options: ["Tăng ưu tiên cho tiến trình chờ lâu", "Giảm ưu tiên", "Xóa tiến trình", "Tăng bộ nhớ"], correct: 0 },
+            { q: "Demand paging khác pure paging ở điểm nào?", options: ["Chỉ load page khi cần (page fault)", "Load tất cả page ngay từ đầu", "Không dùng page table", "Không dùng swap"], correct: 0 },
+            { q: "TLB (Translation Lookaside Buffer) dùng để làm gì?", options: ["Cache ánh xạ địa chỉ ảo sang vật lý", "Lưu trữ file", "Quản lý tiến trình", "Điều khiển I/O"], correct: 0 },
+            { q: "Belady's anomaly xảy ra ở thuật toán thay trang nào?", options: ["FIFO", "LRU", "Optimal", "Second Chance"], correct: 0 },
+            { q: "Working set model dùng để làm gì?", options: ["Xác định tập trang mà tiến trình đang hoạt động để giảm page fault", "Tăng tốc độ CPU", "Quản lý I/O", "Mã hóa dữ liệu"], correct: 0 },
+            { q: "File allocation method nào không gây phân mảnh ngoài?", options: ["Contiguous", "Linked", "Indexed"], correct: 2 },
+            { q: "FAT (File Allocation Table) thường dùng trong hệ thống tệp nào?", options: ["NTFS", "ext4", "FAT32", "APFS"], correct: 2 },
+            { q: "Journaling trong file system giúp gì?", options: ["Tăng tốc độ đọc", "Phục hồi nhanh sau crash", "Giảm dung lượng", "Mã hóa file"], correct: 1 },
+            { q: "Access Control List (ACL) dùng để làm gì trong hệ thống tệp?", options: ["Quyền truy cập chi tiết cho từng user/group", "Nén file", "Sao lưu", "Mã hóa"], correct: 0 },
+            { q: "Hệ điều hành nào dùng kernel monolithic?", options: ["Minix", "Linux", "QNX", "L4"], correct: 1 },
+            { q: "Microkernel ưu tiên điều gì?", options: ["Tốc độ cao", "Độ tin cậy và modular", "Dung lượng lớn", "Giao diện đồ họa"], correct: 1 },
+            { q: "Virtualization type 2 (hosted) chạy trên?", options: ["Trực tiếp phần cứng", "Trên một OS host", "Không cần host", "Chỉ trên cloud"], correct: 1 },
+            { q: "Container khác VM ở điểm nào?", options: ["Chia sẻ kernel với host, nhẹ hơn VM", "Dùng hypervisor", "Chạy chậm hơn VM", "Không chia sẻ tài nguyên"], correct: 0 },
+            { q: "Cgroup và namespace là công nghệ chính của?", options: ["Docker/Container", "VirtualBox", "VMware", "Hyper-V"], correct: 0 }
+        ];
+
+        // Mật khẩu để xem đáp án chi tiết
+        const PASSWORD = "ktmt2025";
+
+        // Hàm xáo trộn mảng
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Xáo trộn và render câu hỏi
+        const shuffledQuestions = shuffle([...questions]);
+        const quizContainer = document.getElementById('quiz-form');
+        shuffledQuestions.forEach((q, index) => {
+            const div = document.createElement('div');
+            div.className = 'question-card';
+            div.innerHTML = `
+                <p class="font-semibold mb-3">Câu ${index + 1}: ${q.q}</p>
+                ${q.options.map((opt, i) => `
+                    <label class="block mb-1 cursor-pointer">
+                        <input type="radio" name="q${index}" value="${i}" class="mr-2">
+                        ${String.fromCharCode(65 + i)}. ${opt}
+                    </label>
+                `).join('')}
+            `;
+            quizContainer.appendChild(div);
+        });
+
+        // Đếm ngược 40 phút
+        let timeLeft = 2400;
+        const timerDisplay = document.getElementById('timer');
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert("Hết thời gian! Bài kiểm tra sẽ tự động nộp.");
+                submitQuiz();
+            }
+            timeLeft--;
+        }
+        const timerInterval = setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // Hiển thị điểm cao nhất
+        const bestScoreKey = 'bestScore_chuong07';
+        const savedBest = localStorage.getItem(bestScoreKey);
+        if (savedBest) {
+            document.getElementById('best-score').textContent = `Điểm cao nhất: ${savedBest}/40`;
+        }
+
+        // Hàm nộp bài
+        function submitQuiz() {
+            let score = 0;
+            const answerKey = document.getElementById('answer-key');
+            answerKey.innerHTML = '<h3 class="text-2xl font-bold mb-6 text-center">Đáp án chi tiết</h3>';
+
+            shuffledQuestions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                const userAnswer = selected ? parseInt(selected.value) : -1;
+                const isCorrect = userAnswer === q.correct;
+                if (isCorrect) score++;
+
+                const card = document.querySelectorAll('.question-card')[index];
+                card.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+                const answerDiv = document.createElement('div');
+                answerDiv.className = 'question-card mt-4';
+                answerDiv.innerHTML = `
+                    <p class="font-semibold">Câu ${index + 1}: ${q.q}</p>
+                    <p><strong>Đáp án đúng: ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}</strong></p>
+                    <p class="${isCorrect ? 'text-green-600' : 'text-red-600'}">
+                        Bạn chọn: ${userAnswer >= 0 ? String.fromCharCode(65 + userAnswer) + '. ' + q.options[userAnswer] : 'Chưa chọn'} 
+                        ${isCorrect ? '(Đúng)' : '(Sai)'}
+                    </p>
+                `;
+                answerKey.appendChild(answerDiv);
+            });
+
+            document.getElementById('score').textContent = `${score}/40`;
+            document.getElementById('message').textContent = score >= 32 ? 'Xuất sắc!' : score >= 24 ? 'Khá tốt!' : 'Cần ôn tập thêm!';
+            document.getElementById('result-section').classList.remove('hidden');
+            document.getElementById('submit-btn').disabled = true;
+            clearInterval(timerInterval);
+
+            // Lưu điểm cao nhất
+            const currentBest = localStorage.getItem(bestScoreKey);
+            if (!currentBest || score > parseInt(currentBest)) {
+                localStorage.setItem(bestScoreKey, score);
+                document.getElementById('best-score').textContent = `Điểm cao nhất: ${score}/40 (mới cập nhật!)`;
+            }
+        }
+
+        document.getElementById('submit-btn').addEventListener('click', submitQuiz);
+
+        // Làm lại bài
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            location.reload();
+        });
+
+        // Xử lý nút "Xem đáp án chi tiết" + mật khẩu
+        const reviewBtn = document.getElementById('review-btn');
+        const passwordModal = document.getElementById('password-modal');
+        const passwordInput = document.getElementById('password-input');
+        const submitPassword = document.getElementById('submit-password');
+        const cancelPassword = document.getElementById('cancel-password');
+        const passwordError = document.getElementById('password-error');
+        const answerKey = document.getElementById('answer-key');
+
+        reviewBtn.addEventListener('click', () => {
+            passwordModal.classList.remove('hidden');
+            passwordInput.value = '';
+            passwordError.classList.add('hidden');
+        });
+
+        submitPassword.addEventListener('click', () => {
+            if (passwordInput.value === PASSWORD) {
+                passwordModal.classList.add('hidden');
+                answerKey.classList.remove('hidden');
+                answerKey.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                passwordError.classList.remove('hidden');
+            }
+        });
+
+        cancelPassword.addEventListener('click', () => {
+            passwordModal.classList.add('hidden');
+        });
+
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitPassword.click();
+            }
+        });
+    </script>
+
+</body>
+</html>
