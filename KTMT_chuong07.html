@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fix lỗi YouTube embed nếu có -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Chương 7: Hệ điều hành | Kiến trúc Máy tính</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            padding: 2rem;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        img {
+            border-radius: 0.5rem;
+            max-width: 100%;
+            height: auto;
+            margin: 1rem auto;
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+
+        <!-- Nút Quay về trang chủ -->
+        <div class="mb-6 flex justify-start">
+            <a href="index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold shadow-lg hover:from-blue-600 hover:to-cyan-500 transition-all">
+                <i class="fa-solid fa-arrow-left"></i> Quay về trang chủ
+            </a>
+        </div>
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Chương 7: Hệ điều hành</h1>
+            <p class="text-lg text-gray-600">Phần mềm quản lý tài nguyên phần cứng và cung cấp dịch vụ cho ứng dụng</p>
+        </header>
+
+        <!-- Lời mở đầu + Nút Nghe Tổng quan -->
+        <div id="intro-section" class="card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Lời mở đầu</h2>
+            <p id="intro-text" class="text-gray-700 leading-relaxed">
+                Hệ điều hành (Operating System - OS) là lớp phần mềm trung gian quan trọng nhất, làm cầu nối giữa phần cứng (CPU, bộ nhớ, I/O) và người dùng/phần mềm ứng dụng. Trong học phần Kiến trúc máy tính, chương này giúp hiểu cách OS quản lý tài nguyên phần cứng, thực hiện đa nhiệm, quản lý bộ nhớ và giao tiếp với thiết bị ngoại vi.
+            </p>
+
+            <div class="mt-6 flex flex-wrap gap-4">
+                <button id="play-overview-btn" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center">
+                    <i class="fas fa-play mr-2"></i> Nghe Tổng quan
+                </button>
+                <button id="stop-overview-btn" class="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center hidden">
+                    <i class="fas fa-stop mr-2"></i> Dừng
+                </button>
+            </div>
+        </div>
+
+        <main>
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-12 border-b-2 border-blue-500 pb-2">I. Phần Lý Thuyết</h2>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">1. Giới thiệu về Hệ điều hành</h3>
+                <p class="text-gray-700 leading-relaxed">
+                    Hệ điều hành là phần mềm hệ thống quản lý tài nguyên phần cứng (CPU, bộ nhớ, thiết bị I/O) và cung cấp các dịch vụ chung cho ứng dụng (file system, networking, security...).
+                </p>
+                <ul class="list-disc list-inside space-y-2 mt-4">
+                    <li><strong>Chức năng chính</strong>: Quản lý tiến trình, bộ nhớ, I/O, bảo mật, giao diện người dùng.</li>
+                    <li><strong>Kernel</strong>: Lõi OS, chạy ở chế độ kernel mode, giao tiếp trực tiếp với phần cứng.</li>
+                </ul>
+                <div class="text-center my-6">
+                    <img src="https://www.tutorialspoint.com/operating_system/images/operating_system_architecture.jpg" alt="Cấu trúc hệ điều hành">
+                    <p class="text-sm mt-2 text-gray-600">Hình 1: Cấu trúc tổng quát của hệ điều hành (kernel và các lớp)</p>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/26QPDBe-NB8" 
+                            title="Operating Systems: Crash Course Computer Science #18" 
+                            frameborder="0" 
+                            allowfullscreen 
+                            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+            </div>
+
+            <!-- Các phần còn lại giữ nguyên như phiên bản trước -->
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">2. Các loại Hệ điều hành</h3>
+                <div class="overflow-x-auto">
+                    <table>
+                        <caption class="text-lg font-semibold mb-2">Bảng 1: Phân loại các loại hệ điều hành</caption>
+                        <thead>
+                            <tr>
+                                <th>Loại OS</th>
+                                <th>Mô tả</th>
+                                <th>Ví dụ</th>
+                                <th>Đặc điểm trong kiến trúc máy tính</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Đơn nhiệm</td>
+                                <td>Chỉ chạy một chương trình tại một thời điểm</td>
+                                <td>MS-DOS</td>
+                                <td>Đơn giản, ít overhead</td>
+                            </tr>
+                            <tr>
+                                <td>Đa nhiệm</td>
+                                <td>Chạy nhiều chương trình cùng lúc (time-sharing)</td>
+                                <td>Windows, Linux</td>
+                                <td>Hỗ trợ đa tiến trình, scheduling</td>
+                            </tr>
+                            <tr>
+                                <td>Thời gian thực</td>
+                                <td>Đáp ứng thời gian nghiêm ngặt</td>
+                                <td>FreeRTOS, VxWorks</td>
+                                <td>Ưu tiên ngắt nhanh, dùng trong embedded</td>
+                            </tr>
+                            <tr>
+                                <td>Phân tán</td>
+                                <td>Quản lý nhiều máy như một hệ thống</td>
+                                <td>Hadoop, Google OS</td>
+                                <td>Load balancing, cluster</td>
+                            </tr>
+                            <tr>
+                                <td>Nhúng</td>
+                                <td>Dành cho thiết bị chuyên dụng</td>
+                                <td>Android, iOS</td>
+                                <td>Tối ưu tài nguyên hạn chế</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="video-container mt-6">
+                    <iframe src="https://www.youtube.com/embed/pV89NF_fWAc" 
+                            title="Types of Operating Systems" 
+                            frameborder="0" 
+                            allowfullscreen 
+                            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">3. Quản lý Tiến trình (Process Management)</h3>
+                <p>OS quản lý các tiến trình (process) để thực hiện đa nhiệm hiệu quả.</p>
+                <div class="overflow-x-auto mt-4">
+                    <table>
+                        <caption class="text-lg font-semibold mb-2">Bảng 2: So sánh Tiến trình và Tiểu trình</caption>
+                        <thead>
+                            <tr>
+                                <th>Tiêu chí</th>
+                                <th>Tiến trình (Process)</th>
+                                <th>Tiểu trình (Thread)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Không gian bộ nhớ</td>
+                                <td>Riêng biệt</td>
+                                <td>Chia sẻ với tiến trình cha</td>
+                            </tr>
+                            <tr>
+                                <td>Overhead</td>
+                                <td>Cao</td>
+                                <td>Thấp</td>
+                            </tr>
+                            <tr>
+                                <td>Giao tiếp</td>
+                                <td>IPC phức tạp</td>
+                                <td>Dễ dàng qua bộ nhớ chung</td>
+                            </tr>
+                            <tr>
+                                <td>Ví dụ</td>
+                                <td>Nhiều tab browser riêng biệt</td>
+                                <td>Đa luồng trong một ứng dụng</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center my-6">
+                    <img src="https://www.geeksforgeeks.org/wp-content/uploads/process-states.png" alt="Chu kỳ trạng thái tiến trình">
+                    <p class="text-sm mt-2 text-gray-600">Hình 2: Các trạng thái của tiến trình trong hệ điều hành</p>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/OrM7nZ39vhM" 
+                            title="Process Management in Operating System" 
+                            frameborder="0" 
+                            allowfullscreen 
+                            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">4. Quản lý Bộ nhớ (Memory Management)</h3>
+                <div class="overflow-x-auto">
+                    <table>
+                        <caption class="text-lg font-semibold mb-2">Bảng 3: So sánh Paging và Segmentation</caption>
+                        <thead>
+                            <tr>
+                                <th>Tiêu chí</th>
+                                <th>Paging</th>
+                                <th>Segmentation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cơ sở phân chia</td>
+                                <td>Cố định (pages)</td>
+                                <td>Linh hoạt (segments)</td>
+                            </tr>
+                            <tr>
+                                <td>Phân mảnh</td>
+                                <td>Không phân mảnh ngoài</td>
+                                <td>Có phân mảnh ngoài</td>
+                            </tr>
+                            <tr>
+                                <td>Bảo vệ</td>
+                                <td>Dễ qua page table</td>
+                                <td>Hỗ trợ chia sẻ theo segment</td>
+                            </tr>
+                            <tr>
+                                <td>Ứng dụng</td>
+                                <td>Hầu hết OS hiện đại</td>
+                                <td>Kết hợp với paging</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center my-6">
+                    <img src="https://www.tutorialspoint.com/operating_system/images/virtual_memory.jpg" alt="Bộ nhớ ảo">
+                    <p class="text-sm mt-2 text-gray-600">Hình 3: Minh họa bộ nhớ ảo và cơ chế paging</p>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/iuEG4iZ8eag" 
+                            title="Memory Management in Operating System" 
+                            frameborder="0" 
+                            allowfullscreen 
+                            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">5. Quản lý I/O và Hệ thống Tệp</h3>
+                <p>OS quản lý thiết bị I/O qua driver, buffering, caching và hệ thống tệp (file system) như NTFS, ext4.</p>
+                <div class="text-center my-6">
+                    <img src="https://www.geeksforgeeks.org/wp-content/uploads/file-system-structure.png" alt="Cấu trúc hệ thống tệp">
+                    <p class="text-sm mt-2 text-gray-600">Hình 4: Cấu trúc hệ thống tệp điển hình</p>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/KdjIUGv1ArQ" 
+                            title="File Systems in Operating System" 
+                            frameborder="0" 
+                            allowfullscreen 
+                            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+            </div>
+
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-16 border-b-2 border-green-500 pb-2">II. Phần Bài tập Thực hành</h2>
+
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">1. Trắc nghiệm: Kỹ thuật lập lịch nào ưu tiên công việc ngắn nhất?</p>
+                    <p class="mt-2">a) FCFS  b) SJF  c) Round-Robin</p>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p><strong>Đáp án: b) SJF (Shortest Job First)</strong></p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">2. Tự luận: Vai trò của kernel trong OS và cách nó tương tác với phần cứng.</p>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>Kernel là lõi OS, chạy ở kernel mode, quản lý CPU, memory, I/O qua system calls và interrupt.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">3. Tính toán: Với page size 4KB và địa chỉ logic 32-bit, số entry trong page table là bao nhiêu?</p>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>Page number = 32 - 12 = 20 bit → 2<sup>20</sup> = 1.048.576 entry.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Bài tập thực hành: Quan sát quản lý tiến trình và bộ nhớ trên Linux/Windows</p>
+                    <ul class="list-disc list-inside mt-2">
+                        <li>Trên Ubuntu: dùng lệnh <code>ps aux</code>, <code>top</code>, <code>free -h</code>.</li>
+                        <li>Trên Windows: Task Manager → Processes và Performance tab.</li>
+                        <li>Phân tích: Số tiến trình, thread, usage RAM khi chạy nhiều ứng dụng.</li>
+                    </ul>
+                    <p class="mt-4">Gợi ý: Cài Ubuntu trên VirtualBox để thực hành.</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center mt-16 py-8 border-t">
+            <p class="text-gray-500">Tài liệu học phần Kiến trúc máy tính.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle lời giải
+            const solutionButtons = document.querySelectorAll('.toggle-solution-btn');
+            solutionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const solution = button.nextElementSibling;
+                    if (solution.classList.contains('hidden')) {
+                        solution.classList.remove('hidden');
+                        button.textContent = 'Ẩn lời giải';
+                    } else {
+                        solution.classList.add('hidden');
+                        button.textContent = 'Hiển thị lời giải';
+                    }
+                });
+            });
+
+            // Nghe Tổng quan bằng SpeechSynthesis
+            const playBtn = document.getElementById('play-overview-btn');
+            const stopBtn = document.getElementById('stop-overview-btn');
+            const introText = document.getElementById('intro-text').textContent.trim();
+
+            // Nội dung đọc tổng quan (có thể chỉnh sửa nếu muốn ngắn hơn/dài hơn)
+            const overviewText = `
+                Chương bảy giới thiệu về hệ điều hành. 
+                Hệ điều hành là phần mềm quan trọng nhất, làm cầu nối giữa phần cứng và người dùng. 
+                Nó quản lý tài nguyên như CPU, bộ nhớ, thiết bị vào ra, thực hiện đa nhiệm, bảo mật và cung cấp giao diện cho ứng dụng. 
+                Trong kiến trúc máy tính, chúng ta sẽ tìm hiểu cách hệ điều hành quản lý tiến trình, bộ nhớ ảo, hệ thống tệp và giao tiếp với phần cứng.
+            `;
+
+            let utterance = null;
+
+            playBtn.addEventListener('click', () => {
+                if ('speechSynthesis' in window) {
+                    // Dừng nếu đang phát
+                    window.speechSynthesis.cancel();
+
+                    utterance = new SpeechSynthesisUtterance(overviewText);
+                    utterance.lang = 'vi-VN';
+                    utterance.volume = 1;
+                    utterance.rate = 1.0;   // tốc độ đọc (có thể chỉnh 0.9 ~ 1.1)
+                    utterance.pitch = 1.0;
+
+                    utterance.onend = () => {
+                        stopBtn.classList.add('hidden');
+                        playBtn.disabled = false;
+                    };
+
+                    window.speechSynthesis.speak(utterance);
+                    stopBtn.classList.remove('hidden');
+                    playBtn.disabled = true;
+                } else {
+                    alert('Trình duyệt của bạn không hỗ trợ SpeechSynthesis. Hãy thử Chrome hoặc Edge.');
+                }
+            });
+
+            stopBtn.addEventListener('click', () => {
+                window.speechSynthesis.cancel();
+                stopBtn.classList.add('hidden');
+                playBtn.disabled = false;
+            });
+        });
+    </script>
+
+</body>
+</html>
