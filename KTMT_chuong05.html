@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chương 5: Hệ thống BUS | Kiến trúc Máy tính</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            padding: 2rem;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        img {
+            border-radius: 0.5rem;
+            max-width: 100%;
+            height: auto;
+            margin: 1rem auto;
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+
+        <!-- Nút Quay về trang chủ -->
+        <div class="mb-6 flex justify-start">
+            <a href="index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold shadow-lg hover:from-blue-600 hover:to-cyan-500 transition-all">
+                <i class="fa-solid fa-arrow-left"></i> Quay về trang chủ
+            </a>
+        </div>
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Chương 5: Hệ thống BUS</h1>
+            <p class="text-lg text-gray-600">Kết nối và truyền thông tin giữa các thành phần trong máy tính</p>
+        </header>
+
+        <!-- Giới thiệu ngắn -->
+        <div id="intro-section" class="card">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Lời mở đầu</h2>
+            <p class="text-gray-700 leading-relaxed">
+                Hệ thống BUS là nền tảng kết nối các thành phần chính trong máy tính (CPU, bộ nhớ, thiết bị I/O). Chương này trình bày khái niệm, các loại BUS, cấu trúc, cơ chế phân xử và hoạt động thực tế của hệ thống BUS trong kiến trúc máy tính hiện đại.
+            </p>
+        </div>
+
+        <main>
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-12 border-b-2 border-blue-500 pb-2">I. Phần Lý Thuyết</h2>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">1. Giới thiệu về Hệ thống BUS</h3>
+                <p class="text-gray-700 leading-relaxed">
+                    Hệ thống BUS là tập hợp các đường truyền tín hiệu dùng để kết nối và truyền dữ liệu giữa CPU, bộ nhớ chính (RAM), và thiết bị vào/ra (I/O). BUS hoạt động như "đường cao tốc" chung trong máy tính.
+                </p>
+                <ul class="list-disc list-inside space-y-2 mt-4">
+                    <li><strong>Chức năng chính</strong>: Truyền dữ liệu, địa chỉ bộ nhớ, tín hiệu điều khiển.</li>
+                    <li><strong>Ưu điểm</strong>: Giảm số lượng kết nối vật lý, dễ mở rộng hệ thống.</li>
+                    <li><strong>Nhược điểm</strong>: Có thể gây tắc nghẽn nếu nhiều thiết bị truy cập cùng lúc (bus contention).</li>
+                </ul>
+                <div class="text-center my-6">
+                    <img src="https://mrgoff.com/BusExample.png" alt="Cấu trúc BUS cơ bản">
+                    <p class="text-sm mt-2 text-gray-600">Hình 1: Cấu trúc BUS cơ bản (Address, Data, Control Bus kết nối các thành phần)</p>
+                </div>
+                <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/IFVs-5LA13c" title="System Buses in Computer Organization" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <p class="text-center text-sm text-gray-600 mt-2">Video: System Buses in Computer Organization and Architecture (khoảng 12 phút)</p>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">2. Các loại BUS chính</h3>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Loại BUS</th>
+                                <th>Chức năng</th>
+                                <th>Hướng truyền</th>
+                                <th>Ví dụ minh họa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Address Bus</td>
+                                <td>Truyền địa chỉ bộ nhớ từ CPU đến bộ nhớ hoặc I/O</td>
+                                <td>Uni-directional (từ CPU ra)</td>
+                                <td>32-bit → 4GB bộ nhớ; 64-bit → rất lớn</td>
+                            </tr>
+                            <tr>
+                                <td>Data Bus</td>
+                                <td>Truyền dữ liệu thực tế giữa CPU, bộ nhớ và I/O</td>
+                                <td>Bi-directional</td>
+                                <td>64-bit truyền 8 byte/lần</td>
+                            </tr>
+                            <tr>
+                                <td>Control Bus</td>
+                                <td>Truyền tín hiệu điều khiển (read/write, interrupt, clock...)</td>
+                                <td>Bi-directional</td>
+                                <td>R/W, IRQ, clock sync</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center my-6">
+                    <img src="https://d14qv6cm1t62pm.cloudfront.net/ccbp-website/Blogs/home/bus-structure-in-computer-organization-flow-1.png" alt="Các loại BUS">
+                    <p class="text-sm mt-2 text-gray-600">Hình 2: Minh họa các loại BUS trong kiến trúc máy tính</p>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/7QffiMyMpnM" title="What Is A Computer Bus?" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">3. Cấu trúc và Phân cấp BUS</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><strong>Single Bus</strong>: Tất cả thành phần dùng một BUS duy nhất → đơn giản nhưng dễ tắc nghẽn.</li>
+                    <li><strong>Multiple Bus</strong>: System Bus + Expansion Bus (PCI, PCIe) → tăng hiệu suất.</li>
+                    <li><strong>Bus Hierarchy</strong>: Local Bus (cao tốc gần CPU), System Bus, Peripheral Bus (USB, SATA...).</li>
+                </ul>
+                <div class="text-center my-6">
+                    <img src="https://prodigytechno.com/wp-content/uploads/2021/11/Fig-6-1200x729-1.jpg" alt="PCIe bus topology">
+                    <p class="text-sm mt-2 text-gray-600">Hình 3: Cấu trúc topology PCIe hiện đại</p>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/4SU-rJpx3zg" title="KIẾN TRÚC MÁY TÍNH - BUS & PERIPHERALS" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">4. Cơ chế Phân xử BUS (Bus Arbitration)</h3>
+                <p>Cơ chế quyết định thiết bị nào được sử dụng BUS khi có xung đột:</p>
+                <ul class="list-disc list-inside space-y-2 mt-2">
+                    <li><strong>Centralized</strong>: Daisy Chain, Polling, Independent Request.</li>
+                    <li><strong>Distributed</strong>: Token passing, priority-based.</li>
+                </ul>
+                <div class="text-center my-6">
+                    <img src="https://i.ytimg.com/vi/Xl43BrQ8Z6c/sddefault.jpg" alt="Bus Arbitration">
+                    <p class="text-sm mt-2 text-gray-600">Hình 4: Minh họa Bus Arbitration Centralized</p>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/Xl43BrQ8Z6c" title="Bus Arbitration Centralized Distributed" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="text-xl font-bold mb-4">5. Hoạt động và Phát triển BUS</h3>
+                <p>Hoạt động dựa trên clock đồng bộ. Phát triển từ parallel bus (PCI) sang serial bus (PCIe, USB) để tăng tốc độ và giảm nhiễu điện từ.</p>
+                <div class="text-center my-6">
+                    <img src="https://res.cloudinary.com/witspry/image/upload/witscad/public/content/courses/computer-architecture/system-bus.png" alt="System Bus Internal">
+                    <p class="text-sm mt-2 text-gray-600">Hình 5: System Bus kết nối CPU, Memory và I/O</p>
+                </div>
+            </div>
+
+            <h2 class="text-3xl font-bold text-gray-900 mb-6 mt-16 border-b-2 border-green-500 pb-2">II. Bài tập Thực hành</h2>
+
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">1. Trắc nghiệm: Các loại BUS chính trong máy tính là gì?</p>
+                    <p class="mt-2">a) Address Bus, Data Bus, Control Bus<br>b) System Bus, Local Bus, Peripheral Bus<br>c) Parallel Bus, Serial Bus</p>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p><strong>Đáp án: a)</strong> Address Bus, Data Bus, Control Bus là ba loại BUS cơ bản nhất.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">2. Tự luận: Vẽ sơ đồ và giải thích chu kỳ đọc (read cycle) từ bộ nhớ qua các BUS.</p>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị gợi ý lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>CPU đặt địa chỉ lên Address Bus → gửi tín hiệu READ qua Control Bus → bộ nhớ trả dữ liệu qua Data Bus → CPU nhận dữ liệu.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">3. Tính toán: Nếu Address Bus có độ rộng 32 bit, dung lượng bộ nhớ tối đa là bao nhiêu?</p>
+                    <button class="toggle-solution-btn mt-4 text-sm bg-gray-200 text-gray-800 font-semibold py-2 px-3 rounded-md hover:bg-gray-300">Hiển thị lời giải</button>
+                    <div class="solution hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-md text-sm">
+                        <p>2<sup>32</sup> = 4.294.967.296 byte = 4 GB.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-semibold mb-2">Bài tập thực hành: Sử dụng Logisim</p>
+                    <ul class="list-disc list-inside mt-2">
+                        <li>Thiết kế BUS đơn giản với CPU, RAM, I/O.</li>
+                        <li>Mô phỏng quá trình truyền dữ liệu (read/write).</li>
+                        <li>Thêm cơ chế arbitration đơn giản (Daisy Chain).</li>
+                    </ul>
+                    <p class="mt-4">Tải Logisim: <a href="https://sourceforge.net/projects/circuit/" class="text-blue-600 hover:underline">https://sourceforge.net/projects/circuit/</a></p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center mt-16 py-8 border-t">
+            <p class="text-gray-500">TanNQ - VHU - Tài liệu học phần Kiến trúc máy tính.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chức năng ẩn/hiện lời giải
+            const solutionButtons = document.querySelectorAll('.toggle-solution-btn');
+            solutionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const solution = button.nextElementSibling;
+                    const isHidden = solution.classList.contains('hidden');
+                    if (isHidden) {
+                        solution.classList.remove('hidden');
+                        button.textContent = 'Ẩn lời giải';
+                    } else {
+                        solution.classList.add('hidden');
+                        button.textContent = 'Hiển thị lời giải';
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
