@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Kiểm Tra Trắc Nghiệm 14</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        .question { margin-bottom: 20px; padding: 12px; border-left: 4px solid #3498db; background: #f9f9f9; border-radius: 6px; }
+        .timer { font-size: 22px; color: #e74c3c; text-align: center; font-weight: bold; margin: 20px 0; }
+        #submitBtn { 
+            display: block; margin: 30px auto; font-size: 24px; padding: 15px 40px; 
+            background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; 
+        }
+        #submitBtn:hover { background: #219653; }
+        #result { text-align: center; margin: 30px 0; }
+        #score { font-size: 32px; font-weight: bold; color: #2c3e50; margin-bottom: 20px; }
+        .answer-item { margin: 12px 0; padding: 10px; border-radius: 6px; }
+        .correct { background: #e8f5e9; color: #2e7d32; border-left: 5px solid #4caf50; }
+        .wrong   { background: #ffebee; color: #c62828; border-left: 5px solid #f44336; }
+        .unanswered { background: #f5f5f5; color: #616161; border-left: 5px solid #9e9e9e; }
+        #passwordSection { display: none; text-align: center; margin: 30px 0; }
+        .correct-answer { font-weight: bold; color: #2e7d32; }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Kiểm tra Trắc nghiệm 14</h1>
+    <div class="timer" style="text-align: center;">Thời gian còn lại: <span id="time">45:00</span></div>
+    <form id="quizForm"></form>
+    <div id="result" style="display:none;">
+        <div id="score"></div>
+        <div id="detailAnswers"></div>
+    </div>
+    <div id="passwordSection">
+        <p>Nhập mật khẩu để xem toàn bộ đáp án đúng (dành cho giáo viên):</p>
+        <input type="password" id="passwordInput">
+        <button onclick="checkPassword()">Xem Đáp Án</button>
+    </div>
+    <div id="answersDisplay" style="display:none; margin-top:30px;"></div>
+
+    <script>
+        
+
+
+	 const questions = [
+            `<div class="question"><p><strong>Câu 1.</strong> Trong CPU, bộ phận thi hành lệnh có nhiệm vụ:</p><input type="radio" name="q0" value="0"> A. Làm các phép tính trên số liệu<br><input type="radio" name="q0" value="1"> B. Đảm bảo thi hành lệnh một cách tuần tự<br><input type="radio" name="q0" value="2"> C. Tác động vào các mạch điện để thi hành các lệnh<br><input type="radio" name="q0" value="3"> D. Lấy lệnh từ bộ nhớ trong<br></div>`,
+            `<div class="question"><p><strong>Câu 2.</strong> Trong CPU, phần điều khiển có nhiệm vụ:</p><input type="radio" name="q1" value="0"> A. Làm các phép tính trên số liệu<br><input type="radio" name="q1" value="1"> B. Đảm bảo thi hành lệnh một cách tuần tự<br><input type="radio" name="q1" value="2"> C. Tác động vào các mạch điện để thi hành các lệnh<br><input type="radio" name="q1" value="3"> D. Lấy lệnh từ bộ nhớ trong<br></div>`,
+            `<div class="question"><p><strong>Câu 3.</strong> Bus System dùng để:</p><input type="radio" name="q2" value="0"> A. Nối các bộ phận của máy tính lại với nhau<br><input type="radio" name="q2" value="1"> B. Nối CPU với bộ nhớ ngoài<br><input type="radio" name="q2" value="2"> C. Nối bộ nhớ ngoài với bộ nhớ trong<br><input type="radio" name="q2" value="3"> D. Nối CPU với các bộ phận bên ngoài<br></div>`,
+            `<div class="question"><p><strong>Câu 4.</strong> Bộ xử lý trung tâm có chức năng:</p><input type="radio" name="q3" value="0"> A. Thi hành các chương trình được chứa trong bộ nhớ chính<br><input type="radio" name="q3" value="1"> B. Lấy chỉ thị từ bộ nhớ chính, giải mã và điều khiển ALU<br><input type="radio" name="q3" value="2"> C. Thực hiện các thao tác tính toán<br><input type="radio" name="q3" value="3"> D. Chứa kết quả tính toán và các thông tin điều khiển<br></div>`,
+            `<div class="question"><p><strong>Câu 5.</strong> Đơn vị điều khiển (CU) có nhiệm vụ:</p><input type="radio" name="q4" value="0"> A. Thi hành các chương trình được chứa trong bộ nhớ chính<br><input type="radio" name="q4" value="1"> B. Lấy chỉ thị từ bộ nhớ chính, giải mã và điều khiển ALU<br><input type="radio" name="q4" value="2"> C. Thực hiện các thao tác tính toán<br><input type="radio" name="q4" value="3"> D. Chứa kết quả tính toán và các thông tin điều khiển<br></div>`,
+            `<div class="question"><p><strong>Câu 6.</strong> Khối ALU có chức năng:</p><input type="radio" name="q5" value="0"> A. Thi hành các lệnh dưới sự điều khiển của CU<br><input type="radio" name="q5" value="1"> B. Lấy chỉ thị từ bộ nhớ chính, giải mã và điều khiển ALU<br><input type="radio" name="q5" value="2"> C. Thực hiện các thao tác tính toán<br><input type="radio" name="q5" value="3"> D. Chứa kết quả tính toán và các thông tin điều khiển<br></div>`,
+            `<div class="question"><p><strong>Câu 7.</strong> Thanh ghi PC (Program Counter) có nhiệm vụ:</p><input type="radio" name="q6" value="0"> A. Chứa chỉ thị đang thi hành<br><input type="radio" name="q6" value="1"> B. Chứa các kết quả trung gian<br><input type="radio" name="q6" value="2"> C. Trỏ tới chỉ thị tiếp theo sẽ được thi hành<br><input type="radio" name="q6" value="3"> D. Đếm số chương trình đang thực thi trong máy tính<br></div>`,
+            `<div class="question"><p><strong>Câu 8.</strong> Thanh ghi IR (Instruction Register) có nhiệm vụ:</p><input type="radio" name="q7" value="0"> A. Lưu trữ các câu lệnh được đọc từ bộ nhớ<br><input type="radio" name="q7" value="1"> B. Chứa các kết quả trung gian<br><input type="radio" name="q7" value="2"> C. Trỏ tới chỉ thị tiếp theo sẽ được thi hành<br><input type="radio" name="q7" value="3"> D. Đếm số chương trình đang thực thi trong máy tính<br></div>`,
+            `<div class="question"><p><strong>Câu 9.</strong> Kỹ thuật ống dẫn (pipeline) có đặc điểm:</p><input type="radio" name="q8" value="0"> A. Làm giảm tốc độ thực hiện các lệnh<br><input type="radio" name="q8" value="1"> B. Làm tăng tốc độ thực hiện các lệnh<br><input type="radio" name="q8" value="2"> C. Có ít thanh ghi khác nhau dùng cho các tác vụ đọc/ghi<br><input type="radio" name="q8" value="3"> D. Tất cả các giai đoạn của lệnh không được thi hành cùng lúc<br></div>`,
+            `<div class="question"><p><strong>Câu 10.</strong> Một chip nhớ SRAM có n đường địa chỉ và m đường dữ liệu thì dung lượng của chip là:</p><input type="radio" name="q9" value="0"> A. n * m bit<br><input type="radio" name="q9" value="1"> B. 2^n * m bit<br><input type="radio" name="q9" value="2"> C. 2^m * n bit<br><input type="radio" name="q9" value="3"> D. 2^{n+m} bit<br></div>`,
+            `<div class="question"><p><strong>Câu 11.</strong> Sau khi thực hiện các lệnh trên thanh ghi đa dụng thì kết quả được đặt ở:</p><input type="radio" name="q10" value="0"> A. Thanh ghi<br><input type="radio" name="q10" value="1"> B. Bộ nhớ<br><input type="radio" name="q10" value="2"> C. Thanh ghi hoặc bộ nhớ<br><input type="radio" name="q10" value="3"> D. Thanh ghi hoặc ngăn xếp<br></div>`,
+            `<div class="question"><p><strong>Câu 12.</strong> Dải biểu diễn số nguyên không dấu n bit trong máy tính là:</p><input type="radio" name="q11" value="0"> A. 0 → 2 * n<br><input type="radio" name="q11" value="1"> B. 0 → 2 * n - 1<br><input type="radio" name="q11" value="2"> C. 0 → 2^n - 1<br><input type="radio" name="q11" value="3"> D. 0 → 2^n<br></div>`,
+            `<div class="question"><p><strong>Câu 13.</strong> Đối với số không dấu, phát biểu nào sau đây là đúng:</p><input type="radio" name="q12" value="0"> A. Khi thực hiện phép cộng, tổng luôn đúng<br><input type="radio" name="q12" value="1"> B. Khi cộng hai số cùng dấu, cho tổng khác dấu<br><input type="radio" name="q12" value="2"> C. Khi cộng có nhớ ra khỏi bit cao nhất, tổng không sai<br><input type="radio" name="q12" value="3"> D. Khi cộng không nhớ ra khỏi bit cao nhất, tổng đúng<br></div>`,
+            `<div class="question"><p><strong>Câu 14.</strong> Xét các công đoạn của bộ xử lý, thứ tự thực hiện nào là đúng:</p><input type="radio" name="q13" value="0"> A. Giải mã lệnh → Nhận dữ liệu → Nhận lệnh → Xử lý dữ liệu → Ghi dữ liệu<br><input type="radio" name="q13" value="1"> B. Nhận lệnh → Giải mã lệnh → Nhận dữ liệu → Xử lý dữ liệu → Ghi dữ liệu<br><input type="radio" name="q13" value="2"> C. Nhận lệnh → Nhận dữ liệu → Giải mã lệnh → Xử lý dữ liệu → Ghi dữ liệu<br><input type="radio" name="q13" value="3"> D. Giải mã lệnh → Nhận lệnh → Nhận dữ liệu → Xử lý dữ liệu → Ghi dữ liệu<br></div>`,
+            `<div class="question"><p><strong>Câu 15.</strong> Nếu phân loại các bus theo loại tín hiệu truyền thì ta có các bus sau:</p><input type="radio" name="q14" value="0"> A. Bus A, C, D<br><input type="radio" name="q14" value="1"> B. Bus Protocol<br><input type="radio" name="q14" value="2"> C. Bus đồng bộ<br><input type="radio" name="q14" value="3"> D. Bus bất đồng bộ<br></div>`,
+            `<div class="question"><p><strong>Câu 16.</strong> Đối với lệnh mã máy, toán hạng không thể là:</p><input type="radio" name="q15" value="0"> A. Một hằng số<br><input type="radio" name="q15" value="1"> B. Nội dung của thanh ghi<br><input type="radio" name="q15" value="2"> C. Nội dung của ngăn nhớ<br><input type="radio" name="q15" value="3"> D. Nội dung của thanh ghi có địa chỉ nằm trong một ngăn nhớ<br></div>`,
+            `<div class="question"><p><strong>Câu 17.</strong> Trong một lệnh mã máy, phát biểu nào sau đây là đúng:</p><input type="radio" name="q16" value="0"> A. Có thể có nhiều mã lệnh<br><input type="radio" name="q16" value="1"> B. Có thể có nhiều toán hạng<br><input type="radio" name="q16" value="2"> C. Không tồn tại lệnh không có toán hạng<br><input type="radio" name="q16" value="3"> D. Toán hạng là duy nhất<br></div>`,
+            `<div class="question"><p><strong>Câu 18.</strong> Thiết bị đóng vai trò là Master thì cần có bộ khuếch đại tín hiệu là:</p><input type="radio" name="q17" value="0"> A. Bus Receiver<br><input type="radio" name="q17" value="1"> B. Bus Driver<br><input type="radio" name="q17" value="2"> C. Bus Transceiver<br><input type="radio" name="q17" value="3"> D. Không cần bộ khuếch đại<br></div>`,
+            `<div class="question"><p><strong>Câu 19.</strong> Thiết bị đóng vai trò là Slaver thì cần có bộ khuếch đại tín hiệu là:</p><input type="radio" name="q18" value="0"> A. Bus Receiver<br><input type="radio" name="q18" value="1"> B. Bus Driver<br><input type="radio" name="q18" value="2"> C. Bus Transceiver<br><input type="radio" name="q18" value="3"> D. Không cần bộ khuếch đại<br></div>`,
+            `<div class="question"><p><strong>Câu 20.</strong> Thiết bị đóng vai trò vừa là Master, vừa là Slaver thì cần có bộ khuếch đại tín hiệu là:</p><input type="radio" name="q19" value="0"> A. Bus Receiver<br><input type="radio" name="q19" value="1"> B. Bus Driver<br><input type="radio" name="q19" value="2"> C. Bus Transceiver<br><input type="radio" name="q19" value="3"> D. Không cần bộ khuếch đại<br></div>`,
+            `<div class="question"><p><strong>Câu 21.</strong> Đối với bộ nhớ RAM, phát biểu nào sau đây là đúng:</p><input type="radio" name="q20" value="0"> A. Là loại bộ nhớ không khả biến<br><input type="radio" name="q20" value="1"> B. RAM là viết tắt của Read Access Memory<br><input type="radio" name="q20" value="2"> C. SRAM được chế tạo từ các tụ điện<br><input type="radio" name="q20" value="3"> D. Là nơi lưu giữ thông tin mà máy tính đang xử lý<br></div>`,
+            `<div class="question"><p><strong>Câu 22.</strong> Xét sơ đồ phân cấp hệ thống nhớ, phát biểu nào sau đây là đúng:</p><input type="radio" name="q21" value="0"> A. Từ bộ nhớ cache đến bộ nhớ ngoài, tốc độ nhanh dần<br><input type="radio" name="q21" value="1"> B. Từ thanh ghi đến cache, tốc độ tăng dần<br><input type="radio" name="q21" value="2"> C. Từ bộ nhớ ngoài đến thanh ghi, dung lượng giảm dần<br><input type="radio" name="q21" value="3"> D. Từ bộ nhớ trong đến bộ nhớ cache, tần suất truy nhập giảm dần<br></div>`,
+            `<div class="question"><p><strong>Câu 23.</strong> Đối với bộ nhớ cache, phát biểu nào sau đây là đúng:</p><input type="radio" name="q22" value="0"> A. Cache có thể được đặt trên cùng chip với CPU<br><input type="radio" name="q22" value="1"> B. Bộ nhớ chính có tốc độ nhanh hơn cache<br><input type="radio" name="q22" value="2"> C. Cache được đặt giữa bộ nhớ chính và bộ nhớ ngoài<br><input type="radio" name="q22" value="3"> D. Cache không được đặt trên cùng chip với CPU<br></div>`,
+            `<div class="question"><p><strong>Câu 24.</strong> Một chip nhớ DRAM có n đường địa chỉ và m đường dữ liệu thì dung lượng của chip là:</p><input type="radio" name="q23" value="0"> A. 2^2*m * n bit<br><input type="radio" name="q23" value="1"> B. 2^2*n * m bit<br><input type="radio" name="q23" value="2"> C. 2^m * n bit<br><input type="radio" name="q23" value="3"> D. 2^n * m bit<br></div>`,
+            `<div class="question"><p><strong>Câu 25.</strong> Đối với chức năng của Module Vào/ra, phát biểu nào sau đây là sai:</p><input type="radio" name="q24" value="0"> A. Điều khiển và định thời gian<br><input type="radio" name="q24" value="1"> B. Một module chỉ nối ghép được với một thiết bị<br><input type="radio" name="q24" value="2"> C. Trao đổi thông tin với vi xử lý, với thiết bị ngoại vi<br><input type="radio" name="q24" value="3"> D. Bộ đệm dữ liệu, phát hiện lỗi<br></div>`,
+            `<div class="question"><p><strong>Câu 26.</strong> Xét về chức năng, hệ thống nhớ máy tính có thể có ở:</p><input type="radio" name="q25" value="0"> A. Bên trong bộ xử lý, RAM, đĩa từ<br><input type="radio" name="q25" value="1"> B. Các thanh ghi, bộ nhớ trong, CD-ROM<br><input type="radio" name="q25" value="2"> C. Các thanh ghi, ROM, băng từ<br><input type="radio" name="q25" value="3"> D. Các thanh ghi, bộ nhớ trong, bộ nhớ ngoài<br></div>`,
+            `<div class="question"><p><strong>Câu 27.</strong> Đâu không phải là đặc tính của đĩa từ:</p><input type="radio" name="q26" value="0"> A. Đầu từ cố định hoặc di động<br><input type="radio" name="q26" value="1"> B. Đĩa cố định hoặc thay đổi<br><input type="radio" name="q26" value="2"> C. Một đĩa hay nhiều đĩa<br><input type="radio" name="q26" value="3"> D. Mã hóa hoặc giải mã tín hiệu<br></div>`,
+            `<div class="question"><p><strong>Câu 28.</strong> DMAC điều khiển trao đổi dữ liệu giữa các module vào/ra với:</p><input type="radio" name="q27" value="0"> A. Bộ nhớ chính<br><input type="radio" name="q27" value="1"> B. Vi xử lý<br><input type="radio" name="q27" value="2"> C. Bộ nhớ ngoài<br><input type="radio" name="q27" value="3"> D. Các thiết bị ngoại vi<br></div>`,
+            `<div class="question"><p><strong>Câu 29.</strong> Truyền dữ liệu giữa CPU với Cache là hình thức truyền theo dạng:</p><input type="radio" name="q28" value="0"> A. Khối nhớ<br><input type="radio" name="q28" value="1"> B. Từ nhớ<br><input type="radio" name="q28" value="2"> C. Byte<br><input type="radio" name="q28" value="3"> D. Bit<br></div>`,
+            `<div class="question"><p><strong>Câu 30.</strong> Truyền dữ liệu giữa Cache với bộ nhớ chính là hình thức truyền theo dạng:</p><input type="radio" name="q29" value="0"> A. Khối nhớ<br><input type="radio" name="q29" value="1"> B. Từ nhớ<br><input type="radio" name="q29" value="2"> C. Byte<br><input type="radio" name="q29" value="3"> D. Bit<br></div>`,
+            `<div class="question"><p><strong>Câu 31.</strong> Đâu không phải là vấn đề quan trọng khi thiết kế Bus:</p><input type="radio" name="q30" value="0"> A. Xung Clock<br><input type="radio" name="q30" value="1"> B. Cơ chế phân xử Bus<br><input type="radio" name="q30" value="2"> C. Xử lý ngắt, xử lý lỗi<br><input type="radio" name="q30" value="3"> D. Các hình thức kết nối<br></div>`,
+            `<div class="question"><p><strong>Câu 32.</strong> Đâu không phải là đặc điểm của flash disk:</p><input type="radio" name="q31" value="0"> A. Kết nối qua cổng USB<br><input type="radio" name="q31" value="1"> B. Là một dạng đĩa<br><input type="radio" name="q31" value="2"> C. Thuộc loại bộ nhớ bán dẫn<br><input type="radio" name="q31" value="3"> D. Thuận tiện<br></div>`,
+            `<div class="question"><p><strong>Câu 33.</strong> Trong nối ghép thiết bị ngoại vi, một trong các tính chất của kiểu nối ghép song song là:</p><input type="radio" name="q32" value="0"> A. Tốc độ nhanh<br><input type="radio" name="q32" value="1"> B. Truyền lần lượt từng bit<br><input type="radio" name="q32" value="2"> C. Cần bộ chuyển đổi từ song song qua nối tiếp<br><input type="radio" name="q32" value="3"> D. Cần ít đường truyền<br></div>`,
+            `<div class="question"><p><strong>Câu 34.</strong> Trong nối ghép thiết bị ngoại vi, một trong các tính chất của kiểu nối ghép nối tiếp là:</p><input type="radio" name="q33" value="0"> A. Truyền nhiều bit<br><input type="radio" name="q33" value="1"> B. Tốc độ nhanh<br><input type="radio" name="q33" value="2"> C. Cần nhiều đường truyền<br><input type="radio" name="q33" value="3"> D. Cần bộ chuyển đổi song song sang nối tiếp<br></div>`,
+            `<div class="question"><p><strong>Câu 35.</strong> Định dạng đĩa từ là quá trình:</p><input type="radio" name="q34" value="0"> A. Tạo ra các Track<br><input type="radio" name="q34" value="1"> B. Tạo ra các Sector<br><input type="radio" name="q34" value="2"> C. Tạo ra các Track và các Sector<br><input type="radio" name="q34" value="3"> D. Sắp xếp trật tự cho các hạt từ tính<br></div>`,
+            `<div class="question"><p><strong>Câu 36.</strong> Giá trị 29.75 hệ thập phân được biểu diễn nhị phân là:</p><input type="radio" name="q35" value="0"> A. 10111.01<sub>2</sub><br><input type="radio" name="q35" value="1"> B. 10111.11<sub>2</sub><br><input type="radio" name="q35" value="2"> C. 11101.01<sub>2</sub><br><input type="radio" name="q35" value="3"> D. 11101.11<sub>2</sub><br></div>`,
+            `<div class="question"><p><strong>Câu 37.</strong> Kiểu kiến trúc nào mà khi thực hiện phép tính C= A + B sẽ có dạng sau đây:<br>Push A<br>Push B<br>Add<br>Pop C</p><input type="radio" name="q36" value="0"> A. Stack<br><input type="radio" name="q36" value="1"> B. Accumulator<br><input type="radio" name="q36" value="2"> C. Register - Memory<br><input type="radio" name="q36" value="3"> D. Load - Store<br></div>`,
+            `<div class="question"><p><strong>Câu 38.</strong> Kiểu kiến trúc nào mà khi thực hiện phép tính C= A + B sẽ có dạng sau đây:<br>Load A<br>Add B<br>Store C</p><input type="radio" name="q37" value="0"> A. Stack<br><input type="radio" name="q37" value="1"> B. Accumulator<br><input type="radio" name="q37" value="2"> C. Register - Memory<br><input type="radio" name="q37" value="3"> D. Load - Store<br></div>`,
+            `<div class="question"><p><strong>Câu 39.</strong> Kiểu kiến trúc nào mà khi thực hiện phép tính C= A + B sẽ có dạng sau đây:<br>Load R1, A<br>Add R1, B<br>Store C, R1</p><input type="radio" name="q38" value="0"> A. Stack<br><input type="radio" name="q38" value="1"> B. Accumulator<br><input type="radio" name="q38" value="2"> C. Register - Memory<br><input type="radio" name="q38" value="3"> D. Load - Store<br></div>`,
+            `<div class="question"><p><strong>Câu 40.</strong> Kiểu kiến trúc nào mà khi thực hiện phép tính C= A + B sẽ có dạng sau đây:<br>Load R1, A<br>Load R2, B<br>Add R3, R1<br>Add R3, R2<br>Store C, R3</p><input type="radio" name="q39" value="0"> A. Stack<br><input type="radio" name="q39" value="1"> B. Accumulator<br><input type="radio" name="q39" value="2"> C. Register - Memory<br><input type="radio" name="q39" value="3"> D. Load - Store<br></div>`,
+            `<div class="question"><p><strong>Câu 41.</strong> Các hoạt động của máy tính gồm:</p><input type="radio" name="q40" value="0"> A. Ngắt, Giải mã lệnh, Vào/ra<br><input type="radio" name="q40" value="1"> B. Xử lý số liệu, Ngắt, Thực hiện chương trình<br><input type="radio" name="q40" value="2"> C. Thực hiện chương trình, Ngắt, Vào/ra<br><input type="radio" name="q40" value="3"> D. Tính toán kết quả, Lưu trữ dữ liệu, Vào/ra<br></div>`,
+            `<div class="question"><p><strong>Câu 42.</strong> Đối với số nguyên không dấu, 8 bit, giá trị biểu diễn số 261<sub>10</sub> là:</p><input type="radio" name="q41" value="0"> A. 10010001<sub>2</sub><br><input type="radio" name="q41" value="1"> B. 10101011<sub>2</sub><br><input type="radio" name="q41" value="2"> C. 10000111<sub>2</sub><br><input type="radio" name="q41" value="3"> D. Không biểu diễn được<br></div>`,
+            `<div class="question"><p><strong>Câu 43.</strong> Đối với số nguyên có dấu, 8 bit, giá trị biểu diễn số 129<sub>10</sub> là:</p><input type="radio" name="q42" value="0"> A. 10010001<sub>2</sub><br><input type="radio" name="q42" value="1"> B. 10101011<sub>2</sub><br><input type="radio" name="q42" value="2"> C. 10000111<sub>2</sub><br><input type="radio" name="q42" value="3"> D. Không biểu diễn được<br></div>`,
+            `<div class="question"><p><strong>Câu 44.</strong> Đối với số nguyên có dấu, 8 bit, dạng bù 2 thì giá trị biểu diễn số 101<sub>10</sub> là:</p><input type="radio" name="q43" value="0"> A. 01100101<sub>2</sub><br><input type="radio" name="q43" value="1"> B. 00001100<sub>2</sub><br><input type="radio" name="q43" value="2"> C. 00001110<sub>2</sub><br><input type="radio" name="q43" value="3"> D. 01001010<sub>2</sub><br></div>`,
+            `<div class="question"><p><strong>Câu 45.</strong> Cho số thực 81.25, giá trị của nó ở hệ nhị phân là:</p><input type="radio" name="q44" value="0"> A. 1010001.01<sub>2</sub><br><input type="radio" name="q44" value="1"> B. 1010001.01<sub>2</sub><br><input type="radio" name="q44" value="2"> C. 100011.101<sub>2</sub><br><input type="radio" name="q44" value="3"> D. 100010.011<sub>2</sub><br></div>`,
+            `<div class="question"><p><strong>Câu 46.</strong> Với công đoạn nhận lệnh của CPU, thứ tự thực hiện là:</p><input type="radio" name="q45" value="0"> A. Bộ đếm chương trình → Bộ nhớ → Thanh ghi lệnh<br><input type="radio" name="q45" value="1"> B. Bộ nhớ → Thanh ghi lệnh → Bộ đếm chương trình<br><input type="radio" name="q45" value="2"> C. Bộ nhớ → Bộ đếm chương trình → Thanh ghi lệnh<br><input type="radio" name="q45" value="3"> D. Bộ đếm chương trình → Thanh ghi lệnh → Bộ nhớ<br></div>`,
+            `<div class="question"><p><strong>Câu 47.</strong> Với công đoạn xử lý dữ liệu của CPU, thứ tự thực hiện là:</p><input type="radio" name="q46" value="0"> A. Thực hiện phép toán → ALU → Thanh ghi dữ liệu<br><input type="radio" name="q46" value="1"> B. Thực hiện phép toán → Thanh ghi dữ liệu → ALU<br><input type="radio" name="q46" value="2"> C. ALU → Thực hiện phép toán → Thanh ghi dữ liệu<br><input type="radio" name="q46" value="3"> D. ALU → Thanh ghi dữ liệu → Thực hiện phép toán<br></div>`,
+            `<div class="question"><p><strong>Câu 48.</strong> Đối với khối điều khiển CU, phát biểu nào sau đây là sai:</p><input type="radio" name="q47" value="0"> A. Điều khiển các tín hiệu bên trong và bên ngoài bộ xử lý<br><input type="radio" name="q47" value="1"> B. Điều khiển các thanh ghi và ALU<br><input type="radio" name="q47" value="2"> C. Điều khiển bộ nhớ và Module Vào/ra<br><input type="radio" name="q47" value="3"> D. Điều khiển các thanh ghi<br></div>`,
+            `<div class="question"><p><strong>Câu 49.</strong> Xét các tín hiệu điều khiển từ System bus đến CPU, phát biểu nào sau đây sai:</p><input type="radio" name="q48" value="0"> A. Tín hiệu xin nhường bus<br><input type="radio" name="q48" value="1"> B. Không phải là tín hiệu điều khiển đọc ngăn nhớ<br><input type="radio" name="q48" value="2"> C. Tín hiệu xin ngắt<br><input type="radio" name="q48" value="3"> D. Tín hiệu trả lời đồng ý nhường bus<br></div>`,
+            `<div class="question"><p><strong>Câu 50.</strong> Xét các tín hiệu điều khiển từ CPU đến System bus, phát biểu nào sau đây sai:</p><input type="radio" name="q49" value="0"> A. Điều khiển đọc/ghi cổng vào/ra<br><input type="radio" name="q49" value="1"> B. Điều khiển đọc/ghi ngăn nhớ<br><input type="radio" name="q49" value="2"> C. Điều khiển ghi dữ liệu vào các thanh ghi<br><input type="radio" name="q49" value="3"> D. Xử lý các tín hiệu từ bên ngoài gởi tới<br></div>`,
+            `<div class="question"><p><strong>Câu 51.</strong> Đâu không phải là đặc trưng cơ bản của bộ nhớ chính:</p><input type="radio" name="q50" value="0"> A. Tồn tại trên mọi hệ thống máy tính<br><input type="radio" name="q50" value="1"> B. Chứa các chương trình đang thực hiện<br><input type="radio" name="q50" value="2"> C. Các ngăn nhớ được đánh địa chỉ trực tiếp bởi CPU<br><input type="radio" name="q50" value="3"> D. Dung lượng bộ nhớ chính lớn hơn không gian địa chỉ mà CPU quản lý<br></div>`,
+            `<div class="question"><p><strong>Câu 52.</strong> Đâu không phải là đặc trưng chính cho bộ nhớ:</p><input type="radio" name="q51" value="0"> A. Dung lượng<br><input type="radio" name="q51" value="1"> B. Tốc độ<br><input type="radio" name="q51" value="2"> C. Độ trễ<br><input type="radio" name="q51" value="3"> D. Thời gian tối thiểu giữa các lần truy xuất<br></div>`,
+            `<div class="question"><p><strong>Câu 53.</strong> Số 235.648 chuyển sang thập phân có giá trị là:</p><input type="radio" name="q52" value="0"> A. 157.812<sub>10</sub><br><input type="radio" name="q52" value="1"> B. 157.8125<sub>10</sub><br><input type="radio" name="q52" value="2"> C. 158.125<sub>10</sub><br><input type="radio" name="q52" value="3"> D. 158.8125<sub>10</sub><br></div>`,
+            `<div class="question"><p><strong>Câu 54.</strong> Số nhị phân 1001110.10101<sub>2</sub> đổi sang bát phân có giá trị là:</p><input type="radio" name="q53" value="0"> A. 430.51<sub>8</sub><br><input type="radio" name="q53" value="1"> B. 430.52<sub>8</sub><br><input type="radio" name="q53" value="2"> C. 116.52<sub>8</sub><br><input type="radio" name="q53" value="3"> D. 116.51<sub>8</sub><br></div>`,
+            `<div class="question"><p><strong>Câu 55.</strong> Số thập lục phân 34F5C<sub>16</sub> có giá trị tương ứng ở hệ thập phân là:</p><input type="radio" name="q54" value="0"> A. 624<sub>10</sub><br><input type="radio" name="q54" value="1"> B. 216<sub>10</sub><br><input type="radio" name="q54" value="2"> C. 216912<sub>10</sub><br><input type="radio" name="q54" value="3"> D. 216924<sub>10</sub><br></div>`,
+            `<div class="question"><p><strong>Câu 56.</strong> Số -13<sub>10</sub> được biểu diễn nhị phân dạng bù 1, 8 bit là:</p><input type="radio" name="q55" value="0"> A. 00001101<sub>2</sub><br><input type="radio" name="q55" value="1"> B. 11110010<sub>2</sub><br><input type="radio" name="q55" value="2"> C. 10001101<sub>2</sub><br><input type="radio" name="q55" value="3"> D. 11111101<sub>2</sub><br></div>`,
+            `<div class="question"><p><strong>Câu 57.</strong> A=1001<sub>2</sub>, B=11010<sub>2</sub>, phép tính A-B dạng bù 2, có kết quả là:</p><input type="radio" name="q56" value="0"> A. 01111<sub>2</sub><br><input type="radio" name="q56" value="1"> B. 10000<sub>2</sub><br><input type="radio" name="q56" value="2"> C. 10001<sub>2</sub><br><input type="radio" name="q56" value="3"> D. 11111<sub>2</sub><br></div>`,
+            `<div class="question"><p><strong>Câu 58.</strong> A=110101<sub>2</sub>, B=100110<sub>2</sub>, phép tính A-B dạng bù 2, có kết quả là:</p><input type="radio" name="q57" value="0"> A. 001111<sub>2</sub><br><input type="radio" name="q57" value="1"> B. 110000<sub>2</sub><br><input type="radio" name="q57" value="2"> C. 1000011<sub>2</sub><br><input type="radio" name="q57" value="3"> D. 1001111<sub>2</sub><br></div>`,
+            `<div class="question"><p><strong>Câu 59.</strong> Phép tính -5<sub>10</sub> + 2<sub>10</sub> thực hiện dưới dạng dạng bù 2, 8 bit có kết quả là:</p><input type="radio" name="q58" value="0"> A. 00000011<sub>2</sub><br><input type="radio" name="q58" value="1"> B. 00001101<sub>2</sub><br><input type="radio" name="q58" value="2"> C. 11111101<sub>2</sub><br><input type="radio" name="q58" value="3"> D. 11110011<sub>2</sub><br></div>`,
+            `<div class="question"><p><strong>Câu 60.</strong> Phép tính -5<sub>10</sub> + (-7<sub>10</sub>) thực hiện dưới dạng dạng bù 2, 8 bit có kết quả là:</p><input type="radio" name="q59" value="0"> A. 00000010<sub>2</sub><br><input type="radio" name="q59" value="1"> B. 00001110<sub>2</sub><br><input type="radio" name="q59" value="2"> C. 11111100<sub>2</sub><br><input type="radio" name="q59" value="3"> D. 11110100<sub>2</sub><br></div>`
+        ];
+
+        const answers = [2,2,3,0,1,2,2,0,2,1,2,2,3,1,0,3,1,1,2,0,3,0,0,3,1,2,0,0,1,0,3,1,0,2,3,0,1,1,2,3,3,3,3,0,2,2,0,1,3,3,3,1,2,3,1,0,1,2,2,3];
+
+        const correctOptions = ['A','B','D','A','B','A','C','A','C','B','C','C','D','B','A','D','B','B','C','A','D','A','A','D','B','C','A','A','B','A','D','B','A','C','D','A','B','B','C','D','D','D','D','A','C','C','A','B','D','D','D','B','C','D','B','A','B','C','C','D'];
+
+
+        const password = "admin123"; // Bạn có thể thay đổi mật khẩu này
+
+        // Shuffle câu hỏi
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        shuffle(questions);
+
+        // Hiển thị câu hỏi đã shuffle
+        const form = document.getElementById('quizForm');
+        questions.forEach((q, index) => {
+            form.innerHTML += q.replace(/name="q(\d+)"/g, `name="q${index}"`);
+        });
+        form.innerHTML += '<button id="submitBtn" type="button" onclick="submitQuiz()">Nộp Bài</button>';
+
+        let timeLeft = 45 * 60;
+        const timer = setInterval(() => {
+            timeLeft--;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('time').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                submitQuiz(true);
+            }
+        }, 1000);
+
+        function submitQuiz(isAuto = false) {
+            clearInterval(timer);
+            const form = document.getElementById('quizForm');
+            let score = 0;
+            const total = answers.length;
+            let detailHtml = '<h3>Chi tiết câu trả lời:</h3>';
+
+            for (let i = 0; i < total; i++) {
+                const selected = form.elements['q' + i] ? form.elements['q' + i].value : null;
+                const correct = answers[i];
+                const userAns = selected !== null ? String.fromCharCode(65 + parseInt(selected)) : null;
+                const correctAns = correctOptions[i];
+
+                let statusClass = 'unanswered';
+                let text = `Câu ${i+1}: Chưa trả lời → Đáp án đúng: <span class="correct-answer">${correctAns}</span>`;
+
+                if (selected !== null) {
+                    if (parseInt(selected) === correct) {
+                        score++;
+                        statusClass = 'correct';
+                        text = `Câu ${i+1}: Đúng → Đáp án: <span class="correct-answer">${correctAns}</span>`;
+                    } else {
+                        statusClass = 'wrong';
+                        text = `Câu ${i+1}: Sai → Bạn chọn: ${userAns} | Đáp án đúng: <span class="correct-answer">${correctAns}</span>`;
+                    }
+                }
+
+                detailHtml += `<div class="answer-item ${statusClass}">${text}</div>`;
+            }
+
+            document.getElementById('score').innerHTML = 
+                `${isAuto ? '<span style="color:#e74c3c;">HẾT GIỜ!</span><br>' : ''}` +
+                `Điểm số: ${score} / ${total} (${Math.round(score / total * 100)}%)`;
+
+            document.getElementById('detailAnswers').innerHTML = detailHtml;
+            document.getElementById('result').style.display = 'block';
+            form.style.display = 'none';
+            document.querySelector('.timer').style.display = 'none';
+            document.getElementById('passwordSection').style.display = 'block';
+        }
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            if (input === password) {
+                document.getElementById('passwordSection').style.display = 'none';
+                document.getElementById('answersDisplay').style.display = 'block';
+                let answersHtml = '<h2>Đáp Án Chi Tiết (Toàn bộ đáp án đúng)</h2>';
+                for (let i = 0; i < answers.length; i++) {
+                    answersHtml += `<div style="margin:10px 0;"><strong>Câu ${i + 1}:</strong> Đáp án đúng là <span class="correct">${correctOptions[i]}</span></div>`;
+                }
+                document.getElementById('answersDisplay').innerHTML = answersHtml;
+            } else {
+                alert('Mật khẩu sai!');
+            }
+        }
+    </script>
+</body>
+</html>
