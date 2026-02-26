@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Kiểm Tra Trắc Nghiệm 23 - Bản Xáo Trộn</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; line-height: 1.6; background-color: #f4f7f9; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .question { margin-bottom: 25px; padding: 20px; border-left: 5px solid #3498db; background: #fcfcfc; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .question p { font-weight: bold; font-size: 1.1em; margin-bottom: 15px; color: #34495e; }
+        .option-label { display: block; margin: 10px 0; cursor: pointer; padding: 8px; border-radius: 4px; transition: background 0.2s; }
+        .option-label:hover { background: #eef7fe; }
+        .timer { font-size: 26px; color: #e74c3c; text-align: center; font-weight: bold; margin: 20px 0; position: sticky; top: 10px; background: white; z-index: 100; padding: 10px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        #submitBtn { display: block; margin: 40px auto; font-size: 22px; padding: 15px 60px; background: #27ae60; color: white; border: none; border-radius: 10px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 0 #1e8449; }
+        #submitBtn:hover { background: #2ecc71; transform: translateY(-2px); }
+        #result { text-align: center; margin: 30px 0; }
+        .answer-item { margin: 15px 0; padding: 15px; border-radius: 8px; text-align: left; }
+        .correct { background: #e8f5e9; color: #2e7d32; border-left: 6px solid #4caf50; }
+        .wrong { background: #ffebee; color: #c62828; border-left: 6px solid #f44336; }
+        .unanswered { background: #f5f5f5; color: #616161; border-left: 6px solid #9e9e9e; }
+        input[type="text"] { padding: 12px; width: 300px; border-radius: 6px; border: 1px solid #ddd; font-size: 16px; }
+        .start-btn { padding: 12px 30px; background: #3498db; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Kiểm Tra Trắc Nghiệm 23</h1>
+
+    <div id="nameSection" style="text-align: center; margin-top: 50px;">
+        <p>Nhập họ tên để bắt đầu làm bài (45 phút):</p>
+        <input type="text" id="studentName" placeholder="Nguyễn Văn A">
+        <button class="start-btn" onclick="startQuiz()">Bắt Đầu</button>
+    </div>
+
+    <div id="quizContainer" style="display:none;">
+        <div class="timer">Thời gian: <span id="time">45:00</span></div>
+        <div id="quizForm"></div>
+        <button id="submitBtn" onclick="submitQuiz()">Nộp Bài</button>
+    </div>
+
+    <div id="result" style="display:none;">
+        <h2 id="resStudent"></h2>
+        <div id="resScore" style="font-size: 32px; font-weight: bold; color: #2c3e50;"></div>
+        <div id="resScore10" style="font-size: 24px; color: #e67e22; margin-bottom: 20px;"></div>
+        <div id="detailAnswers"></div>
+        <button class="start-btn" onclick="location.reload()">Làm Lại Đề Khác</button>
+    </div>
+</div>
+
+<script>
+    const originalData = [
+        { q: "Trong CPU, bộ phận thi hành lệnh có nhiệm vụ:", options: ["Làm các phép tính trên số liệu", "Đảm bảo thi hành lệnh một cách tuần tự", "Tác động vào các mạch điện để thi hành các lệnh", "Lấy lệnh từ bộ nhớ trong"], answer: 2 },
+        { q: "Trong CPU, phần điều khiển có nhiệm vụ:", options: ["Làm các phép tính trên số liệu", "Đảm bảo thi hành lệnh một cách tuần tự", "Tác động vào các mạch điện để thi hành các lệnh", "Lấy lệnh từ bộ nhớ trong"], answer: 3 },
+        { q: "Bus System dùng để:", options: ["Nối các bộ phận của máy tính lại với nhau", "Nối CPU với bộ nhớ ngoài", "Nối bộ nhớ ngoài với bộ nhớ trong", "Nối CPU với các bộ phận bên ngoài"], answer: 0 },
+        { q: "Bộ xử lý trung tâm có chức năng:", options: ["Thi hành các chương trình được chứa trong bộ nhớ chính", "Lấy chỉ thị từ bộ nhớ chính, giải mã và điều khiển ALU", "Thực hiện các thao tác tính toán", "Chứa kết quả tính toán và các thông tin điều khiển"], answer: 0 },
+        { q: "Đơn vị điều khiển (CU) có nhiệm vụ:", options: ["Thi hành các chương trình được chứa trong bộ nhớ chính", "Lấy chỉ thị từ bộ nhớ chính, giải mã và điều khiển ALU", "Thực hiện các thao tác tính toán", "Chứa kết quả tính toán và các thông tin điều khiển"], answer: 1 },
+        { q: "Khối ALU có chức năng:", options: ["Thi hành các lệnh dưới sự điều khiển của CU", "Lấy chỉ thị từ bộ nhớ chính, giải mã và điều khiển ALU", "Thực hiện các thao tác tính toán", "Chứa kết quả tính toán và các thông tin điều khiển"], answer: 2 },
+        { q: "Thanh ghi PC (Program Counter) có nhiệm vụ:", options: ["Chứa chỉ thị đang thi hành", "Chứa các kết quả trung gian", "Trỏ tới chỉ thị tiếp theo sẽ được thi hành", "Đếm số chương trình đang thực thi trong máy tính"], answer: 2 },
+        { q: "Thanh ghi IR (Instruction Register) có nhiệm vụ:", options: ["Lưu trữ các câu lệnh được đọc từ bộ nhớ", "Chứa các kết quả trung gian", "Trỏ tới chỉ thị tiếp theo sẽ được thi hành", "Đếm số chương trình đang thực thi trong máy tính"], answer: 0 },
+        { q: "Kỹ thuật ống dẫn (pipeline) có đặc điểm:", options: ["Làm giảm tốc độ thực hiện các lệnh", "Làm tăng tốc độ thực hiện các lệnh", "Có ít thanh ghi khác nhau dùng cho các tác vụ đọc/ghi", "Tất cả các giai đoạn của lệnh không được thi hành cùng lúc"], answer: 1 },
+        { q: "Một chip nhớ SRAM có n đường địa chỉ và m đường dữ liệu thì dung lượng của chip là:", options: ["n * m bit", "2^n * m bit", "2^m * n bit", "2^{n+m} bit"], answer: 1 },
+        { q: "Sau khi thực hiện các lệnh trên thanh ghi đa dụng thì kết quả được đặt ở:", options: ["Thanh ghi", "Bộ nhớ", "Thanh ghi hoặc bộ nhớ", "Thanh ghi hoặc ngăn xếp"], answer: 2 },
+        { q: "Dải biểu diễn số nguyên không dấu n bit trong máy tính là:", options: ["0 → 2 * n", "0 → 2 * n - 1", "0 → 2^n - 1", "0 → 2^n"], answer: 2 },
+        { q: "Đối với số không dấu, phát biểu nào sau đây là đúng:", options: ["Khi thực hiện phép cộng, tổng luôn đúng", "Khi cộng hai số cùng dấu, cho tổng khác dấu", "Khi cộng có nhớ ra khỏi bit cao nhất, tổng không sai", "Khi cộng không nhớ ra khỏi bit cao nhất, tổng đúng"], answer: 3 },
+        { q: "Xét các công đoạn của bộ xử lý, thứ tự thực hiện nào là đúng:", options: ["Giải mã lệnh → Nhận dữ liệu → Nhận lệnh → Xử lý dữ liệu → Ghi dữ liệu", "Nhận lệnh → Giải mã lệnh → Nhận dữ liệu → Xử lý dữ liệu → Ghi dữ liệu", "Nhận lệnh → Nhận dữ liệu → Giải mã lệnh → Xử lý dữ liệu → Ghi dữ liệu", "Giải mã lệnh → Nhận lệnh → Nhận dữ liệu → Xử lý dữ liệu → Ghi dữ liệu"], answer: 1 },
+        { q: "Nếu phân loại các bus theo loại tín hiệu truyền thì ta có các bus sau:", options: ["Bus A, C, D", "Bus Protocol", "Bus đồng bộ", "Bus địa chỉ, dữ liệu, điều khiển"], answer: 3 },
+        { q: "Đối với lệnh mã máy, toán hạng không thể là:", options: ["Một hằng số", "Nội dung của thanh ghi", "Nội dung của ngăn nhớ", "Nội dung của thanh ghi có địa chỉ nằm trong một ngăn nhớ"], answer: 3 },
+        { q: "Trong một lệnh mã máy, phát biểu nào sau đây là đúng:", options: ["Có thể có nhiều mã lệnh", "Có thể có nhiều toán hạng", "Không tồn tại lệnh không có toán hạng", "Toán hạng là duy nhất"], answer: 1 },
+        { q: "Thiết bị đóng vai trò là Master thì cần có bộ khuếch đại tín hiệu là:", options: ["Bus Receiver", "Bus Driver", "Bus Transceiver", "Không cần bộ khuếch đại"], answer: 1 },
+        { q: "Thiết bị đóng vai trò là Slaver thì cần có bộ khuếch đại tín hiệu là:", options: ["Bus Receiver", "Bus Driver", "Bus Transceiver", "Không cần bộ khuếch đại"], answer: 2 },
+        { q: "Thiết bị đóng vai trò vừa là Master, vừa là Slaver thì cần có bộ khuếch đại tín hiệu là:", options: ["Bus Receiver", "Bus Driver", "Bus Transceiver", "Không cần bộ khuếch đại"], answer: 0 },
+        { q: "Đối với bộ nhớ RAM, phát biểu nào sau đây là đúng:", options: ["Là loại bộ nhớ không khả biến", "RAM là viết tắt của Read Access Memory", "SRAM được chế tạo từ các tụ điện", "Là nơi lưu giữ thông tin mà máy tính đang xử lý"], answer: 3 },
+        { q: "Xét sơ đồ phân cấp hệ thống nhớ, phát biểu nào sau đây là đúng:", options: ["Từ bộ nhớ cache đến bộ nhớ ngoài, tốc độ nhanh dần", "Từ thanh ghi đến cache, tốc độ tăng dần", "Từ bộ nhớ ngoài đến thanh ghi, dung lượng giảm dần", "Từ bộ nhớ trong đến bộ nhớ cache, tần suất truy nhập giảm dần"], answer: 2 },
+        { q: "Đối với bộ nhớ cache, phát biểu nào sau đây là đúng:", options: ["Cache có thể được đặt trên cùng chip với CPU", "Bộ nhớ chính có tốc độ nhanh hơn cache", "Cache được đặt giữa bộ nhớ chính và bộ nhớ ngoài", "Cache không được đặt trên cùng chip với CPU"], answer: 0 },
+        { q: "Một chip nhớ DRAM có n đường địa chỉ và m đường dữ liệu thì dung lượng của chip là:", options: ["2^2*m * n bit", "2^2*n * m bit", "2^m * n bit", "2^n * m bit"], answer: 3 },
+        { q: "Đối với chức năng của Module Vào/ra, phát biểu nào sau đây là sai:", options: ["Điều khiển và định thời gian", "Một module chỉ nối ghép được với một thiết bị", "Trao đổi thông tin với vi xử lý, với thiết bị ngoại vi", "Bộ đệm dữ liệu, phát hiện lỗi"], answer: 1 },
+        { q: "Xét về chức năng, hệ thống nhớ máy tính có thể có ở:", options: ["Bên trong bộ xử lý, RAM, đĩa từ", "Các thanh ghi, bộ nhớ trong, CD-ROM", "Các thanh ghi, bộ nhớ trong, bộ nhớ ngoài", "Các thanh ghi, ROM, băng từ"], answer: 2 },
+        { q: "Đâu không phải là đặc tính của đĩa từ:", options: ["Đầu từ cố định hoặc di động", "Đĩa cố định hoặc thay đổi", "Một đĩa hay nhiều đĩa", "Mã hóa hoặc giải mã tín hiệu"], answer: 3 },
+        { q: "DMAC điều khiển trao đổi dữ liệu giữa các module vào/ra với:", options: ["Bộ nhớ chính", "Vi xử lý", "Bộ nhớ ngoài", "Các thiết bị ngoại vi"], answer: 0 },
+        { q: "Truyền dữ liệu giữa CPU với Cache là hình thức truyền theo dạng:", options: ["Khối nhớ", "Từ nhớ", "Byte", "Bit"], answer: 1 },
+        { q: "Truyền dữ liệu giữa Cache với bộ nhớ chính là hình thức truyền theo dạng:", options: ["Khối nhớ", "Từ nhớ", "Byte", "Bit"], answer: 0 },
+        { q: "Đâu không phải là vấn đề quan trọng khi thiết kế Bus:", options: ["Xung Clock", "Cơ chế phân xử Bus", "Xử lý ngắt, xử lý lỗi", "Các hình thức kết nối vật lý"], answer: 3 },
+        { q: "Đâu không phải là đặc điểm của flash disk:", options: ["Kết nối qua cổng USB", "Là một dạng đĩa từ quay", "Thuộc loại bộ nhớ bán dẫn", "Thuận tiện mang theo"], answer: 1 },
+        { q: "Trong nối ghép thiết bị ngoại vi, một trong các tính chất của kiểu nối ghép song song là:", options: ["Tốc độ nhanh", "Truyền lần lượt từng bit", "Cần bộ chuyển đổi từ song song qua nối tiếp", "Cần ít đường truyền"], answer: 0 },
+        { q: "Trong nối ghép thiết bị ngoại vi, một trong các tính chất của kiểu nối ghép nối tiếp là:", options: ["Truyền nhiều bit cùng lúc", "Tốc độ cực nhanh", "Cần nhiều đường truyền", "Cần bộ chuyển đổi song song sang nối tiếp"], answer: 3 },
+        { q: "Định dạng đĩa từ là quá trình:", options: ["Tạo ra các Track", "Tạo ra các Sector", "Tạo ra các Track và các Sector", "Sắp xếp trật tự cho các hạt từ tính"], answer: 2 },
+        { q: "Giá trị 29.75 hệ thập phân được biểu diễn nhị phân là:", options: ["10111.01", "11101.11", "11101.01", "10111.11"], answer: 1 },
+        { q: "Kiểu kiến trúc nào thực hiện C = A + B bằng cách: Push A, Push B, Add, Pop C?", options: ["Stack", "Accumulator", "Register - Memory", "Load - Store"], answer: 0 },
+        { q: "Kiểu kiến trúc nào thực hiện C = A + B bằng cách: Load A, Add B, Store C?", options: ["Stack", "Accumulator", "Register - Memory", "Load - Store"], answer: 1 },
+        { q: "Kiểu kiến trúc thực hiện C = A + B bằng cách: Load R1, A; Add R1, B; Store C, R1?", options: ["Stack", "Accumulator", "Register - Memory", "Load - Store"], answer: 2 },
+        { q: "Kiểu kiến trúc thực hiện C = A + B bằng cách: Load R1, A; Load R2, B; Add R3, R1, R2; Store C, R3?", options: ["Stack", "Accumulator", "Register - Memory", "Load - Store"], answer: 3 },
+        { q: "Các hoạt động cơ bản của máy tính bao gồm:", options: ["Ngắt, Giải mã lệnh, Vào/ra", "Xử lý số liệu, Ngắt, Thực hiện chương trình", "Thực hiện chương trình, Ngắt, Vào/ra", "Tính toán kết quả, Lưu trữ dữ liệu, Vào/ra"], answer: 2 },
+        { q: "Đối với số nguyên không dấu 8 bit, giá trị 261 thập phân biểu diễn thế nào?", options: ["10010001", "10101011", "10000111", "Không biểu diễn được (vượt quá 255)"], answer: 3 },
+        { q: "Đối với số nguyên có dấu 8 bit, giá trị 129 thập phân biểu diễn thế nào?", options: ["10010001", "10101011", "10000111", "Không biểu diễn được (vượt quá dải -128 đến 127)"], answer: 3 },
+        { q: "Đối với số nguyên có dấu 8 bit dạng bù 2, số 101 thập phân là:", options: ["01100101", "00001100", "00001110", "01001010"], answer: 0 },
+        { q: "Cho số thực 81.25, giá trị của nó ở hệ nhị phân là:", options: ["1010001.01", "100011.101", "100010.011", "1010101.11"], answer: 0 },
+        { q: "Với công đoạn nhận lệnh của CPU, thứ tự thực hiện là:", options: ["Bộ đếm chương trình → Bộ nhớ → Thanh ghi lệnh", "Bộ nhớ → Thanh ghi lệnh → Bộ đếm chương trình", "Bộ nhớ → Bộ đếm chương trình → Thanh ghi lệnh", "Bộ đếm chương trình → Thanh ghi lệnh → Bộ nhớ"], answer: 0 },
+        { q: "Với công đoạn xử lý dữ liệu của CPU, thứ tự thực hiện là:", options: ["Thực hiện phép toán → ALU → Thanh ghi dữ liệu", "Thực hiện phép toán → Thanh ghi dữ liệu → ALU", "ALU → Thực hiện phép toán → Thanh ghi dữ liệu", "ALU → Thanh ghi dữ liệu → Thực hiện phép toán"], answer: 1 },
+        { q: "Đối với khối điều khiển CU, phát biểu nào sau đây là SAI:", options: ["Điều khiển các tín hiệu bên trong và bên ngoài bộ xử lý", "Điều khiển các thanh ghi và ALU", "Điều khiển bộ nhớ và Module Vào/ra", "Chỉ điều khiển duy nhất các thanh ghi nội bộ"], answer: 3 },
+        { q: "Tín hiệu điều khiển nào từ System bus đến CPU là SAI:", options: ["Tín hiệu xin nhường bus", "Tín hiệu xin ngắt", "Tín hiệu trả lời đồng ý nhường bus", "Tín hiệu yêu cầu tính toán ALU"], answer: 2 },
+        { q: "Xét các tín hiệu điều khiển từ CPU đến System bus, phát biểu nào SAI:", options: ["Điều khiển đọc/ghi cổng vào/ra", "Điều khiển đọc/ghi ngăn nhớ", "Điều khiển ghi dữ liệu vào các thanh ghi nội bộ", "Xử lý các tín hiệu từ bên ngoài gửi tới"], answer: 2 },
+        { q: "Đâu KHÔNG PHẢI là đặc trưng của bộ nhớ chính:", options: ["Tồn tại trên mọi hệ thống máy tính", "Chứa các chương trình đang thực hiện", "Các ngăn nhớ được đánh địa chỉ trực tiếp bởi CPU", "Dung lượng bộ nhớ chính luôn lớn hơn không gian địa chỉ CPU quản lý"], answer: 3 },
+        { q: "Đâu KHÔNG PHẢI là đặc trưng chính cho bộ nhớ:", options: ["Dung lượng", "Tính thẩm mỹ của chip", "Độ trễ", "Thời gian tối thiểu giữa các lần truy xuất"], answer: 1 },
+        { q: "Số 235.64 hệ bát phân chuyển sang thập phân là:", options: ["157.812", "157.8125", "158.125", "158.8125"], answer: 1 },
+        { q: "Số nhị phân 1001110.10101 đổi sang bát phân là:", options: ["430.51", "430.52", "116.52", "116.51"], answer: 2 },
+        { q: "Số thập lục phân 34F5C có giá trị thập phân là:", options: ["624", "216", "216912", "216924"], answer: 3 },
+        { q: "Số -13 thập phân được biểu diễn nhị phân dạng bù 1, 8 bit là:", options: ["00001101", "11110010", "10001101", "11111101"], answer: 1 },
+        { q: "A=1001, B=11010, phép tính A-B dạng bù 2 kết quả là:", options: ["01111", "10000", "10001", "11111"], answer: 0 },
+        { q: "A=110101, B=100110, phép tính A-B dạng bù 2 kết quả là:", options: ["001111", "110000", "1000011", "1001111"], answer: 0 },
+        { q: "Phép tính -5 + 2 thực hiện dạng bù 2, 8 bit có kết quả là:", options: ["00000011", "00001101", "11111101", "11110011"], answer: 2 },
+        { q: "Phép tính -5 + (-7) thực hiện dạng bù 2, 8 bit có kết quả là:", options: ["00000010", "00001110", "11111100", "11110100"], answer: 3 }
+    ];
+
+    let currentQuestions = [];
+    let timerInterval;
+
+    // Thuật toán xáo trộn Fisher-Yates
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function startQuiz() {
+        const name = document.getElementById('studentName').value.trim();
+        if (!name) return alert("Vui lòng nhập họ tên!");
+
+        document.getElementById('nameSection').style.display = 'none';
+        document.getElementById('quizContainer').style.display = 'block';
+
+        // Xáo trộn câu hỏi từ bản gốc
+        currentQuestions = shuffle(originalData.map(item => {
+            // Xáo trộn luôn cả các lựa chọn bên trong mỗi câu hỏi
+            let opts = item.options.map((o, i) => ({ text: o, isCorrect: i === item.answer }));
+            shuffle(opts);
+            return {
+                q: item.q,
+                options: opts.map(o => o.text),
+                correctIdx: opts.findIndex(o => o.isCorrect)
+            };
+        }));
+
+        const form = document.getElementById('quizForm');
+        form.innerHTML = '';
+        currentQuestions.forEach((item, idx) => {
+            let qHtml = `<div class="question"><p>Câu ${idx + 1}: ${item.q}</p>`;
+            item.options.forEach((opt, oIdx) => {
+                qHtml += `
+                    <label class="option-label">
+                        <input type="radio" name="q${idx}" value="${oIdx}"> 
+                        ${String.fromCharCode(65 + oIdx)}. ${opt}
+                    </label>`;
+            });
+            qHtml += `</div>`;
+            form.innerHTML += qHtml;
+        });
+
+        startTimer(45 * 60);
+    }
+
+    function startTimer(duration) {
+        let timer = duration;
+        timerInterval = setInterval(() => {
+            let min = Math.floor(timer / 60);
+            let sec = timer % 60;
+            document.getElementById('time').textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+            if (--timer < 0) {
+                clearInterval(timerInterval);
+                submitQuiz();
+            }
+        }, 1000);
+    }
+
+    function submitQuiz() {
+        clearInterval(timerInterval);
+        let score = 0;
+        let detailHtml = '<h3>Chi tiết bài làm:</h3>';
+
+        currentQuestions.forEach((item, idx) => {
+            const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+            const userAnsIdx = selected ? parseInt(selected.value) : -1;
+            const isCorrect = userAnsIdx === item.correctIdx;
+            
+            if (isCorrect) score++;
+
+            detailHtml += `
+                <div class="answer-item ${userAnsIdx === -1 ? 'unanswered' : (isCorrect ? 'correct' : 'wrong')}">
+                    <strong>Câu ${idx + 1}:</strong> ${item.q}<br>
+                    - Lựa chọn của bạn: ${userAnsIdx === -1 ? 'Chưa chọn' : String.fromCharCode(65 + userAnsIdx)}<br>
+                    - Đáp án đúng: ${String.fromCharCode(65 + item.correctIdx)} (${item.options[item.correctIdx]})
+                </div>`;
+        });
+
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('resStudent').textContent = "Thí sinh: " + document.getElementById('studentName').value;
+        document.getElementById('resScore').textContent = `Kết quả: ${score} / ${currentQuestions.length}`;
+        document.getElementById('resScore10').textContent = `Điểm hệ 10: ${(score / currentQuestions.length * 10).toFixed(2)}`;
+        document.getElementById('detailAnswers').innerHTML = detailHtml;
+    }
+</script>
+</body>
+</html>

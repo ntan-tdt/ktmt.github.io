@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Kiểm Tra Trắc Nghiệm 14 - Xáo Trộn Đề</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; background-color: #f0f2f5; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .question { margin-bottom: 24px; padding: 20px; border-left: 5px solid #3498db; background: #f9f9f9; border-radius: 8px; }
+        .timer { font-size: 24px; color: #e74c3c; text-align: center; font-weight: bold; margin: 20px 0; position: sticky; top: 10px; background: white; z-index: 100; padding: 10px; border-radius: 8px; }
+        #submitBtn { 
+            display: block; margin: 40px auto; font-size: 22px; padding: 15px 50px; 
+            background: #27ae60; color: white; border: none; border-radius: 10px; cursor: pointer; transition: 0.3s;
+        }
+        #submitBtn:hover { background: #219653; transform: scale(1.05); }
+        #result { text-align: center; margin: 30px 0; }
+        .answer-item { margin: 10px 0; padding: 15px; border-radius: 8px; }
+        .correct { background: #e8f5e9; color: #2e7d32; border-left: 6px solid #4caf50; }
+        .wrong { background: #ffebee; color: #c62828; border-left: 6px solid #f44336; }
+        .unanswered { background: #f5f5f5; color: #616161; border-left: 6px solid #9e9e9e; }
+        input[type="text"], input[type="password"] { padding: 12px; width: 300px; border-radius: 6px; border: 1px solid #ddd; }
+        button.action-btn { padding: 12px 25px; background: #3498db; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 style="text-align: center; color: #2c3e50;">Kiểm Tra Trắc Nghiệm 14</h1>
+
+    <div id="nameSection" style="text-align: center;">
+        <p>Nhập họ tên để bắt đầu:</p>
+        <input type="text" id="studentName" placeholder="Nguyễn Văn A">
+        <button class="action-btn" onclick="startQuiz()">Bắt Đầu Làm Bài</button>
+    </div>
+
+    <div id="quizContainer" style="display:none;">
+        <div class="timer">Thời gian: <span id="time">45:00</span></div>
+        <div id="quizForm"></div>
+        <button id="submitBtn" onclick="submitQuiz()">Nộp Bài</button>
+    </div>
+
+    <div id="result" style="display:none;">
+        <h2 id="studentInfo"></h2>
+        <div id="score" style="font-size: 30px; font-weight: bold;"></div>
+        <div id="score10" style="font-size: 24px; color: #e67e22;"></div>
+        <div id="detailAnswers" style="text-align: left; margin-top: 20px;"></div>
+        <button class="action-btn" onclick="location.reload()">Làm Lại</button>
+    </div>
+</div>
+
+<script>
+    // Dữ liệu câu hỏi: Mỗi đối tượng bao gồm câu hỏi, mảng các lựa chọn và chỉ số đáp án đúng (theo mảng options ban đầu)
+    const quizData = [
+        { q: "Máy tính dùng kỹ thuật tương tự (analog computer) sử dụng các ... có đặc tính giống như phép tính đang được tiến hành để thực hiện các tính toán trong máy.", options: ["Tụ điện", "Dòng điện", "Mạch điện", "Điện trở"], answer: 1 },
+        { q: "Máy tính đầu tiên có tên là:", options: ["ENIAC", "UNIAC", "IBM", "VAX"], answer: 0 },
+        { q: "Thế hệ máy tính thứ 2 được đặc trưng bởi:", options: ["Đèn điện tử", "Transistor", "Mạch tích hợp", "Mạch tích hợp cao"], answer: 1 },
+        { q: "Thế hệ máy tính thứ 1 được đặc trưng bởi:", options: ["Đèn điện tử", "Transistor", "Mạch tích hợp", "Mạch tích hợp cao"], answer: 0 },
+        { q: "Thế hệ máy tính thứ 3 được đặc trưng bởi:", options: ["Đèn điện tử", "Transistor", "Mạch tích hợp", "Mạch tích hợp cao"], answer: 2 },
+        { q: "Thế hệ máy tính thứ 4 được đặc trưng bởi:", options: ["Đèn điện tử", "Transistor", "Mạch tích hợp", "Mạch tích hợp cao"], answer: 3 },
+        { q: "Ngôn ngữ bậc cao bắt đầu xuất hiện ở thế hệ máy tính nào?", options: ["Thế hệ thứ nhất", "Thế hệ thứ hai", "Thế hệ thứ ba", "Thế hệ thứ tư"], answer: 1 },
+        { q: "Hệ điều hành tuần tự (batch processing) xuất hiện trong thế hệ máy tính nào?", options: ["Thế hệ thứ nhất", "Thế hệ thứ hai", "Thế hệ thứ ba", "Thế hệ thứ tư"], answer: 1 },
+        { q: "Máy tính đa chương xuất hiện trong thế hệ máy tính nào?", options: ["Thế hệ thứ nhất", "Thế hệ thứ hai", "Thế hệ thứ ba", "Thế hệ thứ tư"], answer: 2 },
+        { q: "Hệ điều hành chia sẻ thời gian (time sharing) xuất hiện trong thế hệ máy tính nào?", options: ["Thế hệ thứ nhất", "Thế hệ thứ hai", "Thế hệ thứ ba", "Thế hệ thứ tư"], answer: 2 },
+        { q: "Các mạch tích hợp LSI, VLSI có thể chứa:", options: ["Vài chục Transistor", "Vài trăm Transistor", "Vài ngàn Transistor", "Vài triệu Transistor"], answer: 3 },
+        { q: "Thế hệ máy tính nào thì bộ nhớ bán dẫn, bộ nhớ cache và bộ nhớ ảo đã được dùng rộng rãi", options: ["Thế hệ thứ hai", "Thế hệ thứ ba", "Thế hệ thứ tư", "Thế hệ thứ năm"], answer: 2 },
+        { q: "Bộ nhớ trong là:", options: ["Tập hợp các ô nhớ, mỗi ô nhớ có một số bit nhất định", "Tập các thanh ghi, mỗi thanh ghi có một chức năng nhất định", "Tập hợp các ô nhớ, mỗi ô nhớ có một số bit không nhất định", "Tập các thanh ghi, mỗi thanh ghi có thể gồm nhiều chức năng khác nhau"], answer: 0 },
+        { q: "Intel 8080 là bộ vi xử lý:", options: ["4 bit", "8 bit", "16 bit", "32 bit"], answer: 1 },
+        { q: "Intel 80286 là bộ vi xử lý:", options: ["4 bit", "8 bit", "16 bit", "32 bit"], answer: 2 },
+        { q: "Intel 80386 là bộ vi xử lý:", options: ["4 bit", "8 bit", "16 bit", "32 bit"], answer: 3 },
+        { q: "Cấu trúc phần cứng của máy tính gồm:", options: ["CPU, ALU, Bộ nhớ trong", "CU, ALU, RF", "CPU, I/O, Bộ nhớ trong", "CPU, Bộ nhớ trong, Bộ nhớ ngoài"], answer: 2 },
+        { q: "Dãy các bước dùng để thi hành chỉ thị gọi là chu kỳ:", options: ["Lấy lệnh – Thi hành lệnh – Giải mã lệnh", "Thi hành lệnh – Giải mã lệnh – Lấy lệnh", "Lấy lệnh – Thi hành lệnh – Giải mã lệnh", "Lấy lệnh – Giải mã lệnh – Thi hành lệnh"], answer: 3 },
+        { q: "Bộ nhớ được xây dựng từ:", options: ["Các phần tử nhớ cơ bản", "Các thanh ghi", "Các Transistor", "Các tụ điện"], answer: 0 },
+        { q: "SRAM (RAM tĩnh) được cấu tạo từ:", options: ["Các thanh ghi", "Các tụ điện", "Các Transistor", "Các Flip - Flop"], answer: 3 },
+        { q: "RAM động (DRAM) được cấu tạo từ:", options: ["Các thanh ghi", "Các tụ điện", "Các Transistor", "Các Flip - Flop"], answer: 1 },
+        { q: "Trong tổ chức của chip nhớ, tín hiệu OE là:", options: ["Tín hiệu chọn chip", "Tín hiệu điều khiển đọc", "Tín hiệu điều khiển ghi", "Tín hiệu xác định địa chỉ"], answer: 0 },
+        { q: "Trong tổ chức của chip nhớ, tín hiệu WE là:", options: ["Tín hiệu chọn chip", "Tín hiệu điều khiển đọc", "Tín hiệu điều khiển ghi", "Tín hiệu xác định địa chỉ"], answer: 2 },
+        { q: "Trong tổ chức của chip nhớ, tín hiệu CS là:", options: ["Tín hiệu chọn chip", "Tín hiệu điều khiển đọc", "Tín hiệu điều khiển ghi", "Tín hiệu xác định địa chỉ"], answer: 0 },
+        { q: "Số toán hạng cho lệnh tính toán trong ALU theo kiểu kiến trúc ngăn xếp là:", options: ["0", "1", "2", "2 hoặc 3"], answer: 0 },
+        { q: "Số toán hạng cho lệnh tính toán trong ALU theo kiểu kiến trúc thanh ghi tích lũy là:", options: ["0", "1", "2", "2 hoặc 3"], answer: 1 },
+        { q: "Số toán hạng cho lệnh tính toán trong ALU theo kiểu kiến trúc thanh ghi đa dụng là:", options: ["0", "1", "2", "2 hoặc 3"], answer: 3 },
+        { q: "Ưu điểm của kiểu kiến trúc ngăn xếp là:", options: ["Lệnh ngắn và ít mã máy", "Lệnh ngắn và làm tối thiểu trạng thái bên trong máy", "Lệnh ngắn và nhiều mã máy", "Kiểu rất tổng quát để tạo các mã hữu hạn"], answer: 0 },
+        { q: "Ưu điểm của kiểu kiến trúc thanh ghi đa dụng là:", options: ["Lệnh ngắn và ít mã máy", "Lệnh ngắn và làm tối thiểu trạng thái bên trong máy", "Lệnh ngắn và nhiều mã máy", "Kiểu rất tổng quát để tạo các mã hữu hạn"], answer: 3 },
+        { q: "Ưu điểm của kiểu kiến trúc thanh ghi tích lũy là:", options: ["Lệnh ngắn và ít mã máy", "Lệnh ngắn và làm tối thiểu trạng thái bên trong máy", "Lệnh ngắn và nhiều mã máy", "Kiểu rất tổng quát để tạo các mã hữu hạn"], answer: 1 },
+        { q: "Thanh ghi bộ đếm chương trình là thanh ghi chứa:", options: ["Địa chỉ ô nhớ chứa mã lệnh sắp thực thi", "Địa chỉ của ngăn nhớ dữ liệu mà CPU muốn truy cập", "Địa chỉ của ngăn nhớ đỉnh Stack", "Địa chỉ của ngăn nhớ cơ sở"], answer: 0 },
+        { q: "Thanh ghi con trỏ dữ liệu là thanh ghi chứa:", options: ["Địa chỉ ô nhớ chứa mã lệnh sắp thực thi", "Địa chỉ của ngăn nhớ dữ liệu mà CPU muốn truy cập", "Địa chỉ của ngăn nhớ đỉnh Stack", "Địa chỉ của ngăn nhớ cơ sở"], answer: 1 },
+        { q: "Thanh ghi con trỏ ngăn xếp là thanh ghi chứa:", options: ["Địa chỉ ô nhớ chứa mã lệnh sắp thực thi", "Địa chỉ của ngăn nhớ dữ liệu mà CPU muốn truy cập", "Địa chỉ của ngăn nhớ đỉnh Stack", "Địa chỉ của ngăn nhớ cơ sở"], answer: 2 },
+        { q: "Thanh ghi cơ sở là thanh ghi chứa:", options: ["Địa chỉ ô nhớ chứa mã lệnh sắp thực thi", "Địa chỉ của ngăn nhớ dữ liệu mà CPU muốn truy cập", "Địa chỉ của ngăn nhớ đỉnh Stack", "Địa chỉ của ngăn nhớ cơ sở"], answer: 3 },
+        { q: "Trong bộ thanh ghi thì thanh ghi CS là thanh ghi:", options: ["Đoạn chương trình", "Đoạn dữ liệu", "Đoạn chồng", "Đoạn mở rộng"], answer: 0 },
+        { q: "Trong bộ thanh ghi thì thanh ghi DS là thanh ghi:", options: ["Đoạn chương trình", "Đoạn dữ liệu", "Đoạn chồng", "Đoạn mở rộng"], answer: 1 },
+        { q: "Trong bộ thanh ghi thì thanh ghi SS là thanh ghi:", options: ["Đoạn chương trình", "Đoạn dữ liệu", "Đoạn chồng", "Đoạn mở rộng"], answer: 2 },
+        { q: "Trong bộ thanh ghi thì thanh ghi ES là thanh ghi:", options: ["Đoạn chương trình", "Đoạn dữ liệu", "Đoạn chồng", "Đoạn mở rộng"], answer: 3 },
+        { q: "Trình tự xử lý thông tin của máy tính là:", options: ["CPU Hard Disk Monitor", "Input Process Output", "CPU Keyboard Monitor", "Monitor Printer Hard Disk"], answer: 1 },
+        { q: "Các thành phần cơ bản của máy tính là:", options: ["RAM, CPU, Hard Disk, System Bus", "Memory, System Bus, ROM, Keyboard", "Memory, CPU, Monitor, Mouse", "Memory, CPU, System Bus, I/O"], answer: 3 },
+        { q: "Theo cách phân loại truyền thống, có các loại máy tính sau đây:", options: ["Bộ vi điều khiển, máy tính các nhân, máy tính lớn, siêu máy tính, máy vi tính", "Máy tính xách tay, máy tính lớn, máy tính để bàn, máy vi tính, siêu máy tính", "Máy tính xách tay, máy tính mini, máy tính lớn, siêu máy tính, máy chủ", "Bộ vi điều khiển, máy vi tính, máy tính mini, máy tính lớn, siêu máy tính"], answer: 3 },
+        { q: "Các thành phần cơ bản của thiết bị ngoại vi là:", options: ["Bộ chuyển đổi tín hiệu, Logic điều khiển, Bộ đệm", "Bộ chuyển đổi trạng thái, Logic đọc, Logic điều khiển", "Bộ chuyển đổi hiện thời, Logic ghi, Bộ kiểm tra", "Bộ chuyển đổi địa chỉ, Logic nhận, Bộ đếm lùi"], answer: 0 },
+        { q: "Đâu là một trong những phương pháp điều khiển vào/ra:", options: ["Vào/ra bằng hệ thống", "Vào/ra bằng truy nhập CPU", "Vào/ra bằng chương trình", "Vào/ra bằng hệ điều hành"], answer: 2 },
+        { q: "Trong chuẩn IEEE 754/85, số thực dấu chấm động chính xác kép sẽ có độ dài:", options: ["32 bit", "64 bit", "128 bit", "16 bit"], answer: 1 },
+        { q: "Trong chuẩn IEEE 754/85, số thực dấu chấm động chính xác đơn sẽ có độ dài:", options: ["32 bit", "64 bit", "128 bit", "16 bit"], answer: 0 },
+        { q: "Một trong các chuẩn giao tiếp của đĩa từ là:", options: ["COM", "LPT", "IDE", "VGA"], answer: 2 },
+        { q: "CD-ROM là loại bộ nhớ thuộc dạng:", options: ["Đĩa từ", "Bán dẫn", "Đĩa quang", "Băng từ"], answer: 2 },
+        { q: "Flash disk là loại bộ nhớ được kết nối với máy tính thông qua cổng:", options: ["SATA", "USB", "IDE", "ATA"], answer: 1 },
+        { q: "Đâu không phải là phương pháp điều khiển vào/ra:", options: ["Vào/ra bằng chương trình", "Vào/ra bằng ngắt", "Truy nhập trực tiếp", "Truy nhập gián tiếp"], answer: 3 },
+        { q: "Bộ đếm chương trình (PC) của máy tính là loại thanh ghi:", options: ["Giữ địa chỉ lệnh", "Chứa địa chỉ ngăn nhớ dữ liệu", "Giữ địa chỉ của lệnh tiếp theo", "Đa dụng"], answer: 2 },
+        { q: "Thực hiện phép cộng 5 bit dấu bù 1 cho -6 + 13:", options: ["00111", "11000", "00110", "10110"], answer: 0 },
+        { q: "Bộ cộng toàn phần (Full adder) được dùng trong:", options: ["Khối CU", "ALU", "RF", "Cache"], answer: 1 },
+        { q: "Khi thực hiện: MOV CL, 3; SHL AL, CL (Giả định AL=9):", options: ["27", "32", "54", "72"], answer: 3 },
+        { q: "Khi thực hiện: MOV AL, 51; SHL BL, 5; MUL BL (Giả định BL=5):", options: ["255", "000Fh", "F000h", "0FFFh"], answer: 2 },
+        { q: "Số nhị phân 1001110.10101 đổi sang bát phân:", options: ["430.51", "116.52", "430.52", "116.51"], answer: 1 },
+        { q: "Bộ nhớ đệm (cache) được chế tạo bằng:", options: ["SDRAM", "SRAM", "DRAM", "DDRAM"], answer: 1 },
+        { q: "Loại Bus nào làm nhiệm vụ đọc/ghi dữ liệu giữa Vi xử lý và Bộ nhớ:", options: ["Bus địa chỉ", "Bus điều khiển", "Bus dữ liệu", "Bus địa chỉ và điều khiển"], answer: 2 },
+        { q: "Số nhị phân bù 2 '11100111' sang thập phân là:", options: ["25", "-25", "-231", "231"], answer: 1 },
+        { q: "Phép cộng số có dấu 8-bit bù 2: (-39) + (-42) là:", options: ["Bị tràn số", "Không kết quả", "-81", "81"], answer: 2 },
+        { q: "Biểu diễn 78.375 dạng IEEE 754 đơn:", options: ["01000010100111001100000000000000", "00011100111000010100000000000000", "10011100111000010100000000000000", "11000010100111001100000000000000"], answer: 0 },
+        { q: "Biểu diễn -12.625 dạng IEEE 754 đơn:", options: ["11100101100000100000000000000000", "01100101100000100000000000000000", "01000001010010100000000000000000", "11000001010010100000000000000000"], answer: 3 }
+    ];
+
+    let currentQuestions = [];
+    let timerInterval;
+
+    // Hàm trộn mảng (Fisher-Yates shuffle)
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function startQuiz() {
+        const name = document.getElementById('studentName').value.trim();
+        if (!name) return alert("Vui lòng nhập tên!");
+
+        document.getElementById('nameSection').style.display = 'none';
+        document.getElementById('quizContainer').style.display = 'block';
+
+        // Xáo trộn câu hỏi
+        currentQuestions = shuffle([...quizData]);
+
+        const quizForm = document.getElementById('quizForm');
+        quizForm.innerHTML = '';
+
+        currentQuestions.forEach((item, index) => {
+            let qHtml = `<div class="question">
+                <p><strong>Câu ${index + 1}:</strong> ${item.q}</p>`;
+            
+            item.options.forEach((opt, i) => {
+                qHtml += `<label style="display:block; margin:8px 0; cursor:pointer;">
+                    <input type="radio" name="q${index}" value="${i}"> ${String.fromCharCode(65+i)}. ${opt}
+                </label>`;
+            });
+            qHtml += `</div>`;
+            quizForm.innerHTML += qHtml;
+        });
+
+        startTimer(45 * 60);
+    }
+
+    function startTimer(duration) {
+        let timer = duration;
+        timerInterval = setInterval(() => {
+            let minutes = Math.floor(timer / 60);
+            let seconds = timer % 60;
+            document.getElementById('time').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (--timer < 0) {
+                clearInterval(timerInterval);
+                submitQuiz();
+            }
+        }, 1000);
+    }
+
+    function submitQuiz() {
+        clearInterval(timerInterval);
+        let score = 0;
+        let detailHtml = '';
+
+        currentQuestions.forEach((item, index) => {
+            const rdos = document.getElementsByName(`q${index}`);
+            let selectedValue = -1;
+            rdos.forEach(r => { if(r.checked) selectedValue = parseInt(r.value); });
+
+            const isCorrect = selectedValue === item.answer;
+            if(isCorrect) score++;
+
+            detailHtml += `<div class="answer-item ${selectedValue === -1 ? 'unanswered' : (isCorrect ? 'correct' : 'wrong')}">
+                <strong>Câu ${index + 1}:</strong> ${item.q}<br>
+                - Đáp án của bạn: ${selectedValue === -1 ? 'Chưa chọn' : String.fromCharCode(65 + selectedValue)}<br>
+                - Đáp án đúng: ${String.fromCharCode(65 + item.answer)} (${item.options[item.answer]})
+            </div>`;
+        });
+
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('studentInfo').textContent = "Thí sinh: " + document.getElementById('studentName').value;
+        document.getElementById('score').textContent = `Kết quả: ${score} / ${currentQuestions.length}`;
+        document.getElementById('score10').textContent = `Điểm hệ 10: ${(score / currentQuestions.length * 10).toFixed(2)}`;
+        document.getElementById('detailAnswers').innerHTML = detailHtml;
+    }
+</script>
+
+</body>
+</html>
