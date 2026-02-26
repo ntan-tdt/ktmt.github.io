@@ -38,8 +38,8 @@
 
         <header class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Trắc nghiệm Chương 6: Hệ thống vào ra (I/O)</h1>
-            <p class="text-lg text-gray-600">40 câu hỏi trắc nghiệm – Kiểm tra kiến thức về Input/Output</p>
-            <p class="mt-2 text-sm text-gray-500">Thời gian: <span id="timer">40:00</span> | Tổng điểm: 40</p>
+            <p class="text-lg text-gray-600">50 câu hỏi trắc nghiệm – Kiểm tra kiến thức về Input/Output</p>
+            <p class="mt-2 text-sm text-gray-500">Thời gian: <span id="timer">50:00</span> | Tổng điểm: 50</p>
             <p id="best-score" class="text-sm text-green-600 font-semibold mt-1">Điểm cao nhất: --</p>
         </header>
 
@@ -56,7 +56,7 @@
         <div id="result-section" class="mt-12 hidden">
             <div class="bg-white p-8 rounded-xl shadow-lg text-center">
                 <h2 class="text-3xl font-bold mb-4">Kết quả của bạn</h2>
-                <p class="text-5xl font-bold text-blue-600 mb-6" id="score">0/40</p>
+                <p class="text-5xl font-bold text-blue-600 mb-6" id="score">0/50</p>
                 <p class="text-lg mb-6" id="message"></p>
                 <button id="review-btn" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700">
                     Xem đáp án chi tiết (yêu cầu mật khẩu)
@@ -89,7 +89,7 @@
     </div>
 
     <script>
-        // Dữ liệu 40 câu hỏi (giữ nguyên từ trước)
+        // Dữ liệu 50 câu hỏi
         const questions = [
             { q: "Hệ thống I/O trong máy tính có vai trò gì?", options: ["Thực hiện phép tính số học", "Giao tiếp giữa CPU và thiết bị ngoại vi", "Lưu trữ vĩnh viễn dữ liệu", "Quản lý bộ nhớ cache"], correct: 1 },
             { q: "Thiết bị nào sau đây thuộc loại Input?", options: ["Màn hình", "Máy in", "Bàn phím", "Loa"], correct: 2 },
@@ -101,11 +101,49 @@
             { q: "Ưu điểm của Memory-mapped I/O so với Port-mapped I/O là?", options: ["Không chiếm không gian địa chỉ bộ nhớ", "Linh hoạt và nhanh hơn (dùng lệnh thông thường)", "Không cần driver", "An toàn hơn"], correct: 1 },
             { q: "Buffering trong hệ thống I/O dùng để làm gì?", options: ["Tăng tốc độ CPU", "Giảm sự khác biệt tốc độ giữa CPU và thiết bị I/O", "Mã hóa dữ liệu", "Bảo vệ bộ nhớ"], correct: 1 },
             { q: "Thiết bị nào thường sử dụng DMA để truyền dữ liệu lớn?", options: ["Bàn phím", "Ổ cứng/SSD", "Chuột", "Màn hình cảm ứng"], correct: 1 },
-            // ... (bạn copy đầy đủ 40 câu từ file cũ vào đây nếu cần, tôi rút gọn để code ngắn)
-            { q: "Chuẩn nào sau đây thường dùng cho thiết bị lưu trữ tốc độ cực cao trong máy chủ?", options: ["USB 4", "NVMe over Fabrics", "SATA III", "IDE"], correct: 1 }
+
+            // Câu 10–49: bổ sung thêm
+            { q: "Spooling thường được sử dụng cho thiết bị nào?", options: ["Bàn phím", "Máy in", "Ổ đĩa cứng", "Màn hình"], correct: 1 },
+            { q: "Double buffering giúp làm gì trong hệ thống I/O?", options: ["Tăng dung lượng bộ nhớ", "Cho phép xử lý song song giữa CPU và thiết bị I/O", "Giảm tốc độ truyền", "Tăng số lượng interrupt"], correct: 1 },
+            { q: "Trong interrupt-driven I/O, khi nào CPU bị ngắt?", options: ["Khi thiết bị sẵn sàng truyền/nhận dữ liệu", "Mỗi giây một lần", "Khi CPU rảnh", "Khi bộ nhớ đầy"], correct: 0 },
+            { q: "Vectơ ngắt (interrupt vector) dùng để làm gì?", options: ["Xác định thiết bị gây ngắt", "Chỉ địa chỉ xử lý ngắt tương ứng", "Tăng tốc độ DMA", "Lưu trạng thái CPU"], correct: 1 },
+            { q: "Ưu điểm lớn nhất của DMA so với interrupt-driven I/O khi truyền khối dữ liệu lớn là gì?", options: ["Tốn ít bộ nhớ hơn", "Giảm đáng kể số lần ngắt CPU", "Tăng độ trễ", "Không cần controller"], correct: 1 },
+            { q: "Cycle stealing trong DMA là gì?", options: ["DMA chiếm toàn bộ bus", "DMA lấy cắp chu kỳ bus khi CPU không dùng", "DMA chỉ hoạt động khi CPU tắt", "DMA dùng interrupt mỗi byte"], correct: 1 },
+            { q: "Burst mode trong DMA truyền dữ liệu như thế nào?", options: ["Từng byte một", "Toàn bộ khối rồi nhả bus", "Chỉ 1 chu kỳ bus", "Không truyền dữ liệu"], correct: 1 },
+            { q: "Thiết bị I/O nào thường thuộc loại character device?", options: ["Ổ cứng", "Bàn phím", "Máy in laser", "Card đồ họa"], correct: 1 },
+            { q: "Block device khác character device ở điểm nào chính?", options: ["Chỉ đọc/ghi từng byte", "Đọc/ghi theo khối cố định", "Không dùng buffer", "Chỉ dùng polling"], correct: 1 },
+            { q: "Trong PC, IRQ 1 thường dành cho thiết bị nào?", options: ["Ổ cứng", "Bàn phím", "Chuột", "Máy in"], correct: 1 },
+            { q: "Chuẩn giao tiếp nào sử dụng lệnh IN/OUT đặc trưng cho port-mapped I/O?", options: ["x86", "ARM", "RISC-V", "MIPS"], correct: 0 },
+            { q: "Memory-mapped I/O thường tiện lợi hơn vì?", options: ["Dùng lệnh load/store thông thường", "Không cần driver", "Tốn ít địa chỉ bộ nhớ", "An toàn hơn"], correct: 0 },
+            { q: "Ngắt có mức ưu tiên (priority interrupt) dùng để?", options: ["Xử lý nhiều nguồn ngắt cùng lúc", "Ngăn chặn ngắt", "Tăng tốc DMA", "Giảm bộ nhớ"], correct: 0 },
+            { q: "Thiết bị nào thường không cần DMA?", options: ["Ổ SSD NVMe", "Card mạng Gigabit", "Bàn phím", "Card âm thanh"], correct: 2 },
+            { q: "Chuẩn SATA III có tốc độ tối đa khoảng bao nhiêu?", options: ["6 Gbps", "10 Gbps", "20 Gbps", "40 Gbps"], correct: 0 },
+            { q: "NVMe chủ yếu sử dụng giao tiếp nào để đạt tốc độ cao?", options: ["SATA", "PCIe", "USB", "IDE"], correct: 1 },
+            { q: "USB 3.2 Gen 2 có tốc độ tối đa là?", options: ["5 Gbps", "10 Gbps", "20 Gbps", "40 Gbps"], correct: 1 },
+            { q: "Thiết bị ngoại vi tốc độ thấp thường dùng kỹ thuật I/O nào?", options: ["DMA", "Interrupt-driven", "Programmed I/O", "Channel I/O"], correct: 2 },
+            { q: "I/O channel (trong máy lớn) khác DMA ở điểm nào?", options: ["Channel có khả năng thực hiện chương trình riêng", "Channel không dùng bus", "Channel chậm hơn DMA", "Channel chỉ dùng cho input"], correct: 0 },
+            { q: "Polling disadvantage chính là gì?", options: ["Tốn CPU time", "Cần nhiều interrupt", "Độ trễ thấp", "Dễ lập trình"], correct: 0 },
+            { q: "Interrupt latency là gì?", options: ["Thời gian từ khi ngắt xảy ra đến khi xử lý", "Thời gian truyền 1 byte", "Thời gian DMA chiếm bus", "Thời gian buffer đầy"], correct: 0 },
+            { q: "Kernel thường quản lý I/O qua lớp nào?", options: ["Device driver", "Application", "BIOS", "Firmware"], correct: 0 },
+            { q: "PIO (Programmed I/O) thường dùng cho thiết bị nào trong máy tính hiện đại?", options: ["Ổ cứng SATA", "Card đồ họa", "Bàn phím/chuột", "SSD NVMe"], correct: 2 },
+            { q: "Scatter-gather trong DMA dùng để?", options: ["Truyền dữ liệu không liền mạch trong bộ nhớ", "Tăng tốc độ truyền", "Giảm interrupt", "Tăng buffer"], correct: 0 },
+            { q: "Thiết bị nào thường hỗ trợ hot-plug tốt nhất?", options: ["IDE", "SATA", "USB", "SCSI"], correct: 2 },
+            { q: "Trong hệ điều hành, buffering giúp tránh?", options: ["Tình trạng starvation của tiến trình", "Sự khác biệt tốc độ lớn giữa CPU và thiết bị", "Lỗi phần cứng", "Tăng RAM"], correct: 1 },
+            { q: "Caching trong I/O chủ yếu dùng cho?", options: ["Thiết bị input", "Thiết bị output", "Thiết bị lưu trữ (disk)", "Thiết bị mạng"], correct: 2 },
+            { q: "Write-back vs write-through trong disk cache khác nhau ở?", options: ["Write-back ghi trễ hơn nhưng nhanh", "Write-through an toàn hơn", "Cả hai đều giống nhau", "Không có write-back"], correct: 0 },
+            { q: "RAID 0 dùng kỹ thuật gì để tăng tốc?", options: ["Mirroring", "Striping", "Parity", "Backup"], correct: 1 },
+            { q: "Interrupt nesting cho phép?", options: ["Ngắt có độ ưu tiên cao hơn có thể ngắt ngắt đang xử lý", "Tất cả ngắt đều bị bỏ qua", "Chỉ 1 ngắt hoạt động", "Không dùng ngắt"], correct: 0 },
+            { q: "Chuẩn Thunderbolt chủ yếu dựa trên?", options: ["USB", "PCIe + DisplayPort", "SATA", "Ethernet"], correct: 1 },
+            { q: "Trong x86, cổng I/O địa chỉ từ 0000h đến FFFFh có bao nhiêu port?", options: ["64K", "1M", "4G", "256"], correct: 0 },
+            { q: "Thiết bị I/O nào thường dùng kỹ thuật polling trong embedded system?", options: ["Cảm biến nhiệt độ", "Ổ cứng", "Card mạng", "GPU"], correct: 0 },
+            { q: "DMA controller cần những thanh ghi nào chính?", options: ["Address, Count, Control", "Data, Status", "Interrupt, Vector", "Buffer, Cache"], correct: 0 },
+            { q: "Chuẩn nào thay thế dần SATA trong laptop/server hiện đại?", options: ["USB 4", "NVMe (PCIe)", "eSATA", "FireWire"], correct: 1 },
+            { q: "I/O-bound process thường bị giới hạn bởi?", options: ["Tốc độ CPU", "Tốc độ thiết bị I/O", "Dung lượng RAM", "Cache L3"], correct: 1 },
+            { q: "Trong Linux, /dev/sda là thiết bị?", options: ["USB", "SATA/SSD", "Network", "Printer"], correct: 1 },
+            { q: "Chuẩn USB4 hỗ trợ tốc độ tối đa bao nhiêu?", options: ["10 Gbps", "20 Gbps", "40 Gbps", "80 Gbps"], correct: 2 }
         ];
 
-        // Mật khẩu để xem đáp án chi tiết (bạn có thể thay đổi dòng này)
+        // Mật khẩu để xem đáp án chi tiết
         const PASSWORD = "ktmt2025";
 
         // Hàm xáo trộn mảng (Fisher-Yates)
@@ -135,8 +173,8 @@
             quizContainer.appendChild(div);
         });
 
-        // Đếm ngược 40 phút
-        let timeLeft = 2400;
+        // Đếm ngược 50 phút
+        let timeLeft = 3000;
         const timerDisplay = document.getElementById('timer');
         function updateTimer() {
             const minutes = Math.floor(timeLeft / 60);
@@ -156,7 +194,7 @@
         const bestScoreKey = 'bestScore_chuong06';
         const savedBest = localStorage.getItem(bestScoreKey);
         if (savedBest) {
-            document.getElementById('best-score').textContent = `Điểm cao nhất: ${savedBest}/40`;
+            document.getElementById('best-score').textContent = `Điểm cao nhất: ${savedBest}/50`;
         }
 
         // Hàm nộp bài
@@ -174,7 +212,6 @@
                 const card = document.querySelectorAll('.question-card')[index];
                 card.classList.add(isCorrect ? 'correct' : 'incorrect');
 
-                // Lưu đáp án vào biến (không hiển thị ngay)
                 const answerDiv = document.createElement('div');
                 answerDiv.className = 'question-card mt-4';
                 answerDiv.innerHTML = `
@@ -188,8 +225,8 @@
                 answerKey.appendChild(answerDiv);
             });
 
-            document.getElementById('score').textContent = `${score}/40`;
-            document.getElementById('message').textContent = score >= 32 ? 'Xuất sắc!' : score >= 24 ? 'Khá tốt!' : 'Cần ôn tập thêm!';
+            document.getElementById('score').textContent = `${score}/50`;
+            document.getElementById('message').textContent = score >= 42 ? 'Xuất sắc!' : score >= 35 ? 'Khá tốt!' : score >= 25 ? 'Tạm ổn' : 'Cần ôn tập thêm!';
             document.getElementById('result-section').classList.remove('hidden');
             document.getElementById('submit-btn').disabled = true;
             clearInterval(timerInterval);
@@ -198,7 +235,7 @@
             const currentBest = localStorage.getItem(bestScoreKey);
             if (!currentBest || score > parseInt(currentBest)) {
                 localStorage.setItem(bestScoreKey, score);
-                document.getElementById('best-score').textContent = `Điểm cao nhất: ${score}/40 (mới cập nhật!)`;
+                document.getElementById('best-score').textContent = `Điểm cao nhất: ${score}/50 (mới cập nhật!)`;
             }
         }
 
