@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ôn tập Trắc nghiệm - Chương 5: Hệ thống kết nối BUS (Xáo trộn ngẫu nhiên)</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.6; max-width: 900px; margin: 20px auto; padding: 0 15px; background: #f8f9fa; color: #333; }
+    h1, h2 { text-align: center; color: #2c3e50; }
+    .quiz-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .question { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+    .question h3 { margin: 0 0 10px 0; color: #34495e; }
+    .options label { display: block; margin: 8px 0; cursor: pointer; }
+    .result { margin-top: 30px; padding: 20px; border-radius: 8px; display: none; }
+    .correct { background: #e8f5e9; color: #2e7d32; }
+    .wrong   { background: #ffebee; color: #c62828; }
+    button { padding: 12px 24px; font-size: 1.1rem; margin: 10px; border: none; border-radius: 6px; cursor: pointer; color: white; }
+    #submitBtn   { background: #1976d2; }
+    #submitBtn:hover { background: #1565c0; }
+    #explainBtn  { background: #f57c00; }
+    #explainBtn:hover { background: #ef6c00; }
+    #passwordSection { display: none; margin: 20px 0; }
+    #explanations { display: none; margin-top: 30px; }
+    .explanation { background: #fff3e0; padding: 12px; border-left: 5px solid #ff9800; margin: 10px 0; border-radius: 4px; }
+    .score-box { font-size: 1.4rem; font-weight: bold; text-align: center; margin: 20px 0; }
+    @media (max-width: 600px) { button { width: 100%; margin: 8px 0; } }
+  </style>
+</head>
+<body>
+
+<h1>Ôn tập Trắc nghiệm<br>Chương 5 - Hệ thống kết nối BUS<br>(Thứ tự câu hỏi & đáp án đã xáo trộn ngẫu nhiên)</h1>
+<h2>Kiến trúc máy tính</h2>
+
+<div class="quiz-container">
+  <form id="quizForm">
+
+    <!-- Câu 1 mới (gốc 26) -->
+    <div class="question">
+      <h3>Câu 1: Trong arbitration, tín hiệu REQ# có nghĩa là?</h3>
+      <div class="options">
+        <label><input type="radio" name="q1" value="A"> A. Dữ liệu sẵn sàng</label>
+        <label><input type="radio" name="q1" value="B"> B. Địa chỉ</label>
+        <label><input type="radio" name="q1" value="C"> C. Request sử dụng bus</label>
+        <label><input type="radio" name="q1" value="D"> D. Grant bus</label>
+      </div>
+    </div>
+
+    <!-- Câu 2 mới (gốc 24) -->
+    <div class="question">
+      <h3>Câu 2: Bus Back Side Bus (BSB) kết nối?</h3>
+      <div class="options">
+        <label><input type="radio" name="q2" value="A"> A. CPU với bộ nhớ ngoài</label>
+        <label><input type="radio" name="q2" value="B"> B. CPU với Cache L2/L3</label>
+        <label><input type="radio" name="q2" value="C"> C. USB</label>
+        <label><input type="radio" name="q2" value="D"> D. Chỉ ngoại vi</label>
+      </div>
+    </div>
+
+    <!-- Câu 3 mới (gốc 20) -->
+    <div class="question">
+      <h3>Câu 3: North Bridge thường kết nối với?</h3>
+      <div class="options">
+        <label><input type="radio" name="q3" value="A"> A. Không tồn tại</label>
+        <label><input type="radio" name="q3" value="B"> B. Chỉ USB</label>
+        <label><input type="radio" name="q3" value="C"> C. Chỉ thiết bị chậm</label>
+        <label><input type="radio" name="q3" value="D"> D. CPU, bộ nhớ, GPU (bus tốc độ cao)</label>
+      </div>
+    </div>
+
+    <!-- Câu 4 mới (gốc 12) -->
+    <div class="question">
+      <h3>Câu 4: Giao dịch trên PCI gồm bao nhiêu pha?</h3>
+      <div class="options">
+        <label><input type="radio" name="q4" value="A"> A. 3 pha (Arbitration - Address - Data)</label>
+        <label><input type="radio" name="q4" value="B"> B. Chỉ Data</label>
+        <label><input type="radio" name="q4" value="C"> C. 5 pha</label>
+        <label><input type="radio" name="q4" value="D"> D. 1 pha</label>
+      </div>
+    </div>
+
+    <!-- Câu 5 mới (gốc 5) -->
+    <div class="question">
+      <h3>Câu 5: Bus đồng bộ hoạt động dựa trên gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q5" value="A"> A. Xung nhịp Clock chung</label>
+        <label><input type="radio" name="q5" value="B"> B. Không cần clock</label>
+        <label><input type="radio" name="q5" value="C"> C. Handshaking</label>
+        <label><input type="radio" name="q5" value="D"> D. Tín hiệu STOP#</label>
+      </div>
+    </div>
+
+    <!-- Câu 6 mới (gốc 46) -->
+    <div class="question">
+      <h3>Câu 6: Đặc điểm chung của bus hiện đại?</h3>
+      <div class="options">
+        <label><input type="radio" name="q6" value="A"> A. Không hỗ trợ burst</label>
+        <label><input type="radio" name="q6" value="B"> B. Chỉ không đồng bộ</label>
+        <label><input type="radio" name="q6" value="C"> C. Kết hợp serial + point-to-point</label>
+        <label><input type="radio" name="q6" value="D"> D. Song song 100%</label>
+      </div>
+    </div>
+
+    <!-- Câu 7 mới (gốc 27) -->
+    <div class="question">
+      <h3>Câu 7: Bus nào đã bị thay thế hoàn toàn bởi PCIe?</h3>
+      <div class="options">
+        <label><input type="radio" name="q7" value="A"> A. USB</label>
+        <label><input type="radio" name="q7" value="B"> B. PCI và AGP</label>
+        <label><input type="radio" name="q7" value="C"> C. Chỉ ISA</label>
+        <label><input type="radio" name="q7" value="D"> D. Không bus nào</label>
+      </div>
+    </div>
+
+    <!-- Câu 8 mới (gốc 10) -->
+    <div class="question">
+      <h3>Câu 8: Chuẩn bus ISA có băng thông khoảng?</h3>
+      <div class="options">
+        <label><input type="radio" name="q8" value="A"> A. 133 MB/s</label>
+        <label><input type="radio" name="q8" value="B"> B. 5 GB/s</label>
+        <label><input type="radio" name="q8" value="C"> C. 40 Gbps</label>
+        <label><input type="radio" name="q8" value="D"> D. Thấp (khoảng 8 MB/s)</label>
+      </div>
+    </div>
+
+    <!-- Câu 9 mới (gốc 30) -->
+    <div class="question">
+      <h3>Câu 9: Bus đồng bộ nhanh hơn bus không đồng bộ vì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q9" value="A"> A. Không cần clock</label>
+        <label><input type="radio" name="q9" value="B"> B. Chỉ dùng ngoại vi</label>
+        <label><input type="radio" name="q9" value="C"> C. Không hỗ trợ burst</label>
+        <label><input type="radio" name="q9" value="D"> D. Ít logic quyết định, đồng bộ clock</label>
+      </div>
+    </div>
+
+    <!-- Câu 10 mới (gốc 17) -->
+    <div class="question">
+      <h3>Câu 10: Bus EISA là phiên bản mở rộng của?</h3>
+      <div class="options">
+        <label><input type="radio" name="q10" value="A"> A. ISA</label>
+        <label><input type="radio" name="q10" value="B"> B. USB</label>
+        <label><input type="radio" name="q10" value="C"> C. AGP</label>
+        <label><input type="radio" name="q10" value="D"> D. PCIe</label>
+      </div>
+    </div>
+
+    <!-- Câu 11 mới (gốc 32) -->
+    <div class="question">
+      <h3>Câu 11: Bus nào hỗ trợ nhiều chủ nhân (multi-master)?</h3>
+      <div class="options">
+        <label><input type="radio" name="q11" value="A"> A. Không bus nào</label>
+        <label><input type="radio" name="q11" value="B"> B. Chỉ FSB</label>
+        <label><input type="radio" name="q11" value="C"> C. Chỉ ISA</label>
+        <label><input type="radio" name="q11" value="D"> D. PCI và PCIe (với cơ chế phù hợp)</label>
+      </div>
+    </div>
+
+    <!-- Câu 12 mới (gốc 22) -->
+    <div class="question">
+      <h3>Câu 12: Bus nào hỗ trợ hot-plug tốt nhất?</h3>
+      <div class="options">
+        <label><input type="radio" name="q12" value="A"> A. Chỉ ISA</label>
+        <label><input type="radio" name="q12" value="B"> B. ISA</label>
+        <label><input type="radio" name="q12" value="C"> C. USB và PCIe</label>
+        <label><input type="radio" name="q12" value="D"> D. AGP</label>
+      </div>
+    </div>
+
+    <!-- Câu 13 mới (gốc 13) -->
+    <div class="question">
+      <h3>Câu 13: AGP chuyên dụng cho?</h3>
+      <div class="options">
+        <label><input type="radio" name="q13" value="A"> A. Card đồ họa</label>
+        <label><input type="radio" name="q13" value="B"> B. Bàn phím</label>
+        <label><input type="radio" name="q13" value="C"> C. Card mạng</label>
+        <label><input type="radio" name="q13" value="D"> D. Ổ cứng</label>
+      </div>
+    </div>
+
+    <!-- Câu 14 mới (gốc 4) -->
+    <div class="question">
+      <h3>Câu 14: Bus dữ liệu có hướng truyền như thế nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q14" value="A"> A. Chỉ vào CPU</label>
+        <label><input type="radio" name="q14" value="B"> B. Chỉ từ CPU ra</label>
+        <label><input type="radio" name="q14" value="C"> C. Hai chiều</label>
+        <label><input type="radio" name="q14" value="D"> D. Một chiều</label>
+      </div>
+    </div>
+
+    <!-- Câu 15 mới (gốc 40) -->
+    <div class="question">
+      <h3>Câu 15: AGP 8x có tốc độ khoảng?</h3>
+      <div class="options">
+        <label><input type="radio" name="q15" value="A"> A. ~2 GB/s</label>
+        <label><input type="radio" name="q15" value="B"> B. 40 Gbps</label>
+        <label><input type="radio" name="q15" value="C"> C. 133 MB/s</label>
+        <label><input type="radio" name="q15" value="D"> D. 480 Mbps</label>
+      </div>
+    </div>
+
+    <!-- Câu 16 mới (gốc 39) -->
+    <div class="question">
+      <h3>Câu 16: Bottleneck của bus xảy ra khi?</h3>
+      <div class="options">
+        <label><input type="radio" name="q16" value="A"> A. B và C</label>
+        <label><input type="radio" name="q16" value="B"> B. Nhiều thiết bị tranh chấp bus chia sẻ</label>
+        <label><input type="radio" name="q16" value="C"> C. Chỉ 1 thiết bị</label>
+        <label><input type="radio" name="q16" value="D"> D. Không có arbitration</label>
+      </div>
+    </div>
+
+    <!-- Câu 17 mới (gốc 11) -->
+    <div class="question">
+      <h3>Câu 17: Bus PCI có đặc điểm nổi bật?</h3>
+      <div class="options">
+        <label><input type="radio" name="q17" value="A"> A. Nối tiếp, point-to-point</label>
+        <label><input type="radio" name="q17" value="B"> B. Bus chia sẻ, đồng bộ, hỗ trợ arbitration</label>
+        <label><input type="radio" name="q17" value="C"> C. Chỉ dùng cho USB</label>
+        <label><input type="radio" name="q17" value="D"> D. Không hỗ trợ burst</label>
+      </div>
+    </div>
+
+    <!-- Câu 18 mới (gốc 25) -->
+    <div class="question">
+      <h3>Câu 18: PCIe dùng công nghệ nào để truyền dữ liệu?</h3>
+      <div class="options">
+        <label><input type="radio" name="q18" value="A"> A. Chỉ analog</label>
+        <label><input type="radio" name="q18" value="B"> B. Song song (parallel)</label>
+        <label><input type="radio" name="q18" value="C"> C. Không truyền</label>
+        <label><input type="radio" name="q18" value="D"> D. Nối tiếp (serial)</label>
+      </div>
+    </div>
+
+    <!-- Câu 19 mới (gốc 36) -->
+    <div class="question">
+      <h3>Câu 19: PCIe hỗ trợ bao nhiêu lane phổ biến cho GPU?</h3>
+      <div class="options">
+        <label><input type="radio" name="q19" value="A"> A. Chỉ x1</label>
+        <label><input type="radio" name="q19" value="B"> B. Không lane</label>
+        <label><input type="radio" name="q19" value="C"> C. Chỉ x4</label>
+        <label><input type="radio" name="q19" value="D"> D. x16</label>
+      </div>
+    </div>
+
+    <!-- Câu 20 mới (gốc 1) -->
+    <div class="question">
+      <h3>Câu 20: Bus trong máy tính là gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q20" value="A"> A. Một loại bộ nhớ ngoài</label>
+        <label><input type="radio" name="q20" value="B"> B. Tập hợp các đường dẫn tín hiệu điện để truyền thông tin giữa các thành phần</label>
+        <label><input type="radio" name="q20" value="C"> C. Chỉ là dây nguồn</label>
+        <label><input type="radio" name="q20" value="D"> D. Chỉ dùng cho CPU</label>
+      </div>
+    </div>
+
+    <!-- Câu 21 mới (gốc 44) -->
+    <div class="question">
+      <h3>Câu 21: Bus EISA hỗ trợ băng thông?</h3>
+      <div class="options">
+        <label><input type="radio" name="q21" value="A"> A. 33 MB/s</label>
+        <label><input type="radio" name="q21" value="B"> B. 133 MB/s</label>
+        <label><input type="radio" name="q21" value="C"> C. 8 MB/s</label>
+        <label><input type="radio" name="q21" value="D"> D. 5 Gbps</label>
+      </div>
+    </div>
+
+    <!-- Câu 22 mới (gốc 19) -->
+    <div class="question">
+      <h3>Câu 22: Độ rộng bus dữ liệu 64-bit có thể truyền bao nhiêu byte/lần?</h3>
+      <div class="options">
+        <label><input type="radio" name="q22" value="A"> A. 8 byte</label>
+        <label><input type="radio" name="q22" value="B"> B. 4 byte</label>
+        <label><input type="radio" name="q22" value="C"> C. 1 byte</label>
+        <label><input type="radio" name="q22" value="D"> D. 16 byte</label>
+      </div>
+    </div>
+
+    <!-- Câu 23 mới (gốc 34) -->
+    <div class="question">
+      <h3>Câu 23: Ưu điểm của bus phân cấp?</h3>
+      <div class="options">
+        <label><input type="radio" name="q23" value="A"> A. Bus nhanh nối thành phần nhanh, bus chậm nối ngoại vi chậm</label>
+        <label><input type="radio" name="q23" value="B"> B. Tăng chi phí</label>
+        <label><input type="radio" name="q23" value="C"> C. Không linh hoạt</label>
+        <label><input type="radio" name="q23" value="D"> D. Tất cả bus cùng tốc độ</label>
+      </div>
+    </div>
+
+    <!-- Câu 24 mới (gốc 49) -->
+    <div class="question">
+      <h3>Câu 24: Trong bus PCI, Arbiter có vai trò?</h3>
+      <div class="options">
+        <label><input type="radio" name="q24" value="A"> A. Cấp phát bus (GNT#)</label>
+        <label><input type="radio" name="q24" value="B"> B. Chỉ truyền dữ liệu</label>
+        <label><input type="radio" name="q24" value="C"> C. Chỉ địa chỉ</label>
+        <label><input type="radio" name="q24" value="D"> D. Không tồn tại</label>
+      </div>
+    </div>
+
+    <!-- Câu 25 mới (gốc 42) -->
+    <div class="question">
+      <h3>Câu 25: Trong máy tính hiện đại, bus nào thay thế FSB?</h3>
+      <div class="options">
+        <label><input type="radio" name="q25" value="A"> A. Chỉ ISA</label>
+        <label><input type="radio" name="q25" value="B"> B. USB</label>
+        <label><input type="radio" name="q25" value="C"> C. QPI, HyperTransport hoặc Direct Media Interface (DMI)</label>
+        <label><input type="radio" name="q25" value="D"> D. AGP</label>
+      </div>
+    </div>
+
+    <!-- Câu 26 mới (gốc 31) -->
+    <div class="question">
+      <h3>Câu 26: Card mở rộng cắm vào khe nào thường dùng PCIe x16?</h3>
+      <div class="options">
+        <label><input type="radio" name="q26" value="A"> A. Card đồ họa GPU</label>
+        <label><input type="radio" name="q26" value="B"> B. Chỉ USB</label>
+        <label><input type="radio" name="q26" value="C"> C. Không dùng</label>
+        <label><input type="radio" name="q26" value="D"> D. Chỉ modem</label>
+      </div>
+    </div>
+
+    <!-- Câu 27 mới (gốc 29) -->
+    <div class="question">
+      <h3>Câu 27: USB 3.0 có tốc độ tối đa?</h3>
+      <div class="options">
+        <label><input type="radio" name="q27" value="A"> A. 133 MB/s</label>
+        <label><input type="radio" name="q27" value="B"> B. 5 Gbps</label>
+        <label><input type="radio" name="q27" value="C"> C. 40 Gbps</label>
+        <label><input type="radio" name="q27" value="D"> D. 480 Mbps</label>
+      </div>
+    </div>
+
+    <!-- Câu 28 mới (gốc 21) -->
+    <div class="question">
+      <h3>Câu 28: Tín hiệu FRAME# trong PCI dùng để?</h3>
+      <div class="options">
+        <label><input type="radio" name="q28" value="A"> A. Clock</label>
+        <label><input type="radio" name="q28" value="B"> B. Bắt đầu chu kỳ bus (pha address)</label>
+        <label><input type="radio" name="q28" value="C"> C. Yêu cầu bus</label>
+        <label><input type="radio" name="q28" value="D"> D. Dừng giao dịch</label>
+      </div>
+    </div>
+
+    <!-- Câu 29 mới (gốc 23) -->
+    <div class="question">
+      <h3>Câu 29: Nhược điểm chính của bus chia sẻ (như PCI cũ)?</h3>
+      <div class="options">
+        <label><input type="radio" name="q29" value="A"> A. Không hỗ trợ arbitration</label>
+        <label><input type="radio" name="q29" value="B"> B. Dễ tạo bottleneck khi nhiều thiết bị</label>
+        <label><input type="radio" name="q29" value="C"> C. Tốc độ quá cao</label>
+        <label><input type="radio" name="q29" value="D"> D. Không dùng được</label>
+      </div>
+    </div>
+
+    <!-- Câu 30 mới (gốc 43) -->
+    <div class="question">
+      <h3>Câu 30: DMA sử dụng bus như thế nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q30" value="A"> A. Không hỗ trợ</label>
+        <label><input type="radio" name="q30" value="B"> B. Là master, chiếm bus độc lập với CPU</label>
+        <label><input type="radio" name="q30" value="C"> C. Chỉ CPU dùng</label>
+        <label><input type="radio" name="q30" value="D"> D. Không dùng bus</label>
+      </div>
+    </div>
+
+    <!-- Câu 31 mới (gốc 47) -->
+    <div class="question">
+      <h3>Câu 31: Bus nào cung cấp nguồn cho thiết bị?</h3>
+      <div class="options">
+        <label><input type="radio" name="q31" value="A"> A. ISA</label>
+        <label><input type="radio" name="q31" value="B"> B. Chỉ PCI</label>
+        <label><input type="radio" name="q31" value="C"> C. Chỉ AGP</label>
+        <label><input type="radio" name="q31" value="D"> D. USB</label>
+      </div>
+    </div>
+
+    <!-- Câu 32 mới (gốc 37) -->
+    <div class="question">
+      <h3>Câu 32: Tín hiệu DEVSEL# trong PCI nghĩa là?</h3>
+      <div class="options">
+        <label><input type="radio" name="q32" value="A"> A. Device Select (thiết bị đích xác nhận)</label>
+        <label><input type="radio" name="q32" value="B"> B. Dừng bus</label>
+        <label><input type="radio" name="q32" value="C"> C. Clock</label>
+        <label><input type="radio" name="q32" value="D"> D. Request</label>
+      </div>
+    </div>
+
+    <!-- Câu 33 mới (gốc 33) -->
+    <div class="question">
+      <h3>Câu 33: Pha Data trong giao dịch PCI dùng tín hiệu nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q33" value="A"> A. Chỉ REQ#</label>
+        <label><input type="radio" name="q33" value="B"> B. Chỉ FRAME#</label>
+        <label><input type="radio" name="q33" value="C"> C. Không có</label>
+        <label><input type="radio" name="q33" value="D"> D. IRDY# và TRDY# (Initiator và Target Ready)</label>
+      </div>
+    </div>
+
+    <!-- Câu 34 mới (gốc 45) -->
+    <div class="question">
+      <h3>Câu 34: PCIe version 5.0 lane tốc độ?</h3>
+      <div class="options">
+        <label><input type="radio" name="q34" value="A"> A. 16 GT/s</label>
+        <label><input type="radio" name="q34" value="B"> B. 32 GT/s</label>
+        <label><input type="radio" name="q34" value="C"> C. 2.5 GT/s</label>
+        <label><input type="radio" name="q34" value="D"> D. 8 GT/s</label>
+      </div>
+    </div>
+
+    <!-- Câu 35 mới (gốc 14) -->
+    <div class="question">
+      <h3>Câu 35: PCIe khác PCI ở điểm nào chính?</h3>
+      <div class="options">
+        <label><input type="radio" name="q35" value="A"> A. Kiến trúc point-to-point, nối tiếp (serial)</label>
+        <label><input type="radio" name="q35" value="B"> B. Tốc độ chậm hơn</label>
+        <label><input type="radio" name="q35" value="C"> C. Bus chia sẻ</label>
+        <label><input type="radio" name="q35" value="D"> D. Không hỗ trợ lane</label>
+      </div>
+    </div>
+
+    <!-- Câu 36 mới (gốc 50) -->
+    <div class="question">
+      <h3>Câu 36: Hệ thống Bus quyết định yếu tố nào của máy tính?</h3>
+      <div class="options">
+        <label><input type="radio" name="q36" value="A"> A. Không quan trọng</label>
+        <label><input type="radio" name="q36" value="B"> B. Chỉ dung lượng RAM</label>
+        <label><input type="radio" name="q36" value="C"> C. Hiệu năng tổng thể, khả năng mở rộng và tốc độ truyền dữ liệu</label>
+        <label><input type="radio" name="q36" value="D"> D. Chỉ giá thành</label>
+      </div>
+    </div>
+
+    <!-- Câu 37 mới (gốc 48) -->
+    <div class="question">
+      <h3>Câu 37: Số đường bus địa chỉ ảnh hưởng đến?</h3>
+      <div class="options">
+        <label><input type="radio" name="q37" value="A"> A. Không gian địa chỉ tối đa</label>
+        <label><input type="radio" name="q37" value="B"> B. Chỉ clock</label>
+        <label><input type="radio" name="q37" value="C"> C. Không ảnh hưởng</label>
+        <label><input type="radio" name="q37" value="D"> D. Tốc độ dữ liệu</label>
+      </div>
+    </div>
+
+    <!-- Câu 38 mới (gốc 3) -->
+    <div class="question">
+      <h3>Câu 38: Bus địa chỉ có đặc điểm gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q38" value="A"> A. Không dùng cho ngoại vi</label>
+        <label><input type="radio" name="q38" value="B"> B. Một chiều, do CPU phát</label>
+        <label><input type="radio" name="q38" value="C"> C. Chỉ truyền dữ liệu</label>
+        <label><input type="radio" name="q38" value="D"> D. Hai chiều</label>
+      </div>
+    </div>
+
+    <!-- Câu 39 mới (gốc 28) -->
+    <div class="question">
+      <h3>Câu 39: Độ rộng address bus 32-bit cho phép địa chỉ tối đa?</h3>
+      <div class="options">
+        <label><input type="radio" name="q39" value="A"> A. 4 GB</label>
+        <label><input type="radio" name="q39" value="B"> B. 256 MB</label>
+        <label><input type="radio" name="q39" value="C"> C. 64 GB</label>
+        <label><input type="radio" name="q39" value="D"> D. 1 MB</label>
+      </div>
+    </div>
+
+    <!-- Câu 40 mới (gốc 38) -->
+    <div class="question">
+      <h3>Câu 40: Bus USB có cấu trúc hình gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q40" value="A"> A. Điểm-điểm</label>
+        <label><input type="radio" name="q40" value="B"> B. Chỉ song song</label>
+        <label><input type="radio" name="q40" value="C"> C. Bus vòng</label>
+        <label><input type="radio" name="q40" value="D"> D. Cây phân cấp (tree)</label>
+      </div>
+    </div>
+
+    <!-- Câu 41 mới (gốc 6) -->
+    <div class="question">
+      <h3>Câu 41: Bus không đồng bộ đặc điểm chính là?</h3>
+      <div class="options">
+        <label><input type="radio" name="q41" value="A"> A. Có clock chung</label>
+        <label><input type="radio" name="q41" value="B"> B. Nhanh hơn bus đồng bộ</label>
+        <label><input type="radio" name="q41" value="C"> C. Chỉ dùng cho PCIe</label>
+        <label><input type="radio" name="q41" value="D"> D. Dùng handshaking, không clock chung</label>
+      </div>
+    </div>
+
+    <!-- Câu 42 mới (gốc 35) -->
+    <div class="question">
+      <h3>Câu 42: Bus ISA hoạt động ở tần số tối đa?</h3>
+      <div class="options">
+        <label><input type="radio" name="q42" value="A"> A. 133 MHz</label>
+        <label><input type="radio" name="q42" value="B"> B. 66 MHz</label>
+        <label><input type="radio" name="q42" value="C"> C. 5 GHz</label>
+        <label><input type="radio" name="q42" value="D"> D. 8 MHz</label>
+      </div>
+    </div>
+
+    <!-- Câu 43 mới (gốc 7) -->
+    <div class="question">
+      <h3>Câu 43: Front Side Bus (FSB) dùng để kết nối gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q43" value="A"> A. Chỉ card đồ họa</label>
+        <label><input type="radio" name="q43" value="B"> B. Ngoại vi tốc độ thấp</label>
+        <label><input type="radio" name="q43" value="C"> C. CPU với bộ nhớ chính</label>
+        <label><input type="radio" name="q43" value="D"> D. Chỉ USB</label>
+      </div>
+    </div>
+
+    <!-- Câu 44 mới (gốc 9) -->
+    <div class="question">
+      <h3>Câu 44: Bus arbitration là cơ chế gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q44" value="A"> A. Truyền dữ liệu burst</label>
+        <label><input type="radio" name="q44" value="B"> B. Phân xử quyền sử dụng bus khi có nhiều master</label>
+        <label><input type="radio" name="q44" value="C"> C. Chỉ dùng cho bộ nhớ</label>
+        <label><input type="radio" name="q44" value="D"> D. Không cần trong PCIe</label>
+      </div>
+    </div>
+
+    <!-- Câu 45 mới (gốc 15) -->
+    <div class="question">
+      <h3>Câu 45: Một lane PCIe 3.0 có băng thông khoảng?</h3>
+      <div class="options">
+        <label><input type="radio" name="q45" value="A"> A. ~1 GB/s (thực tế ~985 MB/s)</label>
+        <label><input type="radio" name="q45" value="B"> B. 40 Gbps</label>
+        <label><input type="radio" name="q45" value="C"> C. 133 MB/s</label>
+        <label><input type="radio" name="q45" value="D"> D. 1 GB/s</label>
+      </div>
+    </div>
+
+    <!-- Câu 46 mới (gốc 16) -->
+    <div class="question">
+      <h3>Câu 46: USB là loại bus gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q46" value="A"> A. Chỉ dùng cho bộ nhớ</label>
+        <label><input type="radio" name="q46" value="B"> B. Đồng bộ clock cao</label>
+        <label><input type="radio" name="q46" value="C"> C. Bus nối tiếp ngoại vi, hot-plug</label>
+        <label><input type="radio" name="q46" value="D"> D. Bus song song nội bộ</label>
+      </div>
+    </div>
+
+    <!-- Câu 47 mới (gốc 18) -->
+    <div class="question">
+      <h3>Câu 47: Burst mode trên bus dùng để?</h3>
+      <div class="options">
+        <label><input type="radio" name="q47" value="A"> A. Không dùng trong PCI</label>
+        <label><input type="radio" name="q47" value="B"> B. Truyền từng byte riêng lẻ</label>
+        <label><input type="radio" name="q47" value="C"> C. Chỉ arbitration</label>
+        <label><input type="radio" name="q47" value="D"> D. Truyền khối dữ liệu liên tục, tiết kiệm chu kỳ</label>
+      </div>
+    </div>
+
+    <!-- Câu 48 mới (gốc 2) -->
+    <div class="question">
+      <h3>Câu 48: Bus gồm những thành phần nào chính?</h3>
+      <div class="options">
+        <label><input type="radio" name="q48" value="A"> A. Bus địa chỉ, bus dữ liệu, bus điều khiển</label>
+        <label><input type="radio" name="q48" value="B"> B. Chỉ bus địa chỉ</label>
+        <label><input type="radio" name="q48" value="C"> C. Bus nguồn và bus clock</label>
+        <label><input type="radio" name="q48" value="D"> D. Chỉ bus dữ liệu</label>
+      </div>
+    </div>
+
+    <!-- Câu 49 mới (gốc 8) -->
+    <div class="question">
+      <h3>Câu 49: Hệ thống bus phân cấp (hierarchical) có ưu điểm gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q49" value="A"> A. Không cần bridge</label>
+        <label><input type="radio" name="q49" value="B"> B. Chỉ dùng bus ISA</label>
+        <label><input type="radio" name="q49" value="C"> C. Tăng bottleneck</label>
+        <label><input type="radio" name="q49" value="D"> D. Tối ưu tốc độ giữa các mức bus khác nhau</label>
+      </div>
+    </div>
+
+    <!-- Câu 50 mới (gốc 41) -->
+    <div class="question">
+      <h3>Câu 50: Bus điều khiển truyền tín hiệu nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q50" value="A"> A. READ, WRITE, INTERRUPT...</label>
+        <label><input type="radio" name="q50" value="B"> B. Không tín hiệu</label>
+        <label><input type="radio" name="q50" value="C"> C. Chỉ dữ liệu</label>
+        <label><input type="radio" name="q50" value="D"> D. Chỉ địa chỉ</label>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin: 30px 0;">
+      <button type="button" id="submitBtn">Nộp bài</button>
+      <button type="button" id="explainBtn">Xem giải thích (dành cho GV)</button>
+    </div>
+  </form>
+
+  <div id="result" class="result">
+    <h2>Kết quả</h2>
+    <div id="score" class="score-box"></div>
+    <div id="detail"></div>
+  </div>
+
+  <div id="passwordSection">
+    <label>Nhập mật khẩu giáo viên:</label><br>
+    <input type="password" id="passwordInput" placeholder="Mật khẩu...">
+    <button type="button" id="unlockExplain">Mở giải thích</button>
+  </div>
+
+  <div id="explanations">
+    <h2>Giải thích chi tiết (theo số câu gốc trong bài giảng)</h2>
+
+    <div class="explanation"><strong>Câu 1 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Bus là hệ thống kết nối các thành phần (CPU, bộ nhớ, I/O) để trao đổi dữ liệu, địa chỉ và điều khiển.</div>
+    <div class="explanation"><strong>Câu 2 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Đây là 3 bus con cơ bản trong mọi hệ thống bus.</div>
+    <div class="explanation"><strong>Câu 3 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Bus địa chỉ là unidirectional, CPU dùng để chọn ô nhớ/thiết bị.</div>
+    <div class="explanation"><strong>Câu 4 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Cho phép truyền dữ liệu cả hai chiều (CPU ↔ bộ nhớ/ngoại vi).</div>
+    <div class="explanation"><strong>Câu 5 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Tất cả sự kiện đồng bộ theo clock (ví dụ: PCI).</div>
+    <div class="explanation"><strong>Câu 6 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Linh hoạt nhưng phức tạp hơn.</div>
+    <div class="explanation"><strong>Câu 7 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: FSB là bus hệ thống tốc độ cao.</div>
+    <div class="explanation"><strong>Câu 8 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Có North/South Bridge để phân cấp high-speed và low-speed.</div>
+    <div class="explanation"><strong>Câu 9 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Tránh xung đột (REQ#/GNT# trong PCI).</div>
+    <div class="explanation"><strong>Câu 10 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: ISA cũ, 8/16-bit, 8 MHz.</div>
+    <div class="explanation"><strong>Câu 11 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: PCI 32/64-bit, phổ biến thập niên 90-2000.</div>
+    <div class="explanation"><strong>Câu 12 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Chi tiết trong nguyên lý hoạt động PCI.</div>
+    <div class="explanation"><strong>Câu 13 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Accelerated Graphics Port, burst mode cho GPU.</div>
+    <div class="explanation"><strong>Câu 14 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: PCIe hiện đại, không bottleneck như PCI.</div>
+    <div class="explanation"><strong>Câu 15 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: PCIe 3.0 x1 ≈ 8 GT/s → ~1 GB/s.</div>
+    <div class="explanation"><strong>Câu 16 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Universal Serial Bus, tree topology.</div>
+    <div class="explanation"><strong>Câu 17 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: 32-bit, tương thích ISA.</div>
+    <div class="explanation"><strong>Câu 18 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Tăng hiệu suất (PCI, AGP).</div>
+    <div class="explanation"><strong>Câu 19 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: 64-bit = 8 byte.</div>
+    <div class="explanation"><strong>Câu 20 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Trong cấu trúc phân cấp cũ.</div>
+    <div class="explanation"><strong>Câu 21 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Signal điều khiển giao dịch PCI.</div>
+    <div class="explanation"><strong>Câu 22 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: USB nổi tiếng hot-swap.</div>
+    <div class="explanation"><strong>Câu 23 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Chỉ một cặp thiết bị dùng bus tại một thời điểm.</div>
+    <div class="explanation"><strong>Câu 24 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Internal bus tốc độ cực cao.</div>
+    <div class="explanation"><strong>Câu 25 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Giảm nhiễu, tốc độ cao.</div>
+    <div class="explanation"><strong>Câu 26 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Thiết bị gửi yêu cầu.</div>
+    <div class="explanation"><strong>Câu 27 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: PCIe là chuẩn hiện đại.</div>
+    <div class="explanation"><strong>Câu 28 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: 2^32 = 4GB.</div>
+    <div class="explanation"><strong>Câu 29 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: (USB 3.1/3.2 cao hơn, nhưng cơ bản 5 Gbps).</div>
+    <div class="explanation"><strong>Câu 30 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Giảm overhead.</div>
+    <div class="explanation"><strong>Câu 31 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Băng thông cao.</div>
+    <div class="explanation"><strong>Câu 32 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Hỗ trợ DMA, nhiều thiết bị.</div>
+    <div class="explanation"><strong>Câu 33 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Xác nhận sẵn sàng truyền dữ liệu.</div>
+    <div class="explanation"><strong>Câu 34 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Tối ưu hiệu năng.</div>
+    <div class="explanation"><strong>Câu 35 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Chuẩn cũ.</div>
+    <div class="explanation"><strong>Câu 36 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: PCIe x16 cho card đồ họa.</div>
+    <div class="explanation"><strong>Câu 37 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Pha address.</div>
+    <div class="explanation"><strong>Câu 38 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Hub làm trung gian.</div>
+    <div class="explanation"><strong>Câu 39 gốc:</strong> Đáp án đúng: <strong>D</strong><br>Lý do: Đặc trưng bus cũ như PCI.</div>
+    <div class="explanation"><strong>Câu 40 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Chuyên đồ họa.</div>
+    <div class="explanation"><strong>Câu 41 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Đồng bộ hoạt động.</div>
+    <div class="explanation"><strong>Câu 42 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Công nghệ mới (Intel/AMD).</div>
+    <div class="explanation"><strong>Câu 43 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Direct Memory Access.</div>
+    <div class="explanation"><strong>Câu 44 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Cải tiến ISA.</div>
+    <div class="explanation"><strong>Câu 45 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Phiên bản mới nhất (2026 context).</div>
+    <div class="explanation"><strong>Câu 46 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: PCIe, USB...</div>
+    <div class="explanation"><strong>Câu 47 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: USB Power Delivery.</div>
+    <div class="explanation"><strong>Câu 48 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: 32-bit = 4GB.</div>
+    <div class="explanation"><strong>Câu 49 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Centralized arbitration.</div>
+    <div class="explanation"><strong>Câu 50 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Là yếu tố then chốt trong kiến trúc máy tính.</div>
+
+  </div>
+
+</div>
+
+<script>
+// Đáp án đúng theo thứ tự câu hỏi MỚI (sau xáo trộn)
+const correctAnswers = ["C","B","D","A","A","C","B","D","D","A","D","C","A","C","A","A","B","D","D","B","A","A","A","A","C","A","B","B","B","B","D","A","D","B","A","C","A","B","A","D","D","D","C","B","A","C","D","A","D","A"];
+
+// Mật khẩu giáo viên (thay đổi nếu cần)
+const teacherPassword = "giaovien2026";
+
+document.getElementById("submitBtn").addEventListener("click", function() {
+  let score = 0;
+  let detailHtml = "<h3>Các câu sai / chưa trả lời:</h3><ul>";
+  for(let i = 1; i <= 50; i++) {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected && selected.value === correctAnswers[i-1]) {
+      score++;
+    } else {
+      let userChoice = selected ? selected.value : "Chưa chọn";
+      detailHtml += `<li>Câu ${i}: Bạn chọn ${userChoice} → Đáp án đúng: ${correctAnswers[i-1]}</li>`;
+    }
+  }
+  detailHtml += "</ul>";
+
+  const resultDiv = document.getElementById("result");
+  document.getElementById("score").innerHTML = `Điểm số: ${score} / 50 (${(score/50*100).toFixed(1)}%)`;
+  document.getElementById("detail").innerHTML = detailHtml;
+  resultDiv.style.display = "block";
+  resultDiv.className = score >= 40 ? "result correct" : "result wrong";
+  window.scrollTo({ top: resultDiv.offsetTop - 20, behavior: 'smooth' });
+});
+
+document.getElementById("explainBtn").addEventListener("click", function() {
+  document.getElementById("passwordSection").style.display = "block";
+  this.disabled = true;
+});
+
+document.getElementById("unlockExplain").addEventListener("click", function() {
+  const input = document.getElementById("passwordInput").value.trim();
+  if (input === teacherPassword) {
+    document.getElementById("explanations").style.display = "block";
+    document.getElementById("passwordSection").style.display = "none";
+    alert("Mở thành công! Giải thích theo số câu gốc trong bài giảng.");
+  } else {
+    alert("Mật khẩu không đúng!");
+  }
+});
+</script>
+
+</body>
+</html>

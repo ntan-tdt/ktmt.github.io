@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ôn tập Trắc nghiệm - Chương 6: Hệ thống vào/ra (I/O) (Xáo trộn)</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.6; max-width: 900px; margin: 20px auto; padding: 0 15px; background: #f8f9fa; color: #333; }
+    h1, h2 { text-align: center; color: #2c3e50; }
+    .quiz-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .question { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+    .question h3 { margin: 0 0 10px 0; color: #34495e; }
+    .options label { display: block; margin: 8px 0; cursor: pointer; }
+    .result { margin-top: 30px; padding: 20px; border-radius: 8px; display: none; }
+    .correct { background: #e8f5e9; color: #2e7d32; }
+    .wrong   { background: #ffebee; color: #c62828; }
+    button { padding: 12px 24px; font-size: 1.1rem; margin: 10px; border: none; border-radius: 6px; cursor: pointer; color: white; }
+    #submitBtn   { background: #1976d2; }
+    #submitBtn:hover { background: #1565c0; }
+    #explainBtn  { background: #f57c00; }
+    #explainBtn:hover { background: #ef6c00; }
+    #passwordSection { display: none; margin: 20px 0; }
+    #explanations { display: none; margin-top: 30px; }
+    .explanation { background: #fff3e0; padding: 12px; border-left: 5px solid #ff9800; margin: 10px 0; border-radius: 4px; }
+    .score-box { font-size: 1.4rem; font-weight: bold; text-align: center; margin: 20px 0; }
+    @media (max-width: 600px) { button { width: 100%; margin: 8px 0; } }
+  </style>
+</head>
+<body>
+
+<h1>Ôn tập Trắc nghiệm<br>Chương 6 - Hệ thống vào/ra (I/O)<br>(Thứ tự câu hỏi & đáp án đã xáo trộn)</h1>
+<h2>Kiến trúc máy tính</h2>
+
+<div class="quiz-container">
+  <form id="quizForm">
+
+    <!-- Câu 1 mới (gốc 21) -->
+    <div class="question">
+      <h3>Câu 1: PCIe lane x16 thường dùng cho?</h3>
+      <div class="options">
+        <label><input type="radio" name="q1" value="A"> A. Chuột</label>
+        <label><input type="radio" name="q1" value="B"> B. Card đồ họa GPU</label>
+        <label><input type="radio" name="q1" value="C"> C. Bàn phím</label>
+        <label><input type="radio" name="q1" value="D"> D. USB hub</label>
+      </div>
+    </div>
+
+    <!-- Câu 2 mới (gốc 41) -->
+    <div class="question">
+      <h3>Câu 2: I/O Memory Management Unit (IOMMU) dùng để?</h3>
+      <div class="options">
+        <label><input type="radio" name="q2" value="A"> A. Chỉ Interrupt</label>
+        <label><input type="radio" name="q2" value="B"> B. Không cần</label>
+        <label><input type="radio" name="q2" value="C"> C. Chỉ USB</label>
+        <label><input type="radio" name="q2" value="D"> D. Bảo vệ bộ nhớ cho DMA</label>
+      </div>
+    </div>
+
+    <!-- Câu 3 mới (gốc 22) -->
+    <div class="question">
+      <h3>Câu 3: USB 4.0 có tốc độ tối đa?</h3>
+      <div class="options">
+        <label><input type="radio" name="q3" value="A"> A. 480 Mbps</label>
+        <label><input type="radio" name="q3" value="B"> B. 5 Gbps</label>
+        <label><input type="radio" name="q3" value="C"> C. 6 Gbps</label>
+        <label><input type="radio" name="q3" value="D"> D. 40 Gbps</label>
+      </div>
+    </div>
+
+    <!-- Câu 4 mới (gốc 30) -->
+    <div class="question">
+      <h3>Câu 4: I/O trong máy tính hiện đại chủ yếu dựa vào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q4" value="A"> A. Programmed I/O</label>
+        <label><input type="radio" name="q4" value="B"> B. Chỉ Interrupt</label>
+        <label><input type="radio" name="q4" value="C"> C. Polling</label>
+        <label><input type="radio" name="q4" value="D"> D. DMA + PCIe</label>
+      </div>
+    </div>
+
+    <!-- Câu 5 mới (gốc 24) -->
+    <div class="question">
+      <h3>Câu 5: DMA Controller được CPU cấp quyền gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q5" value="A"> A. Slave</label>
+        <label><input type="radio" name="q5" value="B"> B. Bus Master</label>
+        <label><input type="radio" name="q5" value="C"> C. Không quyền</label>
+        <label><input type="radio" name="q5" value="D"> D. Chỉ Interrupt</label>
+      </div>
+    </div>
+
+    <!-- Câu 6 mới (gốc 38) -->
+    <div class="question">
+      <h3>Câu 6: Driver I/O nằm ở đâu?</h3>
+      <div class="options">
+        <label><input type="radio" name="q6" value="A"> A. User space</label>
+        <label><input type="radio" name="q6" value="B"> B. Chỉ BIOS</label>
+        <label><input type="radio" name="q6" value="C"> C. Không cần</label>
+        <label><input type="radio" name="q6" value="D"> D. Kernel space</label>
+      </div>
+    </div>
+
+    <!-- Câu 7 mới (gốc 46) -->
+    <div class="question">
+      <h3>Câu 7: Hot-Plug hỗ trợ tốt nhất ở chuẩn nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q7" value="A"> A. ISA</label>
+        <label><input type="radio" name="q7" value="B"> B. Chỉ SATA cũ</label>
+        <label><input type="radio" name="q7" value="C"> C. Parallel Port</label>
+        <label><input type="radio" name="q7" value="D"> D. USB và PCIe</label>
+      </div>
+    </div>
+
+    <!-- Câu 8 mới (gốc 49) -->
+    <div class="question">
+      <h3>Câu 8: Hệ thống I/O hiện đại giúp CPU tập trung vào gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q8" value="A"> A. Chỉ I/O</label>
+        <label><input type="radio" name="q8" value="B"> B. Không ảnh hưởng</label>
+        <label><input type="radio" name="q8" value="C"> C. Tính toán thuần túy</label>
+        <label><input type="radio" name="q8" value="D"> D. Chỉ đồ họa</label>
+      </div>
+    </div>
+
+    <!-- Câu 9 mới (gốc 14) -->
+    <div class="question">
+      <h3>Câu 9: SR-IOV là công nghệ gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q9" value="A"> A. DMA cũ</label>
+        <label><input type="radio" name="q9" value="B"> B. Chỉ dùng cho USB</label>
+        <label><input type="radio" name="q9" value="C"> C. Không tồn tại</label>
+        <label><input type="radio" name="q9" value="D"> D. Virtualization I/O cho máy ảo</label>
+      </div>
+    </div>
+
+    <!-- Câu 10 mới (gốc 9) -->
+    <div class="question">
+      <h3>Câu 10: Interrupt Service Routine (ISR) là gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q10" value="A"> A. Chương trình người dùng</label>
+        <label><input type="radio" name="q10" value="B"> B. Chỉ dùng cho DMA</label>
+        <label><input type="radio" name="q10" value="C"> C. Không tồn tại</label>
+        <label><input type="radio" name="q10" value="D"> D. Hàm xử lý ngắt do kernel gọi</label>
+      </div>
+    </div>
+
+    <!-- Câu 11 mới (gốc 2) -->
+    <div class="question">
+      <h3>Câu 11: Thành phần nào nằm giữa thiết bị ngoại vi và bus?</h3>
+      <div class="options">
+        <label><input type="radio" name="q11" value="A"> A. CPU</label>
+        <label><input type="radio" name="q11" value="B"> B. I/O Controller</label>
+        <label><input type="radio" name="q11" value="C"> C. RAM</label>
+        <label><input type="radio" name="q11" value="D"> D. Cache</label>
+      </div>
+    </div>
+
+    <!-- Câu 12 mới (gốc 29) -->
+    <div class="question">
+      <h3>Câu 12: Burst Mode trong DMA dùng để?</h3>
+      <div class="options">
+        <label><input type="radio" name="q12" value="A"> A. Truyền từng byte</label>
+        <label><input type="radio" name="q12" value="B"> B. Chỉ Interrupt</label>
+        <label><input type="radio" name="q12" value="C"> C. Không dùng</label>
+        <label><input type="radio" name="q12" value="D"> D. Truyền khối dữ liệu liên tục</label>
+      </div>
+    </div>
+
+    <!-- Câu 13 mới (gốc 18) -->
+    <div class="question">
+      <h3>Câu 13: Daisy Chain dùng để?</h3>
+      <div class="options">
+        <label><input type="radio" name="q13" value="A"> A. Chỉ DMA</label>
+        <label><input type="radio" name="q13" value="B"> B. Kết nối nhiều thiết bị ngắt theo chuỗi</label>
+        <label><input type="radio" name="q13" value="C"> C. Không dùng</label>
+        <label><input type="radio" name="q13" value="D"> D. Ưu tiên ngắt</label>
+      </div>
+    </div>
+
+    <!-- Câu 14 mới (gốc 1) -->
+    <div class="question">
+      <h3>Câu 14: Hệ thống I/O trong máy tính có vai trò gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q14" value="A"> A. Chỉ lưu trữ dữ liệu</label>
+        <label><input type="radio" name="q14" value="B"> B. Chỉ xử lý đồ họa</label>
+        <label><input type="radio" name="q14" value="C"> C. Cầu nối giữa CPU/bộ nhớ và thiết bị ngoại vi</label>
+        <label><input type="radio" name="q14" value="D"> D. Không quan trọng</label>
+      </div>
+    </div>
+
+    <!-- Câu 15 mới (gốc 36) -->
+    <div class="question">
+      <h3>Câu 15: Transparent DMA là gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q15" value="A"> A. DMA chỉ hoạt động khi CPU không dùng bus</label>
+        <label><input type="radio" name="q15" value="B"> B. Luôn chiếm bus</label>
+        <label><input type="radio" name="q15" value="C"> C. Chỉ Interrupt</label>
+        <label><input type="radio" name="q15" value="D"> D. Không tồn tại</label>
+      </div>
+    </div>
+
+    <!-- Câu 16 mới (gốc 6) -->
+    <div class="question">
+      <h3>Câu 16: Bus nào hiện đại nhất và phổ biến nhất cho card mở rộng?</h3>
+      <div class="options">
+        <label><input type="radio" name="q16" value="A"> A. ISA</label>
+        <label><input type="radio" name="q16" value="B"> B. Parallel Port</label>
+        <label><input type="radio" name="q16" value="C"> C. USB 2.0</label>
+        <label><input type="radio" name="q16" value="D"> D. PCIe</label>
+      </div>
+    </div>
+
+    <!-- Câu 17 mới (gốc 19) -->
+    <div class="question">
+      <h3>Câu 17: Bộ đệm (Buffering) trong I/O dùng để?</h3>
+      <div class="options">
+        <label><input type="radio" name="q17" value="A"> A. Giảm số lần Interrupt</label>
+        <label><input type="radio" name="q17" value="B"> B. Đồng bộ tốc độ</label>
+        <label><input type="radio" name="q17" value="C"> C. A và B</label>
+        <label><input type="radio" name="q17" value="D"> D. Không cần</label>
+      </div>
+    </div>
+
+    <!-- Câu 18 mới (gốc 10) -->
+    <div class="question">
+      <h3>Câu 18: Cycle Stealing là chế độ nào của DMA?</h3>
+      <div class="options">
+        <label><input type="radio" name="q18" value="A"> A. Truyền liên tục</label>
+        <label><input type="radio" name="q18" value="B"> B. Chỉ dùng cho GPU</label>
+        <label><input type="radio" name="q18" value="C"> C. Không tồn tại</label>
+        <label><input type="radio" name="q18" value="D"> D. Lấy từng chu kỳ bus một</label>
+      </div>
+    </div>
+
+    <!-- Câu 19 mới (gốc 27) -->
+    <div class="question">
+      <h3>Câu 19: Card mạng 10Gbps thường dùng giao thức nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q19" value="A"> A. USB</label>
+        <label><input type="radio" name="q19" value="B"> B. PCIe + DMA</label>
+        <label><input type="radio" name="q19" value="C"> C. Parallel Port</label>
+        <label><input type="radio" name="q19" value="D"> D. SATA</label>
+      </div>
+    </div>
+
+    <!-- Câu 20 mới (gốc 20) -->
+    <div class="question">
+      <h3>Câu 20: I/O Processor (Channel) thường dùng trong hệ thống nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q20" value="A"> A. PC thông thường</label>
+        <label><input type="radio" name="q20" value="B"> B. Điện thoại</label>
+        <label><input type="radio" name="q20" value="C"> C. Mainframe / Server lớn</label>
+        <label><input type="radio" name="q20" value="D"> D. Không tồn tại</label>
+      </div>
+    </div>
+
+    <!-- Câu 21 mới (gốc 44) -->
+    <div class="question">
+      <h3>Câu 21: RAID Controller thường dùng DMA vì lý do gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q21" value="A"> A. Rẻ</label>
+        <label><input type="radio" name="q21" value="B"> B. Không cần</label>
+        <label><input type="radio" name="q21" value="C"> C. Tốc độ cao, nhiều ổ</label>
+        <label><input type="radio" name="q21" value="D"> D. Chỉ Interrupt</label>
+      </div>
+    </div>
+
+    <!-- Câu 22 mới (gốc 12) -->
+    <div class="question">
+      <h3>Câu 22: Thiết bị nào thường dùng Interrupt nhiều nhất?</h3>
+      <div class="options">
+        <label><input type="radio" name="q22" value="A"> A. Ổ cứng cũ</label>
+        <label><input type="radio" name="q22" value="B"> B. Chỉ màn hình</label>
+        <label><input type="radio" name="q22" value="C"> C. Không thiết bị nào</label>
+        <label><input type="radio" name="q22" value="D"> D. Bàn phím, chuột, USB</label>
+      </div>
+    </div>
+
+    <!-- Câu 23 mới (gốc 35) -->
+    <div class="question">
+      <h3>Câu 23: Số đường IRQ tối đa trong hệ thống cũ (8259 PIC)?</h3>
+      <div class="options">
+        <label><input type="radio" name="q23" value="A"> A. 256</label>
+        <label><input type="radio" name="q23" value="B"> B. 8</label>
+        <label><input type="radio" name="q23" value="C"> C. 15 (cascaded)</label>
+        <label><input type="radio" name="q23" value="D"> D. Không giới hạn</label>
+      </div>
+    </div>
+
+    <!-- Câu 24 mới (gốc 15) -->
+    <div class="question">
+      <h3>Câu 24: Thunderbolt kết hợp những giao thức nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q24" value="A"> A. Chỉ USB</label>
+        <label><input type="radio" name="q24" value="B"> B. PCIe + DisplayPort</label>
+        <label><input type="radio" name="q24" value="C"> C. Chỉ SATA</label>
+        <label><input type="radio" name="q24" value="D"> D. Parallel</label>
+      </div>
+    </div>
+
+    <!-- Câu 25 mới (gốc 25) -->
+    <div class="question">
+      <h3>Câu 25: Phương pháp nào không làm CPU phải chờ thiết bị?</h3>
+      <div class="options">
+        <label><input type="radio" name="q25" value="A"> A. Programmed I/O</label>
+        <label><input type="radio" name="q25" value="B"> B. Chỉ Polling</label>
+        <label><input type="radio" name="q25" value="C"> C. Interrupt và DMA</label>
+        <label><input type="radio" name="q25" value="D"> D. Không phương pháp nào</label>
+      </div>
+    </div>
+
+    <!-- Câu 26 mới (gốc 11) -->
+    <div class="question">
+      <h3>Câu 26: Context switch trong Interrupt tốn khoảng bao nhiêu chu kỳ?</h3>
+      <div class="options">
+        <label><input type="radio" name="q26" value="A"> A. 1-10</label>
+        <label><input type="radio" name="q26" value="B"> B. 0</label>
+        <label><input type="radio" name="q26" value="C"> C. Hàng triệu</label>
+        <label><input type="radio" name="q26" value="D"> D. 100-1000</label>
+      </div>
+    </div>
+
+    <!-- Câu 27 mới (gốc 43) -->
+    <div class="question">
+      <h3>Câu 27: Phương pháp I/O nào không cần CPU tham gia sau khi khởi tạo?</h3>
+      <div class="options">
+        <label><input type="radio" name="q27" value="A"> A. Programmed I/O</label>
+        <label><input type="radio" name="q27" value="B"> B. Chỉ Interrupt</label>
+        <label><input type="radio" name="q27" value="C"> C. Polling</label>
+        <label><input type="radio" name="q27" value="D"> D. DMA</label>
+      </div>
+    </div>
+
+    <!-- Câu 28 mới (gốc 42) -->
+    <div class="question">
+      <h3>Câu 28: Tốc độ thực tế của USB 3.2 Gen 2?</h3>
+      <div class="options">
+        <label><input type="radio" name="q28" value="A"> A. 480 Mbps</label>
+        <label><input type="radio" name="q28" value="B"> B. 20 Gbps</label>
+        <label><input type="radio" name="q28" value="C"> C. 10 Gbps</label>
+        <label><input type="radio" name="q28" value="D"> D. 40 Gbps</label>
+      </div>
+    </div>
+
+    <!-- Câu 29 mới (gốc 34) -->
+    <div class="question">
+      <h3>Câu 29: Thiết bị chậm nhất thường dùng phương pháp nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q29" value="A"> A. DMA</label>
+        <label><input type="radio" name="q29" value="B"> B. Interrupt</label>
+        <label><input type="radio" name="q29" value="C"> C. Programmed I/O</label>
+        <label><input type="radio" name="q29" value="D"> D. Không dùng</label>
+      </div>
+    </div>
+
+    <!-- Câu 30 mới (gốc 48) -->
+    <div class="question">
+      <h3>Câu 30: CRC dùng để?</h3>
+      <div class="options">
+        <label><input type="radio" name="q30" value="A"> A. Chỉ lưu trữ</label>
+        <label><input type="radio" name="q30" value="B"> B. Kiểm tra lỗi truyền I/O</label>
+        <label><input type="radio" name="q30" value="C"> C. Không dùng</label>
+        <label><input type="radio" name="q30" value="D"> D. Chỉ DMA</label>
+      </div>
+    </div>
+
+    <!-- Câu 31 mới (gốc 50) -->
+    <div class="question">
+      <h3>Câu 31: Yếu tố quyết định hiệu năng I/O hiện đại nhất là gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q31" value="A"> A. Programmed I/O</label>
+        <label><input type="radio" name="q31" value="B"> B. Chỉ Interrupt</label>
+        <label><input type="radio" name="q31" value="C"> C. Polling</label>
+        <label><input type="radio" name="q31" value="D"> D. Kiến trúc DMA + PCIe + NVMe</label>
+      </div>
+    </div>
+
+    <!-- Câu 32 mới (gốc 32) -->
+    <div class="question">
+      <h3>Câu 32: Nested Interrupt là gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q32" value="A"> A. Không cho phép ngắt lồng</label>
+        <label><input type="radio" name="q32" value="B"> B. Chỉ dùng DMA</label>
+        <label><input type="radio" name="q32" value="C"> C. Không tồn tại</label>
+        <label><input type="radio" name="q32" value="D"> D. Cho phép ngắt có mức ưu tiên cao hơn ngắt đang xử lý</label>
+      </div>
+    </div>
+
+    <!-- Câu 33 mới (gốc 3) -->
+    <div class="question">
+      <h3>Câu 33: Phương pháp Programmed I/O còn gọi là?</h3>
+      <div class="options">
+        <label><input type="radio" name="q33" value="A"> A. DMA</label>
+        <label><input type="radio" name="q33" value="B"> B. Interrupt</label>
+        <label><input type="radio" name="q33" value="C"> C. Spooling</label>
+        <label><input type="radio" name="q33" value="D"> D. Polling / Busy-Waiting</label>
+      </div>
+    </div>
+
+    <!-- Câu 34 mới (gốc 40) -->
+    <div class="question">
+      <h3>Câu 34: DisplayPort và HDMI chủ yếu truyền qua?</h3>
+      <div class="options">
+        <label><input type="radio" name="q34" value="A"> A. Chỉ USB</label>
+        <label><input type="radio" name="q34" value="B"> B. SATA</label>
+        <label><input type="radio" name="q34" value="C"> C. Không liên quan I/O</label>
+        <label><input type="radio" name="q34" value="D"> D. PCIe (trong GPU) hoặc cổng riêng</label>
+      </div>
+    </div>
+
+    <!-- Câu 35 mới (gốc 8) -->
+    <div class="question">
+      <h3>Câu 35: NVMe chạy trên giao thức nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q35" value="A"> A. SATA</label>
+        <label><input type="radio" name="q35" value="B"> B. USB</label>
+        <label><input type="radio" name="q35" value="C"> C. Parallel Port</label>
+        <label><input type="radio" name="q35" value="D"> D. PCIe</label>
+      </div>
+    </div>
+
+    <!-- Câu 36 mới (gốc 37) -->
+    <div class="question">
+      <h3>Câu 36: Card mạng 10Gbps thường dùng giao thức nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q36" value="A"> A. USB</label>
+        <label><input type="radio" name="q36" value="B"> B. Parallel Port</label>
+        <label><input type="radio" name="q36" value="C"> C. SATA</label>
+        <label><input type="radio" name="q36" value="D"> D. PCIe + DMA</label>
+      </div>
+    </div>
+
+    <!-- Câu 37 mới (gốc 33) -->
+    <div class="question">
+      <h3>Câu 37: VFIO là công nghệ gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q37" value="A"> A. Chỉ Windows</label>
+        <label><input type="radio" name="q37" value="B"> B. DMA cũ</label>
+        <label><input type="radio" name="q37" value="C"> C. Virtualization Framework for I/O trong Linux</label>
+        <label><input type="radio" name="q37" value="D"> D. Không liên quan</label>
+      </div>
+    </div>
+
+    <!-- Câu 38 mới (gốc 5) -->
+    <div class="question">
+      <h3>Câu 38: DMA hoạt động như thế nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q38" value="A"> A. CPU chuyển từng byte</label>
+        <label><input type="radio" name="q38" value="B"> B. Chỉ dùng cho bàn phím</label>
+        <label><input type="radio" name="q38" value="C"> C. DMA Controller chiếm bus và chuyển trực tiếp bộ nhớ ↔ thiết bị</label>
+        <label><input type="radio" name="q38" value="D"> D. Phải qua Interrupt</label>
+      </div>
+    </div>
+
+    <!-- Câu 39 mới (gốc 13) -->
+    <div class="question">
+      <h3>Câu 39: Spooling dùng để làm gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q39" value="A"> A. Tăng tốc DMA</label>
+        <label><input type="radio" name="q39" value="B"> B. Chỉ dùng cho USB</label>
+        <label><input type="radio" name="q39" value="C"> C. Đồng bộ tốc độ giữa thiết bị chậm và CPU</label>
+        <label><input type="radio" name="q39" value="D"> D. Không liên quan I/O</label>
+      </div>
+    </div>
+
+    <!-- Câu 40 mới (gốc 16) -->
+    <div class="question">
+      <h3>Câu 40: Phương pháp I/O nào hiệu quả nhất cho SSD NVMe?</h3>
+      <div class="options">
+        <label><input type="radio" name="q40" value="A"> A. Programmed I/O</label>
+        <label><input type="radio" name="q40" value="B"> B. Chỉ Interrupt</label>
+        <label><input type="radio" name="q40" value="C"> C. DMA</label>
+        <label><input type="radio" name="q40" value="D"> D. Polling</label>
+      </div>
+    </div>
+
+    <!-- Câu 41 mới (gốc 47) -->
+    <div class="question">
+      <h3>Câu 41: Trong I/O, “Channel” khác “Controller” ở điểm nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q41" value="A"> A. Controller mạnh hơn</label>
+        <label><input type="radio" name="q41" value="B"> B. Không khác</label>
+        <label><input type="radio" name="q41" value="C"> C. Chỉ dùng USB</label>
+        <label><input type="radio" name="q41" value="D"> D. Channel thông minh hơn, có thể chạy chương trình nhỏ</label>
+      </div>
+    </div>
+
+    <!-- Câu 42 mới (gốc 17) -->
+    <div class="question">
+      <h3>Câu 42: IRQ nghĩa là gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q42" value="A"> A. Interrupt Request</label>
+        <label><input type="radio" name="q42" value="B"> B. I/O Request</label>
+        <label><input type="radio" name="q42" value="C"> C. Interrupt Response</label>
+        <label><input type="radio" name="q42" value="D"> D. Không liên quan</label>
+      </div>
+    </div>
+
+    <!-- Câu 43 mới (gốc 4) -->
+    <div class="question">
+      <h3>Câu 43: Ưu điểm lớn nhất của Interrupt-driven I/O là gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q43" value="A"> A. Đơn giản nhất</label>
+        <label><input type="radio" name="q43" value="B"> B. Tốc độ cực cao</label>
+        <label><input type="radio" name="q43" value="C"> C. Không cần driver</label>
+        <label><input type="radio" name="q43" value="D"> D. CPU không phải chờ</label>
+      </div>
+    </div>
+
+    <!-- Câu 44 mới (gốc 23) -->
+    <div class="question">
+      <h3>Câu 44: Vectored Interrupt cung cấp gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q44" value="A"> A. Chỉ số thứ tự</label>
+        <label><input type="radio" name="q44" value="B"> B. Không cung cấp</label>
+        <label><input type="radio" name="q44" value="C"> C. Chỉ DMA</label>
+        <label><input type="radio" name="q44" value="D"> D. Địa chỉ vector trực tiếp</label>
+      </div>
+    </div>
+
+    <!-- Câu 45 mới (gốc 26) -->
+    <div class="question">
+      <h3>Câu 45: SATA III có tốc độ lý thuyết?</h3>
+      <div class="options">
+        <label><input type="radio" name="q45" value="A"> A. 40 Gbps</label>
+        <label><input type="radio" name="q45" value="B"> B. 480 Mbps</label>
+        <label><input type="radio" name="q45" value="C"> C. 6 Gbps</label>
+        <label><input type="radio" name="q45" value="D"> D. 133 MB/s</label>
+      </div>
+    </div>
+
+    <!-- Câu 46 mới (gốc 7) -->
+    <div class="question">
+      <h3>Câu 46: USB có đặc điểm nổi bật nào?</h3>
+      <div class="options">
+        <label><input type="radio" name="q46" value="A"> A. Không hot-plug</label>
+        <label><input type="radio" name="q46" value="B"> B. Chỉ dùng cho ổ cứng</label>
+        <label><input type="radio" name="q46" value="C"> C. Bus song song</label>
+        <label><input type="radio" name="q46" value="D"> D. Cung cấp nguồn và hỗ trợ hot-plug</label>
+      </div>
+    </div>
+
+    <!-- Câu 47 mới (gốc 28) -->
+    <div class="question">
+      <h3>Câu 47: Plug-and-Play (PnP) là tính năng của?</h3>
+      <div class="options">
+        <label><input type="radio" name="q47" value="A"> A. Chỉ ISA</label>
+        <label><input type="radio" name="q47" value="B"> B. Chỉ Parallel Port</label>
+        <label><input type="radio" name="q47" value="C"> C. Không bus nào</label>
+        <label><input type="radio" name="q47" value="D"> D. USB và PCIe</label>
+      </div>
+    </div>
+
+    <!-- Câu 48 mới (gốc 45) -->
+    <div class="question">
+      <h3>Câu 48: APIC (Advanced Programmable Interrupt Controller) hỗ trợ bao nhiêu vector?</h3>
+      <div class="options">
+        <label><input type="radio" name="q48" value="A"> A. 15</label>
+        <label><input type="radio" name="q48" value="B"> B. 8</label>
+        <label><input type="radio" name="q48" value="C"> C. Không giới hạn</label>
+        <label><input type="radio" name="q48" value="D"> D. 256</label>
+      </div>
+    </div>
+
+    <!-- Câu 49 mới (gốc 39) -->
+    <div class="question">
+      <h3>Câu 49: Bottleneck I/O lớn nhất trong máy tính cũ là gì?</h3>
+      <div class="options">
+        <label><input type="radio" name="q49" value="A"> A. PCIe</label>
+        <label><input type="radio" name="q49" value="B"> B. NVMe</label>
+        <label><input type="radio" name="q49" value="C"> C. Không có</label>
+        <label><input type="radio" name="q49" value="D"> D. Bus chia sẻ + Programmed I/O</label>
+      </div>
+    </div>
+
+    <!-- Câu 50 mới (gốc 31) -->
+    <div class="question">
+      <h3>Câu 50: Thanh ghi nào trong I/O Controller báo trạng thái sẵn sàng?</h3>
+      <div class="options">
+        <label><input type="radio" name="q50" value="A"> A. Data Register</label>
+        <label><input type="radio" name="q50" value="B"> B. Control Register</label>
+        <label><input type="radio" name="q50" value="C"> C. Address Register</label>
+        <label><input type="radio" name="q50" value="D"> D. Status Register</label>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin: 30px 0;">
+      <button type="button" id="submitBtn">Nộp bài</button>
+      <button type="button" id="explainBtn">Xem giải thích (dành cho GV)</button>
+    </div>
+  </form>
+
+  <!-- Khu vực kết quả -->
+  <div id="result" class="result">
+    <h2>Kết quả</h2>
+    <div id="score" class="score-box"></div>
+    <div id="detail"></div>
+  </div>
+
+  <!-- Phần mật khẩu để xem giải thích -->
+  <div id="passwordSection">
+    <label>Nhập mật khẩu giáo viên:</label><br>
+    <input type="password" id="passwordInput" placeholder="Mật khẩu...">
+    <button type="button" id="unlockExplain">Mở giải thích</button>
+  </div>
+
+  <!-- Khu vực giải thích -->
+  <div id="explanations">
+    <h2>Giải thích chi tiết (theo số câu gốc trong bài giảng)</h2>
+
+    <div class="explanation"><strong>Câu 1 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: I/O là giao diện với thế giới bên ngoài.</div>
+    <div class="explanation"><strong>Câu 2 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Controller chứa các thanh ghi Data/Status/Control.</div>
+    <div class="explanation"><strong>Câu 3 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: CPU liên tục kiểm tra trạng thái thiết bị.</div>
+    <div class="explanation"><strong>Câu 4 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: CPU làm việc khác trong lúc chờ thiết bị.</div>
+    <div class="explanation"><strong>Câu 5 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Giảm tải CPU tối đa.</div>
+    <div class="explanation"><strong>Câu 6 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Point-to-point, serial, tốc độ rất cao.</div>
+    <div class="explanation"><strong>Câu 7 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Tree topology + Power Delivery.</div>
+    <div class="explanation"><strong>Câu 8 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Tốc độ SSD lên đến >7000 MB/s.</div>
+    <div class="explanation"><strong>Câu 9 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Context switch xảy ra khi có ngắt.</div>
+    <div class="explanation"><strong>Câu 10 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: DMA lấy bus từng chu kỳ nhỏ.</div>
+    <div class="explanation"><strong>Câu 11 gốc:</strong> Đáp án đúng: <strong>D</strong><br>Lý do: Sự kiện người dùng không dự đoán được.</div>
+    <div class="explanation"><strong>Câu 12 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Lưu/restore thanh ghi và PC.</div>
+    <div class="explanation"><strong>Câu 13 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Ví dụ: In background.</div>
+    <div class="explanation"><strong>Câu 14 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: Single Root I/O Virtualization.</div>
+    <div class="explanation"><strong>Câu 15 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Tốc độ 40-80 Gbps.</div>
+    <div class="explanation"><strong>Câu 16 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Băng thông cực cao.</div>
+    <div class="explanation"><strong>Câu 17 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: Interrupt Request.</div>
+    <div class="explanation"><strong>Câu 18 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Phương pháp ưu tiên ngắt cũ.</div>
+    <div class="explanation"><strong>Câu 19 gốc:</strong> Đáp án đúng: <strong>C</strong><br>Lý do: Giảm overhead.</div>
+    <div class="explanation"><strong>Câu 20 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: IBM zSeries.</div>
+    <div class="explanation"><strong>Câu 21 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Băng thông cao nhất.</div>
+    <div class="explanation"><strong>Câu 22 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: (USB4 version 2.0 lên 80 Gbps).</div>
+    <div class="explanation"><strong>Câu 23 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: Nhanh hơn polling vector.</div>
+    <div class="explanation"><strong>Câu 24 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: DMA trở thành master trên bus.</div>
+    <div class="explanation"><strong>Câu 25 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: CPU làm việc khác.</div>
+    <div class="explanation"><strong>Câu 26 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: Serial ATA thế hệ 3.</div>
+    <div class="explanation"><strong>Câu 27 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Đảm bảo tính toàn vẹn dữ liệu.</div>
+    <div class="explanation"><strong>Câu 28 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Tự nhận diện thiết bị.</div>
+    <div class="explanation"><strong>Câu 29 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Tăng hiệu suất.</div>
+    <div class="explanation"><strong>Câu 30 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Kiến trúc hiện đại.</div>
+    <div class="explanation"><strong>Câu 31 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: CPU đọc để biết thiết bị sẵn sàng.</div>
+    <div class="explanation"><strong>Câu 32 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Hỗ trợ đa nhiệm ngắt.</div>
+    <div class="explanation"><strong>Câu 33 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: Dùng cho KVM/QEMU.</div>
+    <div class="explanation"><strong>Câu 34 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Bàn phím, cảm biến.</div>
+    <div class="explanation"><strong>Câu 35 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: APIC hiện đại hỗ trợ 256+.</div>
+    <div class="explanation"><strong>Câu 36 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: Ít ảnh hưởng CPU nhất.</div>
+    <div class="explanation"><strong>Câu 37 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Băng thông cao.</div>
+    <div class="explanation"><strong>Câu 38 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Có quyền truy cập phần cứng.</div>
+    <div class="explanation"><strong>Câu 39 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: Đã được khắc phục ở máy hiện đại.</div>
+    <div class="explanation"><strong>Câu 40 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: GPU output.</div>
+    <div class="explanation"><strong>Câu 41 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: Ngăn DMA truy cập trái phép (VT-d, AMD-Vi).</div>
+    <div class="explanation"><strong>Câu 42 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: (Gen 2x2 = 20 Gbps).</div>
+    <div class="explanation"><strong>Câu 43 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: DMA tự chuyển dữ liệu.</div>
+    <div class="explanation"><strong>Câu 44 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: Xử lý RAID 0/1/5/10.</div>
+    <div class="explanation"><strong>Câu 45 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Dùng trong đa lõi hiện đại.</div>
+    <div class="explanation"><strong>Câu 46 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Tháo cắm khi máy đang chạy.</div>
+    <div class="explanation"><strong>Câu 47 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: I/O Processor/Channel trong mainframe.</div>
+    <div class="explanation"><strong>Câu 48 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: Cyclic Redundancy Check.</div>
+    <div class="explanation"><strong>Câu 49 gốc:</strong> Đáp án đúng: <strong>A</strong><br>Lý do: Nhờ DMA + PCIe.</div>
+    <div class="explanation"><strong>Câu 50 gốc:</strong> Đáp án đúng: <strong>B</strong><br>Lý do: Là yếu tố then chốt trong kiến trúc máy tính.</div>
+  </div>
+
+</div>
+
+<script>
+// Đáp án đúng theo thứ tự câu hỏi MỚI (đã xáo trộn)
+const correctAnswers = [
+  "B", "D", "D", "D", "B", "D", "D", "C", "D", "D",
+  "B", "D", "B", "C", "A", "D", "C", "D", "B", "C",
+  "C", "D", "C", "B", "C", "D", "D", "C", "C", "B",
+  "D", "D", "D", "D", "D", "D", "C", "C", "C", "C",
+  "D", "A", "D", "D", "C", "D", "D", "D", "D", "D"
+];
+
+// Mật khẩu giáo viên (bạn có thể thay đổi)
+const teacherPassword = "giaovien2026";
+
+document.getElementById("submitBtn").addEventListener("click", function() {
+  let score = 0;
+  let detailHtml = "<h3>Các câu sai / chưa trả lời:</h3><ul>";
+  for(let i = 1; i <= 50; i++) {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected && selected.value === correctAnswers[i-1]) {
+      score++;
+    } else {
+      let userChoice = selected ? selected.value : "Chưa chọn";
+      detailHtml += `<li>Câu ${i}: Bạn chọn ${userChoice} → Đáp án đúng: ${correctAnswers[i-1]}</li>`;
+    }
+  }
+  detailHtml += "</ul>";
+
+  const resultDiv = document.getElementById("result");
+  document.getElementById("score").innerHTML = `Điểm số: ${score} / 50 (${(score/50*100).toFixed(1)}%)`;
+  document.getElementById("detail").innerHTML = detailHtml;
+  resultDiv.style.display = "block";
+  resultDiv.className = score >= 40 ? "result correct" : "result wrong";
+  window.scrollTo({ top: resultDiv.offsetTop - 20, behavior: 'smooth' });
+});
+
+document.getElementById("explainBtn").addEventListener("click", function() {
+  document.getElementById("passwordSection").style.display = "block";
+  this.disabled = true;
+});
+
+document.getElementById("unlockExplain").addEventListener("click", function() {
+  const input = document.getElementById("passwordInput").value.trim();
+  if (input === teacherPassword) {
+    document.getElementById("explanations").style.display = "block";
+    document.getElementById("passwordSection").style.display = "none";
+    alert("Mở thành công! Giải thích theo số câu gốc trong bài giảng.");
+  } else {
+    alert("Mật khẩu không đúng!");
+  }
+});
+</script>
+
+</body>
+</html>
